@@ -1,5 +1,5 @@
 ***
-![License](https://img.shields.io/bower/l/bootstrap) ![Contributors](https://img.shields.io/github/contributors/akarakoc/SWE574)
+![License](https://img.shields.io/bower/l/bootstrap) ![Issues](https://img.shields.io/github/issues/akarakoc/SWE574)![Contributors](https://img.shields.io/github/contributors/akarakoc/SWE574)
 
 Welcome to the project main page!
 
