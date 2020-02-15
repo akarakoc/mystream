@@ -1,3 +1,6 @@
+***
+![License](https://img.shields.io/bower/l/bootstrap)
+
 Welcome to the project main page!
 
 We will update here as the project goes on.
