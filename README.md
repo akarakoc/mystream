@@ -3,6 +3,7 @@
 <p align="center">
   <img src="https://github.com/akarakoc/SWE574/blob/master/items/46acde53-e815-431a-ba96-e5230f2f7ee1_200x200.png">
 </p>
+
 ***
 
 Welcome to the project main page!
