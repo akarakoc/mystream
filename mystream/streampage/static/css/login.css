@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+}
+
+/* CSS only for examples not required for centering */
+.container {
+    height: 100%;
+}
+
+.note {
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    top: 0;
+    padding: 5px;
+    background: #eee;
+    max-width: 360px;
+    border: 1px dotted #bbb;
+}
+
+/* show border around full height container */
+.h-100 {
+    border: 1px dotted #cc2222;
+}
