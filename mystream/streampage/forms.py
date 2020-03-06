@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, get_user_model
 from django import forms
-from community.models import Primitives
+from streampage.models import Primitives
 
 class UsersLoginForm(forms.Form):
     username = forms.CharField()

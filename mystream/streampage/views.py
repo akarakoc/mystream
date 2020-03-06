@@ -12,7 +12,6 @@ from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string, get_template
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -21,9 +20,15 @@ import requests
 import uuid
 import hashlib
 from datetime import datetime
-from community.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,Posts,CommunityTags,DatatTypeTags,PostTags,UserTags
+from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,Posts,CommunityTags,DatatTypeTags,PostTags,UserTags
 
-
+def index(request):
+    if request.user.is_authenticated:
+        return render(request, 'index.html', {})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+		
+		
 def login_view(request):
     form = UsersLoginForm(request.POST or None)
     if form.is_valid():
