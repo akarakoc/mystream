@@ -21,45 +21,39 @@
 
 </head>
 
-<body class="bg-light">
-  <div class="bg-light">
-   <div class="row">
-        <div class="col-lg">
-			<div class="card card-block w-50 mx-auto shadow p-3">
-				<a class="text-center"><img src="{% static 'uploads/logo/logo.png' %}"></a>
-				<div><b>{{title}}</b></div>
+<body>
+		<div class="row">
+			<div class="col  bg-light">
+				<a class="text-center"><img src="{% static 'uploads/logo/LogoDark.png' %}"></a>
+			</div>
+			<div class="col">
+				<div>
+					<b>{{title}}</b>
+				</div>
 				<div class="tab-content h-50" id="myTabContent">
 				<!----Login----->
-				  <div class="tab-pane fade show active p-3" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<div class="tab-pane fade show active p-3" id="home" role="tabpanel" aria-labelledby="home-tab">
 						<form method="post" action="">
 							{% csrf_token %}
 							{{form.as_p }}
-							</label><br>
 							<button class="btn btn-primary" type="submit">{{title}}</button>
 						</form>
-				  </div>
-				{% if title == "Login" %}Not Registered? <a href = "/streampage/register">Register Here</a>{% endif %}
-				{% if title == "Register" %}Already Registered? <a href = "/streampage/login">Login Here</a>{% endif %}
-      
-				</div>
-				<div>
-					{% if form.errors %}
-						<p>Login failed!</p>
-					{% endif %}
-					{% if next %}
-						{% if user.is_authenticated %}								
-						{% else %}
-							<p>Please login!</p>
+					</div>
+					{% if title == "Login" %}Not Registered? <a href = "/streampage/register">Register Here</a>{% endif %}
+					{% if title == "Register" %}Already Registered? <a href = "/streampage/login">Login Here</a>{% endif %}
+					<div>
+						{% if form.errors %}
+							<p>Login failed!</p>
 						{% endif %}
-					{% endif %}
+						{% if next %}
+							{% if user.is_authenticated %}								
+							{% else %}
+								<p>Please login!</p>
+							{% endif %}
+						{% endif %}
+					</div>
 				</div>
 			</div>
-        </div>
-    </div>
-  </div>
-
-
-
+		</div>
 </body>
-
 </html>
