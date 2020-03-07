@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <button type="button" id="AddCommunity" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#CommunityModal">
+	<i class="fa fa-plus" aria-hidden="true"></i>
+	Add Community
+  </button>
+  <br>
+  <br>
+  <div id="community_list" class="row">
+  {% for comm in community_resp %}
+	<div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <div id="CommunityName" class="left">
+				<h6 class="m-0 font-weight-bold text-primary" >
+				<button type="button" class="btn btn-none">
+					<p id="Community" class="classC" hash="{{ comm.communityHash }}">
+						<b>{{ comm.name }}</b>
+					</p>
+					<i class="fa fa-star" style="font-size:18px"> {{ comm.communityPopularity.all|length }}</i>
+				</button>
+				</h6>
+			</div>
+			<div class="right">Created by: {{ comm.communityCreator }} at {{ comm.communityCreationDate }}</div>
+				<div class="dropdown no-arrow">
+					<button type="button" class="btn btn-primary" VoteCommunity="Yes" id="VoteCommunity" hash="{{ comm.communityHash }}">
+						<i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+						Like
+					</button>
+					<button type="button" class="btn btn-primary" JoinCommunity="Yes" id="JoinCommunity" hash="{{ comm.communityHash }}">
+						<i class="fas fa-sign-in-alt"></i> 
+						Join
+					</button>
+					
+				</div>
+			</div>
+			<!-- Card Body -->
+        <div class="card-body">
+			<div class="modal-body row">
+				<div class="col-md-6">
+					<img src="{{ comm.communityPhoto }}" class="img-thumbnail"><br>
+				</div>
+				<div class="col-md-6">
+					{{ comm.description }}<br>
+					{%if  comm.communityPrv == True %}
+						<b>Private Community</b>
+					{% elif comm.communityPrv == False %}
+						<b>Public Community</b>
+					{% endif %}<br>
+					<b>Community Point : </b>{{ comm.communityPopularity }}<br>
+					<b>Community Members : </b>{{ comm.communityMembers.all |length}}<br>
+					<b>Community Tags : </b><i><font class="primary">{{ comm.communityTags}}</font></i><br>
+				</div>
+			</div>
+		</div>
+    </div>    
+{% endfor %}
+</div>
+<!-- Modal -->
+	<div class="modal fade" id="CommunityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="CommunityModalTitle"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" action="" id="createCommunity" enctype="multipart/form-data">
+				<div id="communityModalBody" class="modal-body">
+					{% csrf_token %}
+					{{form.as_p }}		
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Create</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if community_resp.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ community_resp.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ community_resp.number }} of {{ community_resp.paginator.num_pages }}.
+        </span>
+
+        {% if community_resp.has_next %}
+            <a href="?page={{ community_resp.next_page_number }}">next</a>
+            <a href="?page={{ community_resp.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div></div>
+{% endblock %}

@@ -20,40 +20,100 @@
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
-
+<style>
+html,body,.container {
+    height:100%;
+}
+.container {
+    width: 100%;
+}
+.row {
+    height: 100%;
+}
+.row .no-float {
+    float: none;
+}
+.footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+  
+</style>
 <body>
-		<div class="row">
-			<div class="col  bg-light">
-				<a class="text-center"><img src="{% static 'uploads/logo/LogoDark.png' %}"></a>
-			</div>
-			<div class="col">
-				<div>
-					<b>{{title}}</b>
-				</div>
-				<div class="tab-content h-50" id="myTabContent">
-				<!----Login----->
-					<div class="tab-pane fade show active p-3" id="home" role="tabpanel" aria-labelledby="home-tab">
-						<form method="post" action="">
-							{% csrf_token %}
-							{{form.as_p }}
-							<button class="btn btn-primary" type="submit">{{title}}</button>
-						</form>
+	<div>
+		<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+		  <a class="navbar-brand" href="#">Navbar</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+			  <li class="nav-item active">
+				<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Link</a>
+			  </li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+			  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+			  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		  </div>
+		</nav>
+	</div>
+    <!-- End of Topbar -->
+
+	<div class="container">
+		<div class="row">	
+			<div class="col-md-7 bg-light">
+				<div class="container">
+				  <div class="row align-items-center justify-content-center">
+					<div class="col-sm-4 d-flex align-items-center">
+					  <img class="mx-auto d-block img-fluid" src="{% static 'uploads/logo/LogoDark.png' %}" alt="View">
 					</div>
-					{% if title == "Login" %}Not Registered? <a href = "/streampage/register">Register Here</a>{% endif %}
-					{% if title == "Register" %}Already Registered? <a href = "/streampage/login">Login Here</a>{% endif %}
-					<div>
-						{% if form.errors %}
-							<p>Login failed!</p>
-						{% endif %}
-						{% if next %}
-							{% if user.is_authenticated %}								
-							{% else %}
-								<p>Please login!</p>
-							{% endif %}
-						{% endif %}
+				  </div>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="container ">
+					<div class="row align-items-center justify-content-center">
+						<div>
+							<div>
+								<b>{{title}}</b>
+							</div>
+							<!----Login----->
+							<div class="tab-pane fade show active p-1" id="home" role="tabpanel" aria-labelledby="home-tab">
+								<form method="post" action="">
+									{% csrf_token %}
+									{{form.as_p }}
+									<button class="btn btn-primary" type="submit">{{title}}</button>
+								</form>
+							</div>
+							{% if title == "Login" %}Not Registered? <a href = "/streampage/register">Register Here</a>{% endif %}
+							{% if title == "Register" %}Already Registered? <a href = "/streampage/login">Login Here</a>{% endif %}
+							<div>
+								{% if form.errors %}
+									<p>Login failed!</p>
+								{% endif %}
+								{% if next %}
+									{% if user.is_authenticated %}								
+									{% else %}
+										<p>Please login!</p>
+									{% endif %}
+								{% endif %}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="footer">
+		<p>Footer</p>
+	</div>
 </body>
 </html>

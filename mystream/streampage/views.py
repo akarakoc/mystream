@@ -36,7 +36,7 @@ def login_view(request):
         password = form.cleaned_data.get("password")
         user = authenticate(username = username, password = password)
         login(request, user)
-        return redirect("/community")
+        return redirect("/streampage")
     return render(request, "login.html", {
 		"form" : form,
 		"title" : "Login",})
@@ -55,7 +55,7 @@ def register_view(request):
         comUsers.save()
         new_user = authenticate(username = user.username, password = password)
         login(request, new_user)
-        return redirect("/community/login")
+        return redirect("/streampage/login")
     return render(request, "login.html", {
 	    "title" : "Register",
 	    "form" : form,
@@ -63,5 +63,5 @@ def register_view(request):
  
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect("/community/login")
+    return HttpResponseRedirect("/streampage/login")
 	

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Communityverse</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}">
+  <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+  
+  <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/sb-admin-2.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/tagsinput.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/popper.js' %}"></script>
+  <style>
+  </style>
+</head>
+
+<script> 
+// Ajax GET data engine //
+$.extend({
+    xResponse: function(url, data) {
+        var theResponse = null;
+        $.ajax({
+            url: url,
+            data: data,
+			type: "GET",
+            dataType: "json",
+            async: false,
+            success: function(respText) {
+                theResponse = respText;
+            }
+        });
+        return theResponse;
+    }
+});
+
+// Ajax GET data engine NON JSON //
+$.extend({
+    zResponse: function(url, data) {
+        var theResponse = null;
+        $.ajax({
+            url: url,
+            data: data,
+			type: "GET",
+            async: false,
+            success: function(respText) {
+                theResponse = respText;
+            }
+        });
+        return theResponse;
+    }
+});
+// Ajax POST data engine //
+$.extend({
+    yResponse: function(url, data) {
+        var theResponse = null;
+        $.ajax({
+            url: url,
+            data: data,
+			type: "POST",
+            dataType: "json",
+            async: false,
+            success: function(respText) {
+                theResponse = respText;
+            }
+        });
+        return theResponse;
+    }
+});
+
+$( document ).ready(function() {
+	$( "#AddCommunity" ).click(function() {
+		var requestFormData={Form:"Yes"};
+		var communityForm = $.zResponse("/community/sendCommunityForm",requestFormData);
+		$('#communityModalBody').html(communityForm);
+		$('#CommunityModalTitle').html("Add New Community");
+		$('#CommunityModal').modal('show');
+	});
+	
+	$( "[JoinCommunity]" ).click(function() {
+		var Chash = $(this).attr('hash');
+		console.log(Chash)
+		var data = new FormData();
+		data.append('community_Hash', Chash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/JoinCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				console.log(data)
+			}		
+		});
+	});
+	
+	$( "[VoteCommunity]" ).click(function() {
+		var Chash = $(this).attr('hash');
+		var data = new FormData();
+		data.append('community_Hash', Chash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/VoteCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+			}		
+		});
+	});
+	
+	$( "#AddDatatype" ).click(function() {
+		var requestFormData={Form:"Yes"};
+		var communityForm = $.zResponse("/community/sendDatatypeForm",requestFormData);
+		$('#DatatypeModalBody').html(communityForm);
+		$('#datatypeModalTitle').html("Add New Datatype");
+		$('#DatatypeModal').modal('show');
+	});
+	
+
+	var tagSearch = function() {
+		$.ajax({
+            url: "/community/searchTag",
+            data: {
+				'search_text' : $('#id_Community_Name').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResult
+        });			
+	};	
+	function searchResult(data, textStatus, jqXHR){
+		$('#id_Community_Tags').val(data.trim());
+	}
+	$("body").on('keyup', "#id_Community_Name", tagSearch);
+	//////////////////////////////////////////////////
+	//////////////////////////////////////////////////
+	var tagSearchDt = function() {
+		$.ajax({
+            url: "/community/searchTag",
+            data: {
+				'search_text' : $('#id_Datatype_Name').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResultDt
+        });			
+	};	
+	function searchResultDt(data, textStatus, jqXHR){
+		$('#id_Datatype_Tags').val(data.trim());
+	}
+	$("body").on('keyup', "#id_Datatype_Name", tagSearchDt);
+	
+	
+	$('#createCommunity').submit(function(event){
+			event.preventDefault();
+			var data = new FormData($('#createCommunity').get(0));
+			console.log($("input[name=csrfmiddlewaretoken]").val());
+			$.ajax({
+				type:'POST',
+				url: '/community/CreateCommunity/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: CommunityCreateResult			
+			});
+	});
+	
+	function CommunityCreateResult(data, textStatus, jqXHR){
+		$('#communityModalBody').html(data);
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	$('#createDatatype').submit(function(event){
+			event.preventDefault();
+			var data = new FormData($('#createDatatype').get(0));
+			data.append('community_Hash', '{{community_Hash}}');
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			//console.log($("input[name=csrfmiddlewaretoken]").val());
+			$.ajax({
+				type:'POST',
+				url: '/community/CreateDatatype/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: DatatypeCreateResult			
+			});
+	});
+	
+	function DatatypeCreateResult(data, textStatus, jqXHR){
+		$('#DatatypeModalBody').html(data);
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+	$( '.classC' ).click(function() {
+		var Cname = $(this).attr('hash');
+		var data = new FormData();
+		data.append('community_Hash', Cname);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/CheckMembership/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				if (data.trim()=="Yes"){
+					var datatypeParam={showDataTypes:Cname};
+					var dt = $.zResponse("/community/sendDatatypePage",datatypeParam);
+					window.location = '/community/sendDatatypePage/?showDataTypes='+Cname;	
+				}else{
+					alert("You should join first!")
+				}
+			}
+		});
+		
+								
+	});
+	
+	$( '.classD' ).click(function() {
+		var Dtname = $(this).attr('hash');
+		var PostParam={showPosts:Dtname};
+		var dt = $.zResponse("/community/sendPostPage",PostParam);
+		window.location = '/community/sendPostPage/?showPosts='+Dtname;							
+	});
+	
+	$( '#Edit_Primitive' ).click(function() {
+		event.preventDefault();
+		var data = new FormData();
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/ShowDatatypeFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: DatatypeFields			
+		});
+	});
+	
+	function DatatypeFields(data, textStatus, jqXHR){
+		$('#CommunityModalTitle').html("Edit Datatypes");
+		$('#communityModalBody').html(data);
+		$('input[name="name"]').attr('readonly', true);
+		$('#CommunityModal').modal('show');
+	}
+	
+	$('#Add_Primitive').submit(function(event){
+			event.preventDefault();
+			var data = new FormData($('#Add_Primitive').get(0));
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/community/EditDataytpe/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: PrimitiveResult
+			});
+	});
+
+	function PrimitiveResult(data, textStatus, jqXHR){
+		$(data).appendTo($("#communityModalBody")).show( "slow" );
+		var time = (new Date).getTime();
+		$('#SavePrimitive').attr("id",time);
+		$('#SavePrimitiveButton').attr("id",time);
+		$('#SavePrimitiveButton').attr("id",time);		
+	}
+	
+	
+	$(document).on ("click", "[updateClass]", function (event) {
+		selectedID=$(this).attr('id');
+		event.preventDefault();
+		var data = new FormData($('#'+ selectedID).get(0));
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/SavePrimitives/',
+			data: data,
+			idval: selectedID,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				if (data.trim() == "Data is saved!"){
+					$( "button[id="+this.idval+"][updateClass='true']" ).html( '<i class="fa fa-check-circle" style="font-size:24px"></i>' );
+				}
+			}		
+		});
+    });
+	
+	$(document).on ("click", "[removeClass]", function (event) {
+		selectedID=$(this).attr('id');
+		event.preventDefault();
+		var data = new FormData($('#'+ selectedID).get(0));
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/DeleteDatatypeFields/',
+			data: data,
+			idval: selectedID,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				if (data.trim() == "Datatype is Deleted Successfully!"){
+					jQuery('#'+this.idval).remove();
+				}
+				$('#AddPost').modal('hide');
+				window.location.reload();
+			}		
+		});
+    });
+
+	$(document).on ("click", "[editClass]", function (event) {
+		selectedID=$(this).attr('id');
+		event.preventDefault();
+		var data = new FormData($('#'+ selectedID).get(0));
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/EditDatatypeFields/',
+			data: data,
+			idval: selectedID,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+    });
+	
+	
+	$(document).on ("click", "[deleteClass]", function (event) {
+		selectedID=$(this).attr('id');
+		jQuery('#'+selectedID).remove();
+    });
+	
+	$(document).on ("click", "#Add_Post", function (event) {
+		event.preventDefault();
+		var data = new FormData();
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/ReturnPostFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){				
+				$('#AddPostBody').html(data);
+				$('#AddPost').modal('show');
+			}		
+		});
+    });
+	
+	$(document).on ("click", "#SubmitEntry", function (event) {
+		event.preventDefault();
+		$("div[entryInput='yes']").each(function() {
+			new_name=$(this).attr("id");
+			$(this).find('.form-control').attr('name',new_name)
+			$(this).find("input").attr('name',new_name)
+		});
+		
+		$("option").each(function() {
+			(new_name=$(this).text())
+			$(this).attr('value',new_name)
+		});
+		var data = new FormData($('#AddEntry').get(0));
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/CreatePost/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				$('#AddPost').modal('hide');
+				window.location.reload();
+			}		
+		});
+    });
+	
+	var tagSearchPt = function() {
+		$.ajax({
+            url: "/community/searchTag",
+            data: {
+				'search_text' : $('#id_TextEntry').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResultPt
+        });			
+	};	
+	function searchResultPt(data, textStatus, jqXHR){
+		$('#id_TagEntry').val(data.trim());
+	}
+	$("body").on('keyup', "#id_TextEntry", tagSearchPt);
+	
+	$(document).on ("click", "#deletePost", function (event) {
+		PostHash=$(this).attr('hash');
+		event.preventDefault();
+		var data = new FormData();
+		data.append('PostHash', PostHash);
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/DeletePost/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+    });
+	
+	$(document).on ("click", "#Search_Entry", function (event) {
+		event.preventDefault();
+		var data = new FormData();
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/ReturnSearchFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){				
+				$('#SearchPostBody').html(data);
+				$('#SearchPost').modal('show');
+			}		
+		});
+    });
+	
+	$(document).on ("click", "#SubmitSearch", function (event) {
+		event.preventDefault();
+		var i=0;
+		var ats=[];
+		$("div[searchInput='yes']").each(function() {
+				at = $(this).attr("id")
+				ats.push(at);
+		});
+		
+		for (var i = 0; i < ats.length; i++) {
+			console.log(ats[i]);
+			$("div[id='"+ats[i]+"']"+" > div > div > select").each(function() {
+				$(this).attr('name',ats[i]+"_Condition")
+			});
+			$("div[id='"+ats[i]+"']"+" > div > div > input").each(function() {
+				$(this).attr('name',ats[i]+"_Value")
+			});	
+		}
+		
+		$("option").each(function() {
+			(new_name=$(this).text())
+			$(this).attr('value',new_name)
+		});var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
+		$('#SearchEntry').append('<input type="hidden" name="CommunityHash" value="{{ Community_Name.0.communityHash}}" />');
+		$('#SearchEntry').append('<input type="hidden" name="DatatypeHash" value="{{ Datatype_Name.0.datatypeHash }}" />');
+		$('#SearchEntry').append('<input type="hidden" name="csrfmiddlewaretoken" value="'+csrftoken+'" />');
+		$("#SearchEntry").attr('action', "/community/ReturnEntrySearchFields/").submit();
+		/*
+		var data = new FormData($('#SearchEntry').get(0));
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/community/ReturnEntrySearchFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$("#Datatypes_list").html(data)	
+				//$('#SearchPost').modal('hide');
+			}		
+		});
+		*/
+    });
+
+
+	
+});
+
+</script>
+<body class="bg-light">
+
+<!-- Main Content -->
+    <div id="content">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top">
+		<a class="navbar-brand" href="http://3.134.79.169:8000/streampage/">
+			<img src="{% static 'uploads/logo/Logo.png' %}" width="55" height="55" class="d-inline-block align-top">
+			<img src="{% static 'uploads/logo/LogoText.png' %}" width="55" height="55" class="d-inline-block align-top">
+			
+		</a>
+		<!-- Topbar Navbar -->
+			<ul class="navbar-nav ml-auto">
+			<!-- Nav Item - User Information -->
+				<li class="nav-item dropdown no-arrow">
+					<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="mr-2 d-none d-lg-inline text-white-600 small">{{user}}</span>
+						<img class="img-profile rounded-circle" src="{% static 'uploads/profiles/default.jpg' %}">
+					</a>
+					<!-- Dropdown - User Information -->
+					<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+						<a class="dropdown-item" href="/streampage/profile">
+							<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+							Profile
+						</a>
+						<a class="dropdown-item" href="#">
+							<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+							Settings
+						</a>
+						<a class="dropdown-item" href="#">
+							<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+							Activity Log
+						</a>
+						<div class="dropdown-divider">
+						</div>
+						<a class="dropdown-item" href="/streampage/logout">
+							<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+							Logout
+						</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+	</div>
+        <!-- End of Topbar -->
+
+  
+	<div class="container-fluid text-center">    
+	  <div class="row content">
+		<div class="col-sm-2 sidenav d-flex">
+		</div>
+		<div class="col-sm-8 text-left"> 
+		  {% block content %}{% endblock %}
+		  <hr>
+		</div>
+		<div class="col-sm-2 sidenav d-flex">
+		</div>
+	  </div>
+	</div>
+
+	<footer class="container-fluid text-center">
+	  <p>Copyright Communityverse 2019</p>
+	</footer>
+	
+</body>
+</html>
