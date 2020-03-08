@@ -1,0 +1,81 @@
+{% extends "base.html" %} 
+
+{% block content %}
+  <div class="p-3">
+	<button type="button" id="AddDatatype" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add Datatype</button>
+  <br><br><b>{{ community }}</b><br><br> <!---{{dt_resp.0.relatedCommunity}}---> 
+  </div>
+  <div id="Datatypes_list" class="shadow p-3">
+  <div class="row p-3">
+		<div class="col-sm-5">
+			<img src="{{ community.communityPhoto }}" class="img-thumbnail"><br>
+		</div>
+		<div class="col-sm-7">
+			<p>{{ community.description }}</p><br>
+			<p>{{ community.communityTags }}</p>
+		</div>
+	</div>
+  <div class="container">
+	<div class="row">
+		{% for dt in dt_resp %}
+		<div class="col-6">
+			<div class="card shadow mb-4">
+				<div class="card-header bg-white d-flex flex-row align-items-center justify-content-between">
+					<div class="right small"><b>{{ dt.name }}</b></div>
+					<div id="datatypeName" class="left small"><button type="button" class="btn btn-primary"><a id="Datatype" class="classD" hash="{{ dt.datatypeHash }}">Go!</a></button></div>			
+				</div>
+				<!-- Card Body -->
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-12 small">
+							<b>Created by : </b><i><font class="primary">{{ dt.datatypeCreator }}</font></i><br>
+							<b>Creation Date : </b><i><font class="primary">{{ dt.datatypeCreationDate }}</font></i>			
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>   
+		{% endfor %}
+    </div>
+  </div>
+<!-- Modal -->
+	<div class="modal fade" id="DatatypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="datatypeModalTitle"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" action="" id="createDatatype" enctype="multipart/form-data">
+				<div id="DatatypeModalBody" class="modal-body" >
+					{% csrf_token %}
+					{{form.as_p }}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Create</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<div class="pagination">
+    <span class="step-links">
+        {% if dt_resp.has_previous %}
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page=1">&laquo; first</a>
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ dt_resp.number }} of {{ dt_resp.paginator.num_pages }}.
+        </span>
+
+        {% if dt_resp.has_next %}
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.next_page_number }}">next</a>
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div></div> 
+{% endblock %}
