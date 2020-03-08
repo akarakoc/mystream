@@ -71,10 +71,11 @@ $.extend({
     }
 });
 
+//ADD COMMUNITY BUTTON MODAL RESPONSE
 $( document ).ready(function() {
 	$( "#AddCommunity" ).click(function() {
 		var requestFormData={Form:"Yes"};
-		var communityForm = $.zResponse("/community/sendCommunityForm",requestFormData);
+		var communityForm = $.zResponse("/streampage/sendCommunityForm",requestFormData);
 		$('#communityModalBody').html(communityForm);
 		$('#CommunityModalTitle').html("Add New Community");
 		$('#CommunityModal').modal('show');
@@ -88,7 +89,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/JoinCommunity/',
+			url: '/streampage/JoinCommunity/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -106,7 +107,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/VoteCommunity/',
+			url: '/streampage/VoteCommunity/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -119,7 +120,7 @@ $( document ).ready(function() {
 	
 	$( "#AddDatatype" ).click(function() {
 		var requestFormData={Form:"Yes"};
-		var communityForm = $.zResponse("/community/sendDatatypeForm",requestFormData);
+		var communityForm = $.zResponse("/streampage/sendDatatypeForm",requestFormData);
 		$('#DatatypeModalBody').html(communityForm);
 		$('#datatypeModalTitle').html("Add New Datatype");
 		$('#DatatypeModal').modal('show');
@@ -128,7 +129,7 @@ $( document ).ready(function() {
 
 	var tagSearch = function() {
 		$.ajax({
-            url: "/community/searchTag",
+            url: "/streampage/searchTag",
             data: {
 				'search_text' : $('#id_Community_Name').val(),
 				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
@@ -146,7 +147,7 @@ $( document ).ready(function() {
 	//////////////////////////////////////////////////
 	var tagSearchDt = function() {
 		$.ajax({
-            url: "/community/searchTag",
+            url: "/streampage/searchTag",
             data: {
 				'search_text' : $('#id_Datatype_Name').val(),
 				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
@@ -168,7 +169,7 @@ $( document ).ready(function() {
 			console.log($("input[name=csrfmiddlewaretoken]").val());
 			$.ajax({
 				type:'POST',
-				url: '/community/CreateCommunity/',
+				url: '/streampage/CreateCommunity/',
 				data: data,
 				processData: false,
 				contentType: false,
@@ -191,7 +192,7 @@ $( document ).ready(function() {
 			//console.log($("input[name=csrfmiddlewaretoken]").val());
 			$.ajax({
 				type:'POST',
-				url: '/community/CreateDatatype/',
+				url: '/streampage/CreateDatatype/',
 				data: data,
 				processData: false,
 				contentType: false,
@@ -214,7 +215,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/CheckMembership/',
+			url: '/streampage/CheckMembership/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -222,8 +223,8 @@ $( document ).ready(function() {
 			success: function(data, textStatus, jqXHR){
 				if (data.trim()=="Yes"){
 					var datatypeParam={showDataTypes:Cname};
-					var dt = $.zResponse("/community/sendDatatypePage",datatypeParam);
-					window.location = '/community/sendDatatypePage/?showDataTypes='+Cname;	
+					var dt = $.zResponse("/streampage/sendDatatypePage",datatypeParam);
+					window.location = '/streampage/sendDatatypePage/?showDataTypes='+Cname;	
 				}else{
 					alert("You should join first!")
 				}
@@ -236,8 +237,8 @@ $( document ).ready(function() {
 	$( '.classD' ).click(function() {
 		var Dtname = $(this).attr('hash');
 		var PostParam={showPosts:Dtname};
-		var dt = $.zResponse("/community/sendPostPage",PostParam);
-		window.location = '/community/sendPostPage/?showPosts='+Dtname;							
+		var dt = $.zResponse("/streampage/sendPostPage",PostParam);
+		window.location = '/streampage/sendPostPage/?showPosts='+Dtname;							
 	});
 	
 	$( '#Edit_Primitive' ).click(function() {
@@ -248,7 +249,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/ShowDatatypeFields/',
+			url: '/streampage/ShowDatatypeFields/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -270,7 +271,7 @@ $( document ).ready(function() {
 			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 			$.ajax({
 				type:'POST',
-				url: '/community/EditDataytpe/',
+				url: '/streampage/EditDataytpe/',
 				data: data,
 				processData: false,
 				contentType: false,
@@ -297,7 +298,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/SavePrimitives/',
+			url: '/streampage/SavePrimitives/',
 			data: data,
 			idval: selectedID,
 			processData: false,
@@ -321,7 +322,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/DeleteDatatypeFields/',
+			url: '/streampage/DeleteDatatypeFields/',
 			data: data,
 			idval: selectedID,
 			processData: false,
@@ -347,7 +348,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/EditDatatypeFields/',
+			url: '/streampage/EditDatatypeFields/',
 			data: data,
 			idval: selectedID,
 			processData: false,
@@ -374,7 +375,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/ReturnPostFields/',
+			url: '/streampage/ReturnPostFields/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -404,7 +405,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/CreatePost/',
+			url: '/streampage/CreatePost/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -419,7 +420,7 @@ $( document ).ready(function() {
 	
 	var tagSearchPt = function() {
 		$.ajax({
-            url: "/community/searchTag",
+            url: "/streampage/searchTag",
             data: {
 				'search_text' : $('#id_TextEntry').val(),
 				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
@@ -444,7 +445,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/DeletePost/',
+			url: '/streampage/DeletePost/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -464,7 +465,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/ReturnSearchFields/',
+			url: '/streampage/ReturnSearchFields/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -502,7 +503,7 @@ $( document ).ready(function() {
 		$('#SearchEntry').append('<input type="hidden" name="CommunityHash" value="{{ Community_Name.0.communityHash}}" />');
 		$('#SearchEntry').append('<input type="hidden" name="DatatypeHash" value="{{ Datatype_Name.0.datatypeHash }}" />');
 		$('#SearchEntry').append('<input type="hidden" name="csrfmiddlewaretoken" value="'+csrftoken+'" />');
-		$("#SearchEntry").attr('action', "/community/ReturnEntrySearchFields/").submit();
+		$("#SearchEntry").attr('action', "/streampage/ReturnEntrySearchFields/").submit();
 		/*
 		var data = new FormData($('#SearchEntry').get(0));
 		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
@@ -510,7 +511,7 @@ $( document ).ready(function() {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/community/ReturnEntrySearchFields/',
+			url: '/streampage/ReturnEntrySearchFields/',
 			data: data,
 			processData: false,
 			contentType: false,

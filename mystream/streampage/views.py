@@ -109,9 +109,9 @@ def CheckMembership_view(request):
     user = request.user
     userModel = communityUsers.objects.filter(nickName=user)[0]
     if Communities.objects.filter(communityMembers=userModel,communityHash=request.POST.get("community_Hash")):
-        return render_to_response('tagSearch.html', {'form': "Yes"})
+        return render(None, 'tagSearch.html', {'form': "Yes"})
     else:
-        return render_to_response('tagSearch.html', {'form': "No"})
+        return render(None, 'tagSearch.html', {'form': "No"})
 	
 def VoteCommunity_view(request):
     user = request.user
@@ -141,11 +141,11 @@ def searchTag_view(request):
     titles=""
     for tt in DATA:
         titles+="#"+tt['label']
-    return render_to_response('tagSearch.html', {'form' : titles})
+    return render(None, 'tagSearch.html', {'form' : titles})
 
 
 def handle_uploaded_file(f):
-    filepath = 'community/static/uploads/communities/'+f.name
+    filepath = 'streampage/static/uploads/communities/'+f.name
     with open(filepath, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
@@ -179,7 +179,7 @@ def CreateCommunity_view(request):
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save() 
-    return render_to_response('tagSearch.html', {'form' : "Community is created Successfully!"})
+    return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 		 
 def DatatypePage(request):
     if request.user.is_authenticated:
@@ -195,7 +195,7 @@ def DatatypePage(request):
 
 
 def handle_uploaded_datatypefile(f):
-    filepath = 'community/static/uploads/datatypes/'+f.name
+    filepath = 'streampage/static/uploads/datatypes/'+f.name
     with open(filepath, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
@@ -223,7 +223,7 @@ def CreateDatatype_view(request):
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save() 
-    return render_to_response('tagSearch.html', {'form' : "Datatype is created Successfully!"}) 
+    return render(None, 'tagSearch.html', {'form' : "Datatype is created Successfully!"}) 
 	
 def PostPage(request):
     if request.user.is_authenticated:
@@ -234,7 +234,7 @@ def PostPage(request):
         RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
         Primitive_List = DatatypeResult[0].datatypefields_set.all()
         c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from community_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
         c.execute(execution_string)
         posts=c.fetchall()
         paginator = Paginator(posts, 5)
@@ -250,7 +250,7 @@ def EditDatatype_view(request):
         form = AddTextEntryEnum()
     else:
         form = AddTextEntry()
-    return render_to_response('modalPost.html', {'form' : form })
+    return render(None, 'modalPost.html', {'form' : form })
 
 def ShowDatatypeFields_view(request):
     relatedDt = Datatypes.objects.get(datatypeHash=request.POST.get("DatatypeHash"))
@@ -271,9 +271,9 @@ def ShowDatatypeFields_view(request):
                 form = AddTextEntry(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show})
                 context['form'+str(iter)]=form
             iter +=1
-        return render_to_response('showDataTypeFields.html', {'form':context})
+        return render(None, 'showDataTypeFields.html', {'form':context})
     else:
-        return render_to_response('showDataTypeFields.html', {'form':"Yes"})
+        return render(None, 'showDataTypeFields.html', {'form':"Yes"})
 		
 def SavePrimitives_view(request):
     name = request.POST.get("name")
@@ -295,9 +295,9 @@ def SavePrimitives_view(request):
     else:
         dtFields.fronttableShow = False	
     if name == '':
-        return render_to_response('tagSearch.html', {'form' : "Please Enter The Name!!"})
+        return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
     elif type == '':
-        return render_to_response('tagSearch.html', {'form' : "Please Choose The Type!!"})
+        return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
     else:
         if Enumeration is None:
             typefield = Primitives.objects.get(name=type)
@@ -306,10 +306,10 @@ def SavePrimitives_view(request):
             dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
             dtFields.relatedPrimitives = typefield
             dtFields.save()
-            return render_to_response('tagSearch.html', {'form' : "Data is saved!"})
+            return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
         else:
             if Enumeration == '':
-                return render_to_response('tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+                return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
             else:
                 typefield = Primitives.objects.get(name=type)
                 dtFields.name = name
@@ -318,7 +318,7 @@ def SavePrimitives_view(request):
                 dtFields.relatedPrimitives = typefield
                 dtFields.enumerations = Enumeration
                 dtFields.save()
-                return render_to_response('tagSearch.html', {'form' : "Data is saved!"})
+                return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
 
 def DeleteDatatypeFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
@@ -327,7 +327,7 @@ def DeleteDatatypeFields_view(request):
     name = request.POST.get("name")
     HiddenPosts= Posts.objects.filter(propertyName=name,relatedDatatypes=Dt).delete()
     DatatypeFields.objects.filter(name=name).delete()
-    return render_to_response('tagSearch.html', {'form' : "Datatype is Deleted Successfully!"})
+    return render(None, 'tagSearch.html', {'form' : "Datatype is Deleted Successfully!"})
 
 def EditDatatypeFields_view(request):
     name = request.POST.get("name")
@@ -350,9 +350,9 @@ def EditDatatypeFields_view(request):
     else:
         dtFields.fronttableShow = False	
     if name == '':
-        return render_to_response('tagSearch.html', {'form' : "Please Enter The Name!!"})
+        return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
     elif type == '':
-        return render_to_response('tagSearch.html', {'form' : "Please Choose The Type!!"})
+        return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
     else:
         if Enumeration is None:
             typefield = Primitives.objects.get(name=type)
@@ -361,10 +361,10 @@ def EditDatatypeFields_view(request):
             dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
             dtFields.relatedPrimitives = typefield
             dtFields.save()
-            return render_to_response('tagSearch.html', {'form' : "Data is updated!"})
+            return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
         else:
             if Enumeration == '':
-                return render_to_response('tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+                return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
             else:
                 typefield = Primitives.objects.get(name=type)
                 dtFields.name = name
@@ -373,7 +373,7 @@ def EditDatatypeFields_view(request):
                 dtFields.relatedPrimitives = typefield
                 dtFields.enumerations = Enumeration
                 dtFields.save()
-                return render_to_response('tagSearch.html', {'form' : "Data is updated!"})
+                return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
 	
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
@@ -430,10 +430,10 @@ def ReturnPostFields_view(request):
             show = fields.fronttableShow
             context["Tags"]=AddTagPost()
         iter += 1
-    return render_to_response('entryReturnFields.html', {'form' : context})
+    return render(None, 'entryReturnFields.html', {'form' : context})
 
 def handle_uploaded_postfile(f):
-    filepath = 'community/static/uploads/posts/'+f.name
+    filepath = 'streampage/static/uploads/posts/'+f.name
     with open(filepath, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
@@ -474,7 +474,7 @@ def CreatePost_view(request):
             entry.save()
         else:
             if fields.fieldRequired == True:
-                return render_to_response('tagSearch.html', {'form' : fields.name+" is required!"})
+                return render(None, 'tagSearch.html', {'form' : fields.name+" is required!"})
     Tags = saveTag_view(request.POST.get("Tags"))
     tagentry = PostTags()
     relatedPost = Posts.objects.filter(entryHash=PostHash)[0] 
@@ -482,12 +482,12 @@ def CreatePost_view(request):
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save()  	
-    return render_to_response('tagSearch.html', {'form' : "The Entry is Created Successfully"})
+    return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
     
 def DeletePost_view(request):
     PostHash = request.POST.get("PostHash")	
     Posts.objects.filter(entryHash=PostHash).delete()	
-    return render_to_response('tagSearch.html', {'form' : "The Entry is deleted Successfully"})
+    return render(None, 'tagSearch.html', {'form' : "The Entry is deleted Successfully"})
 	
 	
 def login_view(request):
@@ -602,7 +602,7 @@ def ReturnSearchFields_view(request):
             show = fields.fronttableShow
             context["Tags"]=AddTagSearch()
         iter += 1
-    return render_to_response('entrySearchFields.html', {'form' : context})
+    return render(None, 'entrySearchFields.html', {'form' : context})
 	
 def ReturnEntrySearchFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
@@ -615,29 +615,29 @@ def ReturnEntrySearchFields_view(request):
             subquery=""
             if request.POST.get(fields.name+"_Value") != "":
                 if request.POST.get(fields.name+"_Condition") == "equals":
-                    subquery = "\"entryHash\" in (select \"entryHash\" from community_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'"+request.POST.get(fields.name+"_Value")+"')"
+                    subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
                 elif request.POST.get(fields.name+"_Condition") == "not equal":
-                    subquery = "\"entryHash\" not in (select \"entryHash\" from community_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'"+request.POST.get(fields.name+"_Value")+"')"
+                    subquery = "\"entryHash\" not in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
                 elif request.POST.get(fields.name+"_Condition") == "contains":
-                    subquery = "\"entryHash\" in (select \"entryHash\" from community_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" ~ "+"'"+request.POST.get(fields.name+"_Value")+"')"
+                    subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" ~ "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
                 elif request.POST.get(fields.name+"_Condition") == "not contain":
-                    subquery = "\"entryHash\" not in (select \"entryHash\" from community_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" ~ "+"'"+request.POST.get(fields.name+"_Value")+"')"
+                    subquery = "\"entryHash\" not in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" ~ "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
                 elif request.POST.get(fields.name+"_Condition") == "less than":
-                    subquery = "\"entryHash\" in (select \"entryHash\" from community_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" < "+"'"+request.POST.get(fields.name+"_Value")+"')"
+                    subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" < "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
                 elif request.POST.get(fields.name+"_Condition") == "more than":
-                    subquery = "\"entryHash\" in (select \"entryHash\" from community_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" > "+"'"+request.POST.get(fields.name+"_Value")+"')"
+                    subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" > "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
         querystring = " and ".join(querylist)
         DatatypeId = DatatypeResult[0].id		
         RCommunity = Communities.objects.filter(communityHash=CommunityHash)
         Primitive_List = DatatypeResult[0].datatypefields_set.all()
         c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from community_posts where "relatedDatatypes_id"='+str(DatatypeId)+' and '+querystring+') S GROUP BY "entryHash"'
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+' and '+querystring+') S GROUP BY "entryHash"'
         c.execute(execution_string)
         posts=c.fetchall()
         print(querystring)		
