@@ -1,0 +1,36 @@
+
+{% csrf_token %}
+<form method="post" action="" id="SavePrimitive" enctype="multipart/form-data">
+{% csrf_token %}
+  <div class="container">
+    <div class="row">
+    {% for field in form  %}
+      <div class="col-sm-2">
+        {{ field }} 
+      </div>
+    {% endfor %}
+</form>
+	{% if form.fields|length == 4 %}
+		<div class="col-sm-2">
+		</div>
+		<div class="col-sm-2">
+			<table>
+				<tr>
+					<td><button type="button" updateClass="true" id ="SavePrimitiveButton" class="btn btn-outline-primary"><i class="fa fa-save" style="font-size:24px"></i></button></td>
+					<td><button type="button" deleteClass="true" id ="SavePrimitiveButton" class="btn btn-outline-secondary"><i class="fa fa-window-close" style="font-size:24px" aria-hidden="true"></i></button></td>
+				</tr>
+			</table>
+		</div>
+	{% else %}
+		<div class="col-sm-2">
+			<table>
+				<tr>
+					<td><button type="button" updateClass="true" id ="SavePrimitiveButton" class="btn btn-outline-primary"><i class="fa fa-save" style="font-size:24px"></i></button></td>
+					<td><button type="button" deleteClass="true" id ="SavePrimitiveButton" class="btn btn-outline-secondary"><i class="fa fa-window-close" aria-hidden="true" style="font-size:24px"></i></button></td>
+				</tr>
+			</table>
+		</div>
+	{% endif %}
+    </div>     
+  </div>
+

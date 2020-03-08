@@ -1,0 +1,85 @@
+{% extends "base.html" %} 
+
+{% block content %}
+{% load static %}
+	<div class="row">
+		<div class="col-md-3">
+			<img src="{% static 'uploads/profiles/default.jpg' %}" class="img-thumbnail"><br>
+		</div>
+		<div class="col-sm-5">
+			<div class="row">
+				<b>Nickname:&nbsp</b>{{ user }}
+			</div>
+			<div class="row">
+				<b>Name:</b>
+			</div>
+			<div class="row">
+				<b>E-Mail:</b>
+			</div>
+			<div class="row">
+				<b>Community Point:</b>
+			</div>
+			<div class="row">
+				<b>Created:</b>
+			</div>
+		</div> 
+    </div>
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Owned Communities</th>
+				</tr>
+				{% for c in Communities %}
+				<tr>
+					<td>{{c}}<br><td>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div> 
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Owned Datatypes</th>
+				</tr>
+				{% for d in Datatypes %}
+				<tr>					
+					<td>{{d}}<br></td>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Owned Posts</th>
+				</tr>
+				{% for p in Posts %}
+				<tr>
+					<td>{{p}}<td></br>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Joined Communities</th>
+				</tr>
+				{% for j in Joined %}
+				<tr>
+					<td>{{j}}<td></br>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div>
+    </div>
+{% endblock %}

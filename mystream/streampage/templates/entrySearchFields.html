@@ -1,0 +1,23 @@
+{% csrf_token %}
+<form method="post" action="" id="SearchEntry" enctype="multipart/form-data">
+{% csrf_token %}
+  <div class="container">
+	{% for key,val in form.items  %}
+    <div class="row">
+		  <div class="col-sm-3">
+			{{ key }}
+		  </div>
+		  <div id="{{ key }}" searchInput="yes" class="col-sm-9">
+				<div class="row"> 					
+					{% for areas in val  %}
+						<div class="col-sm-5">
+							{{ areas }} 
+						</div>
+					{% endfor %}
+				</div>
+		  </div>
+    </div> 
+	{% endfor %}	
+  </div>
+</form>
+

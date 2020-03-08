@@ -1,0 +1,167 @@
+  <style>
+.modal-dialog,
+.modal-content {
+    /* 80% of window height */
+    height: 80%;
+}
+
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: calc(100% - 120px);
+    overflow-y: scroll;
+}
+  </style>
+  {% extends "base.html" %} 
+{% block content %}
+  <button type="button" id="Add_Post" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add Entry</button>
+  <button type="button" id="Edit_Primitive" class="btn btn-primary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Datatypes</button>
+  <button type="button" id="Search_Entry" class="btn btn-primary btn-sm"><i class="fa fa-search" aria-hidden="true"></i> Search</button> 
+ <br>
+  <br>
+  <b>{{ Community_Name.0.name }} > {{ Datatype_Name.0.name }}</b> 
+  <br>
+  <br>
+  <div class="row">
+		<div class="col-sm-6">
+			<img src="{{  Datatype_Name.0.datatypePhoto }}" class="img-thumbnail"><br>
+		</div>
+		<div class="col-sm-5">
+			<p>{{ Datatype_Name.0.datatypeTags }}</p><br><br>
+		</div>
+  </div>
+  <div class="shadow bg-white p-3" id="Datatypes_list">
+  <table class="table">
+  {% for posts in post_resp %}
+	<tr>
+		<tr>
+			{% for key,val in posts.1.items %}<div class="row">
+			 <td>
+				<div class="row">
+					<div class="col-sm-15">
+						<b>{{ key }}:&nbsp</b>
+						 {{ val }}
+					</div>
+				</div>
+			</td>
+			{% endfor %}
+			<td>
+				<div class="col-sm-2">
+					<button type="button" id = "deletePost" hash="{{ posts.0 }}" class="btn btn-outline-secondary"><i class="fa fa-trash" style="font-size:24px" aria-hidden="true"></i></button>
+				</div>
+			</td>
+		</tr>
+  {% endfor %}
+  </table>
+	<!-- Modal -->
+	<div class="modal fade" id="CommunityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="CommunityModalTitle"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="container">
+					<div class="row p-3" id="PrimitiveTable">
+						<div class="col-sm-2">
+							Name
+						</div>
+						<div class="col-sm-2">
+							Type
+						</div>
+						<div class="col-sm-2">
+							Required
+						</div>
+						<div class="col-sm-2">
+							Show
+						</div>
+						<div class="col-sm-2">
+							Enumerations
+						</div>
+						<div class="col-sm-2">
+							Action
+						</div>
+					</div>  
+				</div>
+				<div id="communityModalBody" class="modal-body">
+				</div>
+				<div class="modal-footer justify-content-between">
+					<form method="post" action="" id="Add_Primitive" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div id="AddPrimitives" class="p-3">
+							<button type="submit" class="btn btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
+							<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label> 				
+						</div>
+					</form>	
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+ 
+<!-- Modal Post -->
+	<div class="modal fade" id="AddPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog  modal-dialog-centered modal" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="AddPostTitle">Add Entry</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="AddPostBody" class="modal-body">
+				</div>
+				<div class="modal-footer justify-content-between">				
+						{% csrf_token %}
+					<button type="submit" id="SubmitEntry" class="btn btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Submit Post</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<!-- Modal Post -->
+	<div class="modal fade" id="SearchPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog  modal-dialog-centered modal" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="SearchPostTitle">Search Entry</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="SearchPostBody" class="modal-body">
+				{% csrf_token %}
+				</div>
+				<div class="modal-footer justify-content-between">				
+						{% csrf_token %}
+					<button type="submit" id="SubmitSearch" class="btn btn-outline-primary mr-auto"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+<div class="pagination">
+    <span class="step-links">
+        {% if post_resp.has_previous %}
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ post_resp.number }} of {{ post_resp.paginator.num_pages }}.
+        </span>
+
+        {% if post_resp.has_next %}
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div></div>
+{% endblock %}
+

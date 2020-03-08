@@ -1,0 +1,16 @@
+{% csrf_token %}
+<form method="post" action="" id="AddEntry" enctype="multipart/form-data">
+  <div class="container">
+	{% for key,val in form.items  %}
+    <div class="row">
+		  <div class="col-sm-5">
+			{{ key }}
+		  </div>
+		  <div id="{{ key }}" entryInput="yes" class="col-sm-6">
+			{{ val }} 
+		  </div>
+    </div> 
+	{% endfor %}	
+  </div>
+</form>
+
