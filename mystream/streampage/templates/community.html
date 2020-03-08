@@ -10,7 +10,7 @@
   <div id="community_list" class="row">
 	{% for comm in community_resp %}
 	<div class="card shadow mb-4 col-md-12">
-        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+        <div class="d-flex flex-row align-items-center justify-content-between">
             <div id="CommunityName" class="left">
 				<h6 class="m-0 font-weight-bold text-primary" >
 				<button type="button" class="btn btn-sm">
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			<!-- Card Body -->
-        <div class="card-body bg-light">
+        <div class="card-body">
 			<div class="modal-body row">
 				<div class="col-md-3">
 					<img src="{{ comm.communityPhoto }}" width="200" height="150" class="d-inline-block align-top"><br>
