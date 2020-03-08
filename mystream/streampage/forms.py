@@ -86,15 +86,15 @@ class AddCommunity(forms.Form):
         super(AddCommunity, self).__init__(*args, **kwargs)
         self.fields['Community_Name'].label = "Community Name"
         self.fields['Community_Name'].widget.attrs.update({
-            'class': 'form-control',
+            'class': 'form-control small',
             "name":"Community Name"})
         self.fields['Community_Description'].label = "Community Description"
         self.fields['Community_Description'].widget.attrs.update({
-            'class': 'form-control',
+            'class': 'form-control small',
             "name":"Community Description"})
         self.fields['Community_Tags'].label = "Community Tags"
         self.fields['Community_Tags'].widget.attrs.update({
-            'class': 'form-control',
+            'class': 'form-control small',
             "name":"Community Tags"})
     def clean(self, *args, **keyargs):
         Community_Name = self.cleaned_data.get("Community Name")

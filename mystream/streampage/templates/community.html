@@ -1,46 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <button type="button" id="AddCommunity" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#CommunityModal">
+  <button type="button" id="AddCommunity" class="btn btn-primary btn-sm small" data-toggle="modal" data-target="#CommunityModal">
 	<i class="fa fa-plus" aria-hidden="true"></i>
 	Add Community
   </button>
   <br>
   <br>
   <div id="community_list" class="row">
-  {% for comm in community_resp %}
-	<div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	{% for comm in community_resp %}
+	<div class="card shadow mb-4 col-md-12">
+        <div class="card-header d-flex flex-row align-items-center justify-content-between">
             <div id="CommunityName" class="left">
 				<h6 class="m-0 font-weight-bold text-primary" >
-				<button type="button" class="btn btn-none">
+				<button type="button" class="btn btn-sm">
 					<p id="Community" class="classC" hash="{{ comm.communityHash }}">
 						<b>{{ comm.name }}</b>
+						<i class="fa fa-star small" style=""> {{ comm.communityPopularity.all|length }}</i>
 					</p>
-					<i class="fa fa-star" style="font-size:18px"> {{ comm.communityPopularity.all|length }}</i>
+					
 				</button>
 				</h6>
 			</div>
-			<div class="right">Created by: {{ comm.communityCreator }} at {{ comm.communityCreationDate }}</div>
+			<div class="right small">Created by: {{ comm.communityCreator }} at {{ comm.communityCreationDate }}</div>
 				<div class="dropdown no-arrow">
-					<button type="button" class="btn btn-primary" VoteCommunity="Yes" id="VoteCommunity" hash="{{ comm.communityHash }}">
-						<i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+					<button type="button" class="btn btn-primary btn-sm small" VoteCommunity="Yes" id="VoteCommunity" hash="{{ comm.communityHash }}">
+						<i class="fa fa-thumbs-up small" aria-hidden="true"></i> 
 						Like
 					</button>
-					<button type="button" class="btn btn-primary" JoinCommunity="Yes" id="JoinCommunity" hash="{{ comm.communityHash }}">
-						<i class="fas fa-sign-in-alt"></i> 
+					<button type="button" class="btn btn-primary btn-sm small" JoinCommunity="Yes" id="JoinCommunity" hash="{{ comm.communityHash }}">
+						<i class="fas fa-sign-in-alt small"></i> 
 						Join
 					</button>
 					
 				</div>
 			</div>
 			<!-- Card Body -->
-        <div class="card-body">
+        <div class="card-body bg-light">
 			<div class="modal-body row">
-				<div class="col-md-6">
-					<img src="{{ comm.communityPhoto }}" class="img-thumbnail"><br>
+				<div class="col-md-3">
+					<img src="{{ comm.communityPhoto }}" width="200" height="150" class="d-inline-block align-top"><br>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-9 small">
 					{{ comm.description }}<br>
 					{%if  comm.communityPrv == True %}
 						<b>Private Community</b>
@@ -61,7 +62,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="CommunityModalTitle"></h5>
+					<b><h8 class="modal-title" id="CommunityModalTitle"></h8></b>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
