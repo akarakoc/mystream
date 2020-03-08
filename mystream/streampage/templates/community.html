@@ -41,7 +41,7 @@
 				<div class="col-md-3">
 					<img src="{{ comm.communityPhoto }}" width="200" height="150" class="d-inline-block align-top"><br>
 				</div>
-				<div class="col-md-9 small mb-2">
+				<div class="col-md-9 small">
 					{{ comm.description }}<br>
 					{%if  comm.communityPrv == True %}
 						<b>Private Community</b>
@@ -81,7 +81,7 @@
 		</div>
 	</div>
 
-<div class="pagination">
+<div class="pagination small">
     <span class="step-links">
         {% if community_resp.has_previous %}
             <a href="?page=1">&laquo; first</a>
