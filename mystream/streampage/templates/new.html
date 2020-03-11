@@ -1,76 +1,71 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 
 {% block content %}
-  <button type="button" id="AddCommunity" class="btn btn-primary btn-sm small" data-toggle="modal" data-target="#CommunityModal">
-	<i class="fa fa-plus" aria-hidden="true"></i>
-	Add Community
-  </button>
-  <br>
-  <br>
-  <div id="community_list" class="row">
-	{% for comm in community_resp %}
-	<div class="card shadow mb-4 col-md-12">
-        <div class="d-flex flex-row align-items-center justify-content-between">
-            <div id="CommunityName" class="left">
-				<h6 class="m-0 font-weight-bold text-primary" >
-				<button type="button" class="btn btn-sm">
-					<p id="Community" class="classC" hash="{{ comm.communityHash }}">
-						<b>{{ comm.name }}</b>
-						<i class="fa fa-star small" style=""> {{ comm.communityPopularity.all|length }}</i>
-					</p>
-					
-				</button>
-				</h6>
-			</div>
-			<div class="right small">Created by: {{ comm.communityCreator }} at {{ comm.communityCreationDate }}</div>
-				<div class="dropdown no-arrow">
-					<button type="button" class="btn btn-primary btn-sm small" VoteCommunity="Yes" id="VoteCommunity" hash="{{ comm.communityHash }}">
-						<i class="fa fa-thumbs-up small" aria-hidden="true"></i> 
-						Like
-					</button>
-					<button type="button" class="btn btn-primary btn-sm small" JoinCommunity="Yes" id="JoinCommunity" hash="{{ comm.communityHash }}">
-						<i class="fas fa-sign-in-alt small"></i> 
-						Join
-					</button>
-					
-				</div>
-			</div>
-			<!-- Card Body -->
-        <div class="card-body">
-			<div class="modal-body row">
-				<div class="col-md-3">
-					<img src="{{ comm.communityPhoto }}" width="200" height="150" class="d-inline-block align-top"><br>
-				</div>
-				<div class="col-md-9 small">
-					{{ comm.description }}<br>
-					{%if  comm.communityPrv == True %}
-						<b>Private Community</b>
-					{% elif comm.communityPrv == False %}
-						<b>Public Community</b>
-					{% endif %}<br>
-					<b>Community Point : </b>{{ comm.communityPopularity }}<br>
-					<b>Community Members : </b>{{ comm.communityMembers.all |length}}<br>
-					<b>Community Tags : </b><i><font class="primary">{{ comm.communityTags}}</font></i><br>
-				</div>
-			</div>
+  <div class="p-3">
+	<button type="button" id="AddDatatype" class="btn btn-primary btn-sm">
+		<i class="fa fa-plus" aria-hidden="true"></i> Add Posttype
+	</button>
+    <button type="button" id="Edit_Primitive" class="btn btn-primary btn-sm">
+		<i class="fas fa-edit" aria-hidden="true"></i>Edit Posttypes
+	</button>	
+	<button type="button" id="Add_Post" class="btn btn-primary btn-sm">
+		<i class="fa fa-plus" aria-hidden="true"></i> Add Post
+	</button>
+    <button type="button" id="Search_Entry" class="btn btn-primary btn-sm">
+		<i class="fa fa-search" aria-hidden="true"></i> Search
+	</button> 
+  </div>
+  <div class="d-flex flex-row align-items-center justify-content-between">
+	<b>{{ community }}</b>
+	<b>Created by: {{ community.communityCreator }} at {{ community.communityCreationDate }}</b>
+  </div>
+  <div id="Datatypes_list" class="">
+  <div class="row">
+		<div class="col-sm-5">
+			<img src="{{ community.communityPhoto }}" width="200" height="150" class="img-thumbnail"><br>
 		</div>
-    </div>    
-{% endfor %}
-</div>
+		<div class="col-sm-7">
+			<p>{{ community.description }}</p><br>
+			<p>{{ community.communityTags }}</p>
+		</div>
+	</div>
+  <div class="container">
+	<div class="row">
+		{% for dt in dt_resp %}
+		<div class="col-6">
+			<div class="card shadow mb-4">
+				<div class="card-header bg-white d-flex flex-row align-items-center justify-content-between">
+					<div class="right small"><b>{{ dt.name }}</b></div>
+					<div id="datatypeName" class="left small"><button type="button" class="btn btn-primary"><a id="Datatype" class="classD" hash="{{ dt.datatypeHash }}">Go!</a></button></div>			
+				</div>
+				<!-- Card Body -->
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-12 small">
+							<b>Created by : </b><i><font class="primary">{{ dt.datatypeCreator }}</font></i><br>
+							<b>Creation Date : </b><i><font class="primary">{{ dt.datatypeCreationDate }}</font></i>			
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>   
+		{% endfor %}
+    </div>
+  </div>
 <!-- Modal -->
-	<div class="modal fade" id="CommunityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="DatatypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<b><h8 class="modal-title" id="CommunityModalTitle"></h8></b>
+					<h5 class="modal-title" id="datatypeModalTitle"></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form method="post" action="" id="createCommunity" enctype="multipart/form-data">
-				<div id="communityModalBody" class="modal-body">
+				<form method="post" action="" id="createDatatype" enctype="multipart/form-data">
+				<div id="DatatypeModalBody" class="modal-body" >
 					{% csrf_token %}
-					{{form.as_p }}		
+					{{form.as_p }}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -80,22 +75,21 @@
 			</div>
 		</div>
 	</div>
-
-<div class="pagination small">
+<div class="pagination">
     <span class="step-links">
-        {% if community_resp.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ community_resp.previous_page_number }}">previous</a>
+        {% if dt_resp.has_previous %}
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page=1">&laquo; first</a>
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
-            Page {{ community_resp.number }} of {{ community_resp.paginator.num_pages }}.
+            Page {{ dt_resp.number }} of {{ dt_resp.paginator.num_pages }}.
         </span>
 
-        {% if community_resp.has_next %}
-            <a href="?page={{ community_resp.next_page_number }}">next</a>
-            <a href="?page={{ community_resp.paginator.num_pages }}">last &raquo;</a>
+        {% if dt_resp.has_next %}
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.next_page_number }}">next</a>
+            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
-</div></div>
+</div></div> 
 {% endblock %}
