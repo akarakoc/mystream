@@ -15,20 +15,33 @@
 		<i class="fa fa-search" aria-hidden="true"></i> Search
 	</button> 
   </div>
-  <div class="d-flex flex-row align-items-center justify-content-between">
-	<b>{{ community }}</b>
-	<b>Created by: {{ community.communityCreator }} at {{ community.communityCreationDate }}</b>
-  </div>
+
   <div id="Datatypes_list" class="">
-  <div class="row">
-		<div class="col-sm-5">
-			<img src="{{ community.communityPhoto }}" width="200" height="150" class="img-thumbnail"><br>
+  <div class="card mb-4">
+	<div class="card-header bg-white d-flex flex-row align-items-center justify-content-between">
+		<div class="d-flex flex-row align-items-center justify-content-between">
+			<div class="small">
+				{{ community }} Community
+			</div>			
+			<div class="small">
+				Created by: {{ community.communityCreator }} at {{ community.communityCreationDate }}
+			</div>
 		</div>
-		<div class="col-sm-7">
-			<p>{{ community.description }}</p><br>
-			<p>{{ community.communityTags }}</p>
 		</div>
-	</div>
+		<!-- Card Body -->
+		<div class="card-body small">
+			<div class="row">
+				<div class="col-sm-3">
+					<img src="{{ community.communityPhoto }}" width="100" height="80" class="img-thumbnail"><br>
+				</div>
+				<div class="col-sm-9">
+					<p>{{ community.description }}</p>
+					<p>{{ community.communityTags }}</p>
+				</div>
+			</div>
+		</div>
+    </div>
+  </div>
   <div class="container">
 	<div class="row">
 		{% for dt in dt_resp %}
