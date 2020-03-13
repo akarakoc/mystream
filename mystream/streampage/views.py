@@ -194,18 +194,6 @@ def DatatypePage(request):
     else:
         return HttpResponseRedirect("/streampage/login")
 
-def DatatypePageNew(request):
-    if request.user.is_authenticated:
-        CommunityHash = request.GET.get('showDataTypes')
-        Community_List = Communities.objects.filter(communityHash=CommunityHash)
-        dt = Community_List[0].datatypes_set.all()
-        paginator = Paginator(dt, 5)
-        page = request.GET.get('page')
-        dt_resp = paginator.get_page(page)
-        return render(request, 'new.html', {'dt_resp': dt_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
-    else:
-        return HttpResponseRedirect("/streampage/login")
-
 def handle_uploaded_datatypefile(f):
     filepath = 'streampage/static/uploads/datatypes/'+f.name
     with open(filepath, 'wb+') as destination:
