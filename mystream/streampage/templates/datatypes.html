@@ -1,76 +1,52 @@
 {% extends "base.html" %} 
 
 {% block content %}
-  <div class="p-3">
-	<button type="button" id="AddDatatype" class="btn btn-primary btn-sm">
-		<i class="fa fa-plus" aria-hidden="true"></i> Add Posttype
-	</button>
-    <button type="button" id="Edit_Primitive" class="btn btn-primary btn-sm">
-		<i class="fas fa-edit" aria-hidden="true"></i>Edit Posttypes
-	</button>	
-	<button type="button" id="Add_Post" class="btn btn-primary btn-sm">
-		<i class="fa fa-plus" aria-hidden="true"></i> Add Post
-	</button>
-    <button type="button" id="Search_Entry" class="btn btn-primary btn-sm">
-		<i class="fa fa-search" aria-hidden="true"></i> Search
-	</button> 
-  </div>
-
   <div id="Datatypes_list" class="">
-  <div class="card mb-4">
-	<div class="card-header bg-white ">
+  <div class="card mb-2">
+	<!-- Card Body -->
+	<div class="card-body small">
 		<div class="d-flex flex-row align-items-center justify-content-between">
-			<div class="small">
+			<div class="">
 				{{ community }} Community
 			</div>			
-			<div class="small">
+			<div class="">
 				Created by: {{ community.communityCreator }} at {{ community.communityCreationDate }}
 			</div>
 		</div>
-		</div>
-		<!-- Card Body -->
-		<div class="card-body small">
-			<div class="row">
-				<div class="col-sm-3">
-					<img src="{{ community.communityPhoto }}" width="125" height="100" class="img-thumbnail"><br>
-				</div>
-				<div class="col-sm-9">
-					<p>{{ community.description }}</p>
-					<p>{{ community.communityTags }}</p>
-				</div>
+		<br>
+		<div class="row">
+			<div class="col-sm-3">
+				<img src="{{ community.communityPhoto }}" width="125" height="100" class="img-thumbnail"><br>
+			</div>
+			<div class="col-sm-9">
+				<p>{{ community.description }}</p>
+				<p>{{ community.communityTags }}</p>
 			</div>
 		</div>
-    </div>
+		<br>
+		<div class="p-1">
+			<button type="button" id="AddDatatype" class="btn btn-primary btn-sm">
+				<i class="fa fa-plus" aria-hidden="true"></i> Add Posttype
+			</button>
+			<button type="button" id="Edit_Primitive" class="btn btn-primary btn-sm">
+				<i class="fas fa-edit" aria-hidden="true"></i>Edit Posttypes
+			</button>	
+			<button type="button" id="Add_Post" class="btn btn-primary btn-sm">
+				<i class="fa fa-plus" aria-hidden="true"></i> Add Post
+			</button>
+			<button type="button" id="Search_Entry" class="btn btn-primary btn-sm">
+				<i class="fa fa-search" aria-hidden="true"></i> Search
+			</button> 
+		</div>
+	</div>
   </div>
-  <div class="container">
-	<div class="row">
-		{% for dt in dt_resp %}
-		<div class="col-6">
-			<div class="card shadow mb-4">
-				<div class="card-header bg-white d-flex flex-row align-items-center justify-content-between">
-					<div class="right small"><b>{{ dt.name }}</b></div>
-					<div id="datatypeName" class="left small"><button type="button" class="btn btn-primary"><a id="Datatype" class="classD" hash="{{ dt.datatypeHash }}">Go!</a></button></div>			
-				</div>
-				<!-- Card Body -->
-				<div class="card-body">
-					<div class="row">
-						<div class="col-sm-12 small">
-							<b>Created by : </b><i><font class="primary">{{ dt.datatypeCreator }}</font></i><br>
-							<b>Creation Date : </b><i><font class="primary">{{ dt.datatypeCreationDate }}</font></i>			
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>   
-		{% endfor %}
-    </div>
-  </div>
+
 <!-- Modal -->
-	<div class="modal fade" id="DatatypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade small" id="DatatypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="datatypeModalTitle"></h5>
+					<h6 class="modal-title" id="datatypeModalTitle"></h6>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -81,8 +57,8 @@
 					{{form.as_p }}
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary">Create</button>
+					<button type="button" class="btn btn-secondary small" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary small">Create</button>
 				</div>
 				</form>
 			</div>

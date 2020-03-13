@@ -455,3 +455,17 @@ class AddTagSearch(forms.Form):
         super(AddTagSearch, self).__init__(*args, **kwargs)
         self.fields['TagEntry'].widget.attrs.update({'class': 'form-control'})
         self.fields['Condition'].widget.attrs.update({'class': 'form-control'})
+		
+#########################NEW PROJECT FORMS########################################
+
+class posttypeList(forms.Form):	
+    def __init__(self, *args, **kwargs):
+        enum = kwargs.pop('en')
+        name = kwargs.pop('nm')
+        super(posttypeList, self).__init__(*args, **kwargs)
+        self.fields['EnumaratedEntry'] = forms.ChoiceField(choices=tuple(enumerate(enum)),label='')
+        self.fields['EnumaratedEntry'].widget.attrs.update({'class': 'form-control'})
+        self.fields['Condition'].widget.attrs.update({'class': 'form-control'})
+        contextName={}
+        cnName = contextName.get(name,name)
+        super(posttypeList, self).add_prefix(cnName)
