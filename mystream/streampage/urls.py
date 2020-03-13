@@ -9,7 +9,6 @@ urlpatterns = [
     path('sendCommunityForm/', views.communityForm, name='index'),
     path('communities/', views.communityPage, name='index'),
     path('sendDatatypePage/', views.DatatypePage, name='index'),
-    path('sendDatatypePageNew/', views.DatatypePageNew, name='index'),	
     path('sendPostPage/', views.PostPage, name='index'),
 	path('login/', views.login_view, name='login'),
 	path('register/', views.register_view, name = "register"),
