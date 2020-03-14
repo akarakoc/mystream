@@ -181,7 +181,8 @@ def CreateCommunity_view(request):
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save() 
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
-		 
+
+
 def DatatypePage(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
