@@ -119,11 +119,11 @@ $( document ).ready(function() {
 		});
 	});
 	
-	$( "#AddDatatype" ).click(function() {
+	$( "#AddPosttype" ).click(function() {
 		var requestFormData={Form:"Yes"};
-		var communityForm = $.zResponse("/streampage/sendDatatypeForm",requestFormData);
+		var communityForm = $.zResponse("/streampage/sendPosttypeForm",requestFormData);
 		$('#DatatypeModalBody').html(communityForm);
-		$('#datatypeModalTitle').html("Add New Datatype");
+		$('#datatypeModalTitle').html("Add New Posttype");
 		$('#DatatypeModal').modal('show');
 	});
 	
@@ -224,8 +224,8 @@ $( document ).ready(function() {
 			success: function(data, textStatus, jqXHR){
 				if (data.trim()=="Yes"){
 					var datatypeParam={showDataTypes:Cname};
-					var dt = $.zResponse("/streampage/sendDatatypePage",datatypeParam);
-					window.location = '/streampage/sendDatatypePage/?showDataTypes='+Cname;	
+					var dt = $.zResponse("/streampage/sendPosttypePage",datatypeParam);
+					window.location = '/streampage/sendPosttypePage/?showDataTypes='+Cname;	
 				}else{
 					alert("You should join first!")
 				}
@@ -505,24 +505,6 @@ $( document ).ready(function() {
 		$('#SearchEntry').append('<input type="hidden" name="DatatypeHash" value="{{ Datatype_Name.0.datatypeHash }}" />');
 		$('#SearchEntry').append('<input type="hidden" name="csrfmiddlewaretoken" value="'+csrftoken+'" />');
 		$("#SearchEntry").attr('action', "/streampage/ReturnEntrySearchFields/").submit();
-		/*
-		var data = new FormData($('#SearchEntry').get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
-		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-		$.ajax({
-			type:'POST',
-			url: '/streampage/ReturnEntrySearchFields/',
-			data: data,
-			processData: false,
-			contentType: false,
-			dataType: "html",
-			success: function(data, textStatus, jqXHR){
-				$("#Datatypes_list").html(data)	
-				//$('#SearchPost').modal('hide');
-			}		
-		});
-		*/
     });
 
 

@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from .forms import UsersLoginForm, UsersRegisterForm
 from .forms import UsersRegisterForm
 from .forms import AddCommunity
-from .forms import AddDatatype
+from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
@@ -121,8 +121,8 @@ def VoteCommunity_view(request):
     Comm.communityPopularity.add(userModel)
     return render(request, 'tagSearch.html', {'form': form})
 	
-def datatypeForm(request):
-    form = AddDatatype()
+def posttypeForm(request):
+    form = AddPosttype()
     return render(request, 'modal.html', {'form': form})
 
 def searchTag_view(request):
@@ -183,7 +183,7 @@ def CreateCommunity_view(request):
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
 
-def DatatypePage(request):
+def PosttypePage(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
         Community_List = Communities.objects.filter(communityHash=CommunityHash)
