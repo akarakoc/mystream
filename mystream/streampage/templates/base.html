@@ -20,24 +20,6 @@
 </head>
 
 <script> 
-// Ajax GET data engine //
-$.extend({
-    xResponse: function(url, data) {
-        var theResponse = null;
-        $.ajax({
-            url: url,
-            data: data,
-			type: "GET",
-            dataType: "json",
-            async: false,
-            success: function(respText) {
-                theResponse = respText;
-            }
-        });
-        return theResponse;
-    }
-});
-
 // Ajax GET data engine NON JSON //
 $.extend({
     zResponse: function(url, data) {
@@ -54,23 +36,7 @@ $.extend({
         return theResponse;
     }
 });
-// Ajax POST data engine //
-$.extend({
-    yResponse: function(url, data) {
-        var theResponse = null;
-        $.ajax({
-            url: url,
-            data: data,
-			type: "POST",
-            dataType: "json",
-            async: false,
-            success: function(respText) {
-                theResponse = respText;
-            }
-        });
-        return theResponse;
-    }
-});
+
 
 //ADD COMMUNITY
 $( document ).ready(function() {
@@ -118,6 +84,31 @@ $( document ).ready(function() {
 		$('#id_Community_Tags').val(data.trim());
 	}
 	$("body").on('keyup', "#id_Community_Name", tagSearch);
+	
+//CHECK COMMUNITY MEMBERSHIP
+	$( '.classC' ).click(function() {
+		var Cname = $(this).attr('hash');
+		var data = new FormData();
+		data.append('community_Hash', Cname);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CheckMembership/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				if (data.trim()=="Yes"){
+					var posttypeParam={showDataTypes:Cname};
+					var dt = $.zResponse("/streampage/sendPosttypePage",posttypeParam);
+					window.location = '/streampage/sendPosttypePage/?showDataTypes='+Cname;	
+				}else{
+					alert("You should join first!")
+				}
+			}
+		});								
+	});
 	
 //JOIN COMMUNITY
 	$( "[JoinCommunity]" ).click(function() {
@@ -204,45 +195,24 @@ $( document ).ready(function() {
 	});
 	
 	function PosttypeCreateResult(data, textStatus, jqXHR){
-		$('#PosttypeModalBody').html(data);
+		$('#PosttypeResult').html(data+'<button type="button" id="AddPosttype" class="btn btn-warning btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add Posttype</button>')		
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-	
-	$( '.classC' ).click(function() {
-		var Cname = $(this).attr('hash');
-		var data = new FormData();
-		data.append('community_Hash', Cname);
-		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-		$.ajax({
-			type:'POST',
-			url: '/streampage/CheckMembership/',
-			data: data,
-			processData: false,
-			contentType: false,
-			dataType: "html",
-			success: function(data, textStatus, jqXHR){
-				if (data.trim()=="Yes"){
-					var datatypeParam={showDataTypes:Cname};
-					var dt = $.zResponse("/streampage/sendPosttypePage",datatypeParam);
-					window.location = '/streampage/sendPosttypePage/?showDataTypes='+Cname;	
-				}else{
-					alert("You should join first!")
-				}
-			}
-		});
-		
-								
-	});
-	
+
+
+/*SHOW POSTS
 	$( '.classD' ).click(function() {
 		var Dtname = $(this).attr('hash');
 		var PostParam={showPosts:Dtname};
 		var dt = $.zResponse("/streampage/sendPostPage",PostParam);
 		window.location = '/streampage/sendPostPage/?showPosts='+Dtname;							
 	});
-	
+*/
+
+	$( '#Edit_Primitive' ).click(function() {
+	});
+
+//EDIT PROSTTYPE
 	$( '#Edit_Primitive' ).click(function() {
 		event.preventDefault();
 		var data = new FormData();
@@ -267,6 +237,8 @@ $( document ).ready(function() {
 		$('#CommunityModal').modal('show');
 	}
 	
+
+//ADD PRIMITIVES	
 	$('#Add_Primitive').submit(function(event){
 			event.preventDefault();
 			var data = new FormData($('#Add_Primitive').get(0));
