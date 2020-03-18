@@ -202,29 +202,29 @@ def handle_uploaded_datatypefile(f):
             destination.write(chunk)
     return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
 
-def CreateDatatype_view(request):
-    form = AddDatatype(request.POST, request.FILES)
-    d_image=request.FILES.get("Datatype_Image")
+def CreatePosttype_view(request):
+    form = AddPosttype(request.POST, request.FILES)
+    d_image=request.FILES.get("Posttype_Image")
     image_path=handle_uploaded_datatypefile(d_image)
     dt = Datatypes()
-    dt.name = request.POST.get("Datatype_Name")
+    dt.name = request.POST.get("Posttype_Name")
     salt = uuid.uuid4().hex
     DtHash = hashlib.sha256(salt.encode() + dt.name.encode()).hexdigest() + salt
     dt.datatypeHash = DtHash
     dt.datatypePhoto = image_path
     dt.relatedCommunity=Communities.objects.get(communityHash=request.POST.get("community_Hash"))
-    dt.datatypeTags = request.POST.get("Datatype_Tags")
+    dt.datatypeTags = request.POST.get("Posttype_Tags")
     dt.datatypeCreationDate = datetime.now()
     dt.datatypeCreator = communityUsers.objects.get(nickName=request.user)
     dt.save()
-    Tags = saveTag_view(request.POST.get("Datatype_Tags"))
+    Tags = saveTag_view(request.POST.get("Posttype_Tags"))
     tagentry = DatatTypeTags()
     relatedDt = Datatypes.objects.filter(datatypeHash=DtHash)[0] 
     tagentry.datatypeTag = relatedDt
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save() 
-    return render(None, 'tagSearch.html', {'form' : "Datatype is created Successfully!"}) 
+    return render(None, 'tagSearch.html', {'form' : "Posttype is created Successfully!"}) 
 	
 def PostPage(request):
     if request.user.is_authenticated:
