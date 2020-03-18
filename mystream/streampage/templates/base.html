@@ -72,7 +72,7 @@ $.extend({
     }
 });
 
-//ADD COMMUNITY BUTTON MODAL RESPONSE
+//ADD COMMUNITY
 $( document ).ready(function() {
 	$( "#AddCommunity" ).click(function() {
 		var requestFormData={Form:"Yes"};
@@ -82,88 +82,7 @@ $( document ).ready(function() {
 		$('#CommunityModal').modal('show');
 	});
 	
-	$( "[JoinCommunity]" ).click(function() {
-		var Chash = $(this).attr('hash');
-		console.log(Chash)
-		var data = new FormData();
-		data.append('community_Hash', Chash);
-		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-		$.ajax({
-			type:'POST',
-			url: '/streampage/JoinCommunity/',
-			data: data,
-			processData: false,
-			contentType: false,
-			dataType: "html",
-			success: function(data, textStatus, jqXHR){
-				console.log(data)
-			}		
-		});
-	});
-	
-	$( "[VoteCommunity]" ).click(function() {
-		var Chash = $(this).attr('hash');
-		var data = new FormData();
-		data.append('community_Hash', Chash);
-		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-		$.ajax({
-			type:'POST',
-			url: '/streampage/VoteCommunity/',
-			data: data,
-			processData: false,
-			contentType: false,
-			dataType: "html",
-			success: function(data, textStatus, jqXHR){
-				alert(data)
-			}		
-		});
-	});
-	
-	$( "#AddPosttype" ).click(function() {
-		var requestFormData={Form:"Yes"};
-		var communityForm = $.zResponse("/streampage/sendPosttypeForm",requestFormData);
-		$('#DatatypeModalBody').html(communityForm);
-		$('#datatypeModalTitle').html("Add New Posttype");
-		$('#DatatypeModal').modal('show');
-	});
-	
-
-	var tagSearch = function() {
-		$.ajax({
-            url: "/streampage/searchTag",
-            data: {
-				'search_text' : $('#id_Community_Name').val(),
-				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
-			},
-			type: "GET",
-            dataType: "html",
-            success: searchResult
-        });			
-	};	
-	function searchResult(data, textStatus, jqXHR){
-		$('#id_Community_Tags').val(data.trim());
-	}
-	$("body").on('keyup', "#id_Community_Name", tagSearch);
-	//////////////////////////////////////////////////
-	//////////////////////////////////////////////////
-	var tagSearchDt = function() {
-		$.ajax({
-            url: "/streampage/searchTag",
-            data: {
-				'search_text' : $('#id_Datatype_Name').val(),
-				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
-			},
-			type: "GET",
-            dataType: "html",
-            success: searchResultDt
-        });			
-	};	
-	function searchResultDt(data, textStatus, jqXHR){
-		$('#id_Datatype_Tags').val(data.trim());
-	}
-	$("body").on('keyup', "#id_Datatype_Name", tagSearchDt);
-	
-	
+//CREATE COMMUNITY (MODAL)
 	$('#createCommunity').submit(function(event){
 			event.preventDefault();
 			var data = new FormData($('#createCommunity').get(0));
@@ -182,28 +101,110 @@ $( document ).ready(function() {
 	function CommunityCreateResult(data, textStatus, jqXHR){
 		$('#communityModalBody').html(data);
 	}
-	//////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////
+//REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
+	var tagSearch = function() {
+		$.ajax({
+            url: "/streampage/searchTag",
+            data: {
+				'search_text' : $('#id_Community_Name').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResult
+        });			
+	};	
+	function searchResult(data, textStatus, jqXHR){
+		$('#id_Community_Tags').val(data.trim());
+	}
+	$("body").on('keyup', "#id_Community_Name", tagSearch);
 	
-	$('#createDatatype').submit(function(event){
+//JOIN COMMUNITY
+	$( "[JoinCommunity]" ).click(function() {
+		var Chash = $(this).attr('hash');
+		console.log(Chash)
+		var data = new FormData();
+		data.append('community_Hash', Chash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/JoinCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				console.log(data)
+			}		
+		});
+	});
+
+//VOTE COMMUNITY
+	$( "[VoteCommunity]" ).click(function() {
+		var Chash = $(this).attr('hash');
+		var data = new FormData();
+		data.append('community_Hash', Chash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/VoteCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+			}		
+		});
+	});
+	
+//ADD POSTTYPE
+	$( "#AddPosttype" ).click(function() {
+		var requestFormData={Form:"Yes"};
+		var communityForm = $.zResponse("/streampage/sendPosttypeForm",requestFormData);
+		$('#PosttypeModalBody').html(communityForm);
+		$('#posttypeModalTitle').html("Add New Posttype");
+		$('#PosttypeModal').modal('show');
+	});
+	
+//REAL TIME POSTTYPE WIKIDATA TAG SEARCH
+	var tagSearchDt = function() {
+		$.ajax({
+            url: "/streampage/searchTag",
+            data: {
+				'search_text' : $('#id_Posttype_Name').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResultDt
+        });			
+	};	
+	function searchResultDt(data, textStatus, jqXHR){
+		$('#id_Posttype_Tags').val(data.trim());
+	}
+	$("body").on('keyup', "#id_Posttype_Name", tagSearchDt);
+	
+//CREATE POSTTYPE (MODAL)
+	$('#createPosttype').submit(function(event){
 			event.preventDefault();
-			var data = new FormData($('#createDatatype').get(0));
+			var data = new FormData($('#createPosttype').get(0));
 			data.append('community_Hash', '{{community_Hash}}');
 			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 			//console.log($("input[name=csrfmiddlewaretoken]").val());
 			$.ajax({
 				type:'POST',
-				url: '/streampage/CreateDatatype/',
+				url: '/streampage/CreatePosttype/',
 				data: data,
 				processData: false,
 				contentType: false,
 				dataType: "html",
-				success: DatatypeCreateResult			
+				success: PosttypeCreateResult			
 			});
 	});
 	
-	function DatatypeCreateResult(data, textStatus, jqXHR){
-		$('#DatatypeModalBody').html(data);
+	function PosttypeCreateResult(data, textStatus, jqXHR){
+		$('#PosttypeModalBody').html(data);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
