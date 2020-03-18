@@ -1,7 +1,7 @@
 {% extends "base.html" %} 
 
 {% block content %}
-  <div id="Datatypes_list" class="">
+<div id="Datatypes_list" class="">
   <div class="card mb-2">
 	<!-- Card Body -->
 	<div class="card-body small">
@@ -23,24 +23,24 @@
 				<p>{{ community.communityTags }}</p>
 			</div>
 		</div>
-		<br>
-		<div class="p-1">
-			<button type="button" id="AddDatatype" class="btn btn-primary btn-sm">
+	</div>
+  </div>
+  <div class="card mb-2">
+     <div class="p-2">
+			<button type="button" id="AddPosttype" class="btn btn-warning btn-sm">
 				<i class="fa fa-plus" aria-hidden="true"></i> Add Posttype
 			</button>
-			<button type="button" id="Edit_Primitive" class="btn btn-primary btn-sm">
+			<button type="button" id="Edit_Primitive" class="btn btn-success btn-sm">
 				<i class="fas fa-edit" aria-hidden="true"></i>Edit Posttypes
 			</button>	
-			<button type="button" id="Add_Post" class="btn btn-primary btn-sm">
+			<button type="button" id="Add_Post" class="btn btn-danger btn-sm">
 				<i class="fa fa-plus" aria-hidden="true"></i> Add Post
 			</button>
 			<button type="button" id="Search_Entry" class="btn btn-primary btn-sm">
 				<i class="fa fa-search" aria-hidden="true"></i> Search
 			</button> 
 		</div>
-	</div>
   </div>
-
 <!-- Modal -->
 	<div class="modal fade small" id="DatatypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -67,8 +67,8 @@
 <div class="pagination">
     <span class="step-links">
         {% if dt_resp.has_previous %}
-            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page=1">&laquo; first</a>
-            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.previous_page_number }}">previous</a>
+            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page=1">&laquo; first</a>
+            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -76,7 +76,7 @@
         </span>
 
         {% if dt_resp.has_next %}
-            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.next_page_number }}">next</a>
+            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.next_page_number }}">next</a>
             <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>

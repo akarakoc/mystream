@@ -104,25 +104,25 @@ class AddCommunity(forms.Form):
         return super(AddCommunity, self).clean(*args, **keyargs) 
 		
 
-class AddDatatype(forms.Form):
-    Datatype_Name = forms.CharField()
-    Datatype_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
-    Datatype_Image = forms.ImageField()
+class AddPosttype(forms.Form):
+    Posttype_Name = forms.CharField()
+    Posttype_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    Posttype_Image = forms.ImageField()
     def __init__(self, *args, **kwargs):
-        super(AddDatatype, self).__init__(*args, **kwargs)
-        self.fields['Datatype_Name'].label = "Datatype Name"
-        self.fields['Datatype_Name'].widget.attrs.update({
+        super(AddPosttype, self).__init__(*args, **kwargs)
+        self.fields['Posttype_Name'].label = "Posttype Name"
+        self.fields['Posttype_Name'].widget.attrs.update({
             'class': 'form-control',
-            "name":"Datatype Name"})
-        self.fields['Datatype_Tags'].label = "Datatype Tags"
-        self.fields['Datatype_Tags'].widget.attrs.update({
+            "name":"Posttype Name"})
+        self.fields['Posttype_Tags'].label = "Posttype Tags"
+        self.fields['Posttype_Tags'].widget.attrs.update({
             'class': 'form-control',
-            "name":"Datatype Tags"})
+            "name":"Posttype Tags"})
     def clean(self, *args, **keyargs):
-        Datatype_Name = self.cleaned_data.get("Datatype Name")
-        Datatype_Tags = self.cleaned_data.get("Datatype Tags")
-        Datatype_Image = self.cleaned_data.get("Datatype Image")
-        return super(AddDatatype, self).clean(*args, **keyargs)
+        Posttype_Name = self.cleaned_data.get("Posttype Name")
+        Posttype_Tags = self.cleaned_data.get("Posttype Tags")
+        Posttype_Image = self.cleaned_data.get("Posttype Image")
+        return super(AddPosttype, self).clean(*args, **keyargs)
 
 
 class AddTextEntryEnum(forms.Form):
