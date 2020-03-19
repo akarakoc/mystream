@@ -209,6 +209,7 @@ def CreatePosttype_view(request):
     dt = Datatypes()
     dt.name = request.POST.get("Posttype_Name")
     salt = uuid.uuid4().hex
+    communityHash=request.POST.get("community_Hash")
     DtHash = hashlib.sha256(salt.encode() + dt.name.encode()).hexdigest() + salt
     dt.datatypeHash = DtHash
     dt.datatypePhoto = image_path
@@ -224,7 +225,7 @@ def CreatePosttype_view(request):
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save() 
-    return render(None, 'tagSearch.html', {'form' : "Posttype is created Successfully!"}) 
+    return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
 	
 def PostPage(request):
     if request.user.is_authenticated:
@@ -245,7 +246,7 @@ def PostPage(request):
     else:
         return HttpResponseRedirect("/streampage/login")
 
-def EditDatatype_view(request):
+def addPosttypeField_view(request):
     EnField = request.POST.get("Enumeration")
     if EnField == 'on':
         form = AddTextEntryEnum()
@@ -253,7 +254,7 @@ def EditDatatype_view(request):
         form = AddTextEntry()
     return render(None, 'modalPost.html', {'form' : form })
 
-def ShowDatatypeFields_view(request):
+def ShowPosttypeFields_view(request):
     relatedDt = Datatypes.objects.get(datatypeHash=request.POST.get("DatatypeHash"))
     if DatatypeFields.objects.filter(relatedDatatype = relatedDt):
         DtFields = DatatypeFields.objects.filter(relatedDatatype = relatedDt)
