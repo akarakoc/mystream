@@ -177,7 +177,7 @@ $( document ).ready(function() {
 	$("body").on('keyup', "#id_Posttype_Name", tagSearchDt);
 	
 //CREATE POSTTYPE (MODAL)
-	$('#createPosttype').submit(function(event){
+	$(document).on ("click", "#createPosttypeButton", function (event) {
 			event.preventDefault();
 			var data = new FormData($('#createPosttype').get(0));
 			data.append('community_Hash', '{{community_Hash}}');
@@ -189,13 +189,16 @@ $( document ).ready(function() {
 				data: data,
 				processData: false,
 				contentType: false,
-				dataType: "html",
+				dataType: "json",
 				success: PosttypeCreateResult			
 			});
 	});
 	
 	function PosttypeCreateResult(data, textStatus, jqXHR){
-		$('#PosttypeResult').html(data+'<button type="button" id="AddPosttype" class="btn btn-warning btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add Posttype</button>')		
+		$('#editPosttypeButton').html('<button type="button" id="EditPosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;'+data["form"]+'<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>')
+		//$('#PosttypeResult').html('')
+		$('#footerAddPosttype').html('<form method="post" action="" id="AddFields" enctype="multipart/form-data">{% csrf_token %}<div id="Fields" class=""><button type="button" hash='+data["posttypeHash"]+' class="btn btn-sm btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add Field</button>&nbsp;&nbsp;<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label></div></form><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>')
+		$('input[name="name"]').attr('readonly', true);
 	}
 	
 
@@ -209,43 +212,41 @@ $( document ).ready(function() {
 	});
 */
 
-	$( '#Edit_Primitive' ).click(function() {
-	});
 
-//EDIT PROSTTYPE
-	$( '#Edit_Primitive' ).click(function() {
+/*EDIT POSTTYPE INITIAL
+	$( '#AddFields' ).click(function() {
 		event.preventDefault();
 		var data = new FormData();
+		var posttypehash = $(this).attr('hash');
 		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('DatatypeHash', posttypehash);
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/streampage/ShowDatatypeFields/',
+			url: '/streampage/ShowPosttypeFields/',
 			data: data,
 			processData: false,
 			contentType: false,
 			dataType: "html",
-			success: DatatypeFields			
+			success: DatatypeFields
 		});
 	});
 	
 	function DatatypeFields(data, textStatus, jqXHR){
-		$('#CommunityModalTitle').html("Edit Datatypes");
-		$('#communityModalBody').html(data);
-		$('input[name="name"]').attr('readonly', true);
-		$('#CommunityModal').modal('show');
+		//$('#CommunityModalTitle').html("Edit Datatypes");
+		$('#PosttypeResult').html(data);
+		//$('#CommunityModal').modal('show');
 	}
-	
+*/
 
-//ADD PRIMITIVES	
-	$('#Add_Primitive').submit(function(event){
+//ADD PRIMITIVE FIELDS	
+	$(document).on ("click", "#Fields", function (event) {
 			event.preventDefault();
-			var data = new FormData($('#Add_Primitive').get(0));
+			var data = new FormData($('#AddFields').get(0));
 			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 			$.ajax({
 				type:'POST',
-				url: '/streampage/EditDataytpe/',
+				url: '/streampage/addPosttypeField/',
 				data: data,
 				processData: false,
 				contentType: false,
@@ -255,7 +256,7 @@ $( document ).ready(function() {
 	});
 
 	function PrimitiveResult(data, textStatus, jqXHR){
-		$(data).appendTo($("#communityModalBody")).show( "slow" );
+		$(data).appendTo($("#PosttypeResult")).show( "slow" );
 		var time = (new Date).getTime();
 		$('#SavePrimitive').attr("id",time);
 		$('#SavePrimitiveButton').attr("id",time);
