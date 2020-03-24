@@ -239,7 +239,7 @@ $( document ).ready(function() {
 	}
 */
 
-//ADD PRIMITIVE FIELDS	
+//ADD PRIMITIVE FIELDS AS A RESPONSE OF A FORM	
 	$(document).on ("click", "#Fields", function (event) {
 			event.preventDefault();
 			var data = new FormData($('#AddFields').get(0));
@@ -257,19 +257,23 @@ $( document ).ready(function() {
 
 	function PrimitiveResult(data, textStatus, jqXHR){
 		$(data).appendTo($("#PosttypeResult")).show( "slow" );
+		var posttypeHash = document.getElementById("EditPosttypeInitial").getAttribute("hash");
+		console.log(posttypeHash);
+		$('#SavePrimitive').attr("hash",posttypeHash);
 		var time = (new Date).getTime();
 		$('#SavePrimitive').attr("id",time);
 		$('#SavePrimitiveButton').attr("id",time);
-		$('#SavePrimitiveButton').attr("id",time);		
+		$('#SavePrimitiveButton').attr("id",time);
 	}
 	
-	
+
+//ADD OR UPDATE PRIMITIVES
 	$(document).on ("click", "[updateClass]", function (event) {
 		selectedID=$(this).attr('id');
 		event.preventDefault();
 		var data = new FormData($('#'+ selectedID).get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		var posttypeHash = document.getElementById(selectedID).getAttribute("hash");
+		data.append('DatatypeHash', posttypeHash);
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
@@ -549,7 +553,7 @@ $( document ).ready(function() {
 	</div>
 
 	<footer class="container-fluid text-center">
-	  <p>Copyright Communityverse 2019</p>
+	  <p>Copyright Mystream 2020</p>
 	</footer>
 	
 </body>
