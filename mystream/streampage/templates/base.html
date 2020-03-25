@@ -296,8 +296,8 @@ $( document ).ready(function() {
 		selectedID=$(this).attr('id');
 		event.preventDefault();
 		var data = new FormData($('#'+ selectedID).get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		var posttypeHash = document.getElementById(selectedID).getAttribute("hash");
+		data.append('DatatypeHash', posttypeHash);
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
@@ -322,8 +322,8 @@ $( document ).ready(function() {
 		selectedID=$(this).attr('id');
 		event.preventDefault();
 		var data = new FormData($('#'+ selectedID).get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		var posttypeHash = document.getElementById(selectedID).getAttribute("hash");
+		data.append('DatatypeHash', posttypeHash);
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
