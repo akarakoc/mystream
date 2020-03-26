@@ -283,7 +283,7 @@ def SavePrimitives_view(request):
     req = request.POST.get("Required")
     show = request.POST.get("ShowPage")
     CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
+    DatatypeHash = request.POST.get("PosttypeHash")
     Enumeration = request.POST.get("Enum")
     dtFields = DatatypeFields()
     dtFields.fieldCreationDate = datetime.now()
