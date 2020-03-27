@@ -276,7 +276,7 @@ def ShowPosttypeFields_view(request):
         return render(None, 'showDataTypeFields.html', {'form':context})
     else:
         return render(None, 'showDataTypeFields.html', {'form':"Yes"})
-		
+
 def SavePrimitives_view(request):
     name = request.POST.get("name")
     type = request.POST.get("Types")
@@ -284,43 +284,85 @@ def SavePrimitives_view(request):
     show = request.POST.get("ShowPage")
     CommunityHash = request.POST.get("CommunityHash")
     DatatypeHash = request.POST.get("PosttypeHash")
-    Enumeration = request.POST.get("Enum")
-    dtFields = DatatypeFields()
-    dtFields.fieldCreationDate = datetime.now()
-    dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
-    if req == 'on':
-        dtFields.fieldRequired = True
-    else:
-        dtFields.fieldRequired = False
-    if show == 'on':
-        dtFields.fronttableShow = True
-    else:
-        dtFields.fronttableShow = False	
-    if name == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
-    elif type == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
-    else:
-        if Enumeration is None:
-            typefield = Primitives.objects.get(name=type)
-            dtFields.name = name
-            dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-            dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-            dtFields.relatedPrimitives = typefield
-            dtFields.save()
-            return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
-        else:
-            if Enumeration == '':
-                return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+    postType = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
+    try:
+        checkName = postType.datatypefields_set.filter(name=name)[0].name
+        if  checkName == name:
+            Enumeration = request.POST.get("Enum")
+            dtFields = DatatypeFields.objects.filter(name=name,relatedDatatype=postType)[0]
+            dtFields.fieldCreationDate = datetime.now()
+            dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
+            if req == 'on':
+                dtFields.fieldRequired = True
             else:
+                dtFields.fieldRequired = False
+            if show == 'on':
+                dtFields.fronttableShow = True
+            else:
+                dtFields.fronttableShow = False	
+            if name == '':
+                return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
+            elif type == '':
+                return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
+            else:
+                if Enumeration is None:
+                    typefield = Primitives.objects.get(name=type)
+                    dtFields.name = name
+                    dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                    dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                    dtFields.relatedPrimitives = typefield
+                    dtFields.save()
+                    return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
+                else:
+                    if Enumeration == '':
+                        return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+                    else:
+                        typefield = Primitives.objects.get(name=type)
+                        dtFields.name = name
+                        dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                        dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                        dtFields.relatedPrimitives = typefield
+                        dtFields.enumerations = Enumeration
+                        dtFields.save()
+                        return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
+    except:
+        Enumeration = request.POST.get("Enum")
+        dtFields = DatatypeFields()
+        dtFields.fieldCreationDate = datetime.now()
+        dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
+        if req == 'on':
+            dtFields.fieldRequired = True
+        else:
+            dtFields.fieldRequired = False
+        if show == 'on':
+            dtFields.fronttableShow = True
+        else:
+            dtFields.fronttableShow = False	
+        if name == '':
+            return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
+        elif type == '':
+            return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
+        else:
+            if Enumeration is None:
                 typefield = Primitives.objects.get(name=type)
                 dtFields.name = name
                 dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
                 dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
                 dtFields.relatedPrimitives = typefield
-                dtFields.enumerations = Enumeration
                 dtFields.save()
                 return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
+            else:
+                if Enumeration == '':
+                    return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+                else:
+                    typefield = Primitives.objects.get(name=type)
+                    dtFields.name = name
+                    dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                    dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                    dtFields.relatedPrimitives = typefield
+                    dtFields.enumerations = Enumeration
+                    dtFields.save()
+                    return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
 
 def DeleteDatatypeFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
