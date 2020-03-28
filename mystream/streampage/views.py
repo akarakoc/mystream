@@ -227,6 +227,32 @@ def CreatePosttype_view(request):
     tagentry.save() 
     return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
 	
+def EditPosttypeMeta_view(request):
+    dt_hash = request.POST.get("Posttype_Hash")
+    d_image=request.FILES.get("Posttype_Image")
+    image_path=handle_uploaded_datatypefile(d_image)
+    dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
+    dt.name = request.POST.get("Posttype_Name")
+    dt.datatypePhoto = image_path
+    dt.datatypeTags = request.POST.get("Posttype_Tags")
+    dt.datatypeCreationDate = datetime.now()
+    dt.datatypeCreator = communityUsers.objects.get(nickName=request.user)
+    dt.save()
+    Tags = saveTag_view(request.POST.get("Posttype_Tags"))
+    tagentry = DatatTypeTags()
+    relatedDt = Datatypes.objects.filter(datatypeHash=dt_hash)[0] 
+    tagentry.datatypeTag = relatedDt
+    tagentry.tagName = Tags["TITLE"] 
+    tagentry.tagItem = Tags["ITEM"]
+    tagentry.save() 
+    return JsonResponse({'form' : "Posttype is updated Successfully!",'posttypeHash':dt_hash})
+
+def DeletePosttypeMeta_view(request):
+    dt_hash = request.POST.get("Posttype_Hash")
+    dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
+    dt.delete() 
+    return JsonResponse({'form' : "Posttype is deleted Successfully!",'posttypeHash':dt_hash})
+	
 def PostPage(request):
     if request.user.is_authenticated:
         DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))

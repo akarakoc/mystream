@@ -35,8 +35,10 @@ class Communities(models.Model):
 class Datatypes(models.Model):
     name = models.CharField(max_length=200, null=True, help_text='Enter ypur datatype') 
     datatypeCreator = models.ForeignKey(communityUsers, related_name='datatypecreator',on_delete=models.SET_NULL, null=True)
+    datatypeEditor = models.ForeignKey(communityUsers, related_name='datatypeeditor',on_delete=models.SET_NULL, null=True)
     relatedCommunity = models.ForeignKey(Communities, help_text='Select related community',on_delete=models.SET_NULL, null=True)
     datatypeCreationDate= models.DateTimeField(null=True)
+    datatypeEditionDate= models.DateTimeField(null=True)
     datatypePhoto = models.CharField(max_length=200, null=True, help_text='datatype photo')
     datatypeTags = models.CharField(max_length=2000, null=True, help_text='Enter datatype Tags')
     datatypeHash = models.CharField(max_length=200, null=True, help_text='Enter datatype hash')
