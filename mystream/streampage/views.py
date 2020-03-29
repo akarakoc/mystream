@@ -281,28 +281,6 @@ def addPosttypeField_view(request):
         form = AddTextEntry()
     return render(None, 'modalPost.html', {'form' : form })
 
-def ShowPosttypeFields_view(request):
-    relatedDt = Datatypes.objects.get(datatypeHash=request.POST.get("DatatypeHash"))
-    if DatatypeFields.objects.filter(relatedDatatype = relatedDt):
-        DtFields = DatatypeFields.objects.filter(relatedDatatype = relatedDt)
-        context = {}
-        iter=0
-        for fields in DtFields:
-            name = fields.name
-            Types = fields.relatedPrimitives
-            Required = fields.fieldRequired
-            Show = fields.fronttableShow
-            if fields.enumerations:
-                Enum = fields.enumerations
-                form = AddTextEntryEnum(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show, 'Enum': Enum})
-                context['form'+str(iter)]=form
-            else:
-                form = AddTextEntry(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show})
-                context['form'+str(iter)]=form
-            iter +=1
-        return render(None, 'showDataTypeFields.html', {'form':context})
-    else:
-        return render(None, 'showDataTypeFields.html', {'form':"Yes"})
 
 def SavePrimitives_view(request):
     name = request.POST.get("name")
@@ -452,7 +430,36 @@ def EditDatatypeFields_view(request):
                 dtFields.enumerations = Enumeration
                 dtFields.save()
                 return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
-	
+
+def ShowPosttypeFields_view(request):
+    CommunityHash = request.POST.get("CommunityHash")
+    PosttypeName = request.POST.get("PosttypeEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dt = Cm.datatypes_set.filter(name=PosttypeName)[0]
+    PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
+    if DatatypeFields.objects.filter(relatedDatatype = Dt):
+        PtFields = DatatypeFields.objects.filter(relatedDatatype = Dt)
+        context = {}
+        iter=0
+        for fields in PtFields:
+            name = fields.name
+            Types = fields.relatedPrimitives
+            Required = fields.fieldRequired
+            Show = fields.fronttableShow
+            if fields.enumerations:
+                Enum = fields.enumerations
+                form = AddTextEntryEnum(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show, 'Enum': Enum})
+                context['form'+str(iter)]=form
+            else:
+                form = AddTextEntry(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show})
+                context['form'+str(iter)]=form
+            iter +=1
+        return render(None, 'showDataTypeFields.html', {'form':context})
+    else:
+        return render(None, 'showDataTypeFields.html', {'form':"Yes"})
+
+
+
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
     PosttypeName = request.POST.get("PosttypeEntry")

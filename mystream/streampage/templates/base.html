@@ -381,13 +381,14 @@ $(document).on ("click", "#EditSelectedPosttype", function (event) {
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
-			url: '/streampage/ReturnPostFields/',
+			url: '/streampage/ShowPosttypeFields/',
 			data: data,
 			processData: false,
 			contentType: false,
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){
 				$('#editReturnedFields').html(data);
+				$('#footerEditPosttype').html('<form method="post" action="" id="AddFields" enctype="multipart/form-data">{% csrf_token %}<div class=""><button type="button" id="Fields" hash='+data["posttypeHash"]+' class="btn btn-sm btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add Field</button>&nbsp;&nbsp;<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label></div></form><button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>');
 			}		
 		});
     });
