@@ -41,7 +41,7 @@
 			</button> 
 		</div>
   </div>
-<!-- Modal -->
+<!-- Modal Add Posttype-->
 	<div class="modal fade small" id="PosttypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
@@ -63,6 +63,41 @@
 				<div id="PosttypeResult" class="modal-body" >
 				</div>
 				<div id="footerAddPosttype" class="modal-footer justify-content-between">
+					<div></div>
+					<button type="button" class="btn btn-sm btn-secondary small" data-dismiss="modal">Close</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+<!-- Modal Add Posttype-->
+	<div class="modal fade small" id="EditPosttypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h6 class="modal-title" id="editposttypeModalTitle"></h6>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="row p-3">
+					<div class="modal-body col-sm-7" >
+						<form method="post" action="" id="editPosttypeTrigger" enctype="multipart/form-data">
+							<div id="EditPosttypeModalBody" >
+								{% csrf_token %}
+								{{form.as_p }}
+							</div>
+						</form>
+					</div>
+					<div id="editButtons" class="col-sm-5 p-3">
+					</div>
+				</div>
+				<div id="editReturnedFields" class="modal-body p-3">
+					
+				</div>
+				
+				<div id="footerEditPosttype" class="modal-footer justify-content-between">
 					<div></div>
 					<button type="button" class="btn btn-sm btn-secondary small" data-dismiss="modal">Close</button>
 				</div>

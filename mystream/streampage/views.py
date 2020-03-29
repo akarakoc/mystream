@@ -14,6 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
+from .forms import posttypeList
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -399,6 +400,12 @@ def DeleteDatatypeFields_view(request):
     DatatypeFields.objects.filter(name=name).delete()
     return render(None, 'tagSearch.html', {'form' : "Datatype is Deleted Successfully!"})
 
+def EditPosttypes_view(request):
+    CommunityHash = request.GET.get("community_Hash")
+    context={}
+    form=posttypeList(cHash=CommunityHash)
+    return render(request, 'modal.html', {'form': form})  
+
 def EditDatatypeFields_view(request):
     name = request.POST.get("name")
     type = request.POST.get("Types")
@@ -406,6 +413,7 @@ def EditDatatypeFields_view(request):
     show = request.POST.get("ShowPage")
     CommunityHash = request.POST.get("CommunityHash")
     DatatypeHash = request.POST.get("DatatypeHash")
+    context[fields.name]=posttypeList(dtHash=DatatypeHash)
     Dt=Datatypes.objects.get(datatypeHash=DatatypeHash)
     Enumeration = request.POST.get("Enum")
     dtFields = DatatypeFields.objects.filter(name=name,relatedDatatype=Dt)[0]
@@ -447,8 +455,9 @@ def EditDatatypeFields_view(request):
 	
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
+    PosttypeName = request.POST.get("PosttypeEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dt = Cm.datatypes_set.filter(name=PosttypeName)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
     iter=0
     context={}

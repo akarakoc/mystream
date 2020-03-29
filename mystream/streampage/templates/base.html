@@ -202,7 +202,7 @@ $( document ).ready(function() {
 	}
 
 
-//EDIT POSTTYPE (MODAL)
+//EDIT POSTTYPE (ADD MODAL)
 	$(document).on ("click", "#EditPosttypeInitial", function (event) {
 			event.preventDefault();
 			var data = new FormData($('#createPosttype').get(0));
@@ -226,7 +226,7 @@ $( document ).ready(function() {
 	}
 	
 
-//DELETE POSTTYPE (MODAL)
+//DELETE POSTTYPE (ADD MODAL)
 	$(document).on ("click", "#DeletePosttypeInitial", function (event) {
 			event.preventDefault();
 			var data = new FormData();
@@ -249,7 +249,7 @@ $( document ).ready(function() {
 		$('#editPosttypeButton').html('<button type="button" id="EditPosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeletePosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i> Delete Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;'+data["form"]+'<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>')
 		alert(data["form"])
 		$('#PosttypeModal').modal('hide');
-		reload();
+		location.reload();
 	}
 
 
@@ -315,7 +315,7 @@ $( document ).ready(function() {
 			event.preventDefault();
 			var data = new FormData($('#'+ selectedID).get(0));
 			var posttypeHash = document.getElementById(selectedID).getAttribute("hash");
-			data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+			data.append('CommunityHash', '{{community_Hash}}');
 			data.append('DatatypeHash', posttypeHash);
 			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 			$.ajax({
@@ -360,7 +360,39 @@ $( document ).ready(function() {
 			}		
 		});
     });
-	
+
+
+//EDIT POSTTYPE CHOOSE  (EDIT MODAL)
+	$(document).on ("click", "#Edit_Primitive", function (event) {
+		var requestFormData = {};
+		requestFormData["community_Hash"]= '{{community_Hash}}';
+		var editPosttypeForm = $.zResponse("/streampage/EditPosttypes",requestFormData);
+		$('#EditPosttypeModalBody').html(editPosttypeForm);
+		$('#editButtons').html('<button type="button" id="EditSelectedPosttype" hash="" class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Selected</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeleteSelectedPosttype" hash="" class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i> Delete Selected</button>&nbsp;&nbsp;&nbsp;&nbsp');
+		$('#editposttypeModalTitle').html("Edit Posttypes");
+		$('#EditPosttypeModal').modal('show');
+	});
+
+//EDIT MODAL FETCH SELECTED POSTTYPE
+$(document).on ("click", "#EditSelectedPosttype", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#editPosttypeTrigger').get(0));
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/ReturnPostFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$('#editReturnedFields').html(data);
+			}		
+		});
+    });
+
+//
 	$(document).on ("click", "#Add_Post", function (event) {
 		event.preventDefault();
 		var data = new FormData();
