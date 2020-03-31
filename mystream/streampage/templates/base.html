@@ -47,7 +47,12 @@ $( document ).ready(function() {
 		$('#CommunityModalTitle').html("Add New Community");
 		$('#CommunityModal').modal('show');
 	});
-	
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////                                /////////////////////
+/////////////////////////        COMMUNITY               /////////////////////
+/////////////////////////                                /////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 //CREATE COMMUNITY (MODAL)
 	$('#createCommunity').submit(function(event){
 			event.preventDefault();
@@ -148,7 +153,13 @@ $( document ).ready(function() {
 			}		
 		});
 	});
-	
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////                                /////////////////////
+/////////////////////////        POSTTYPE                /////////////////////
+/////////////////////////                                /////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 //ADD POSTTYPE
 	$( "#AddPosttype" ).click(function() {
 		var requestFormData={Form:"Yes"};
@@ -272,7 +283,6 @@ $( document ).ready(function() {
 	function PrimitiveResult(data, textStatus, jqXHR){
 		$(data).appendTo($("#PosttypeResult")).show( "slow" );
 		var posttypeHash = document.getElementById("EditPosttypeInitial").getAttribute("hash");
-		console.log(posttypeHash);
 		$('#SavePrimitive').attr("hash",posttypeHash);
 		var time = (new Date).getTime();
 		$('#SavePrimitive').attr("id",time);
@@ -361,6 +371,7 @@ $( document ).ready(function() {
 		});
     });
 
+//////////////////////////EDIT POSTTYPE MODAL//////////////////////////////
 
 //EDIT POSTTYPE CHOOSE  (EDIT MODAL)
 	$(document).on ("click", "#Edit_Primitive", function (event) {
@@ -373,7 +384,7 @@ $( document ).ready(function() {
 		$('#EditPosttypeModal').modal('show');
 	});
 
-//EDIT MODAL FETCH SELECTED POSTTYPE
+//EDIT MODAL FETCH SELECTED POSTTYPE FIELDS
 $(document).on ("click", "#EditSelectedPosttype", function (event) {
 		event.preventDefault();
 		var data = new FormData($('#editPosttypeTrigger').get(0));
@@ -387,12 +398,140 @@ $(document).on ("click", "#EditSelectedPosttype", function (event) {
 			contentType: false,
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){
-				$('#editReturnedFields').html(data);
-				$('#footerEditPosttype').html('<form method="post" action="" id="AddFields" enctype="multipart/form-data">{% csrf_token %}<div class=""><button type="button" id="Fields" hash='+data["posttypeHash"]+' class="btn btn-sm btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add Field</button>&nbsp;&nbsp;<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label></div></form><button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>');
+				$('#editReturnedFields').html('<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>'+data);
+				$('#footerEditPosttype').html('<form method="post" action="" id="EditFieldsForm" enctype="multipart/form-data">{% csrf_token %}<div class=""><button type="button" id="EditFieldsButton" hash='+data["posttypeHash"]+' class="btn btn-sm btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add Field</button>&nbsp;&nbsp;<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label></div></form><button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>');
 			}		
 		});
     });
 
+
+//EDIT MODAL DELETE SELECTED POSTTYPE
+$(document).on ("click", "#DeleteSelectedPosttype", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#editPosttypeTrigger').get(0));
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/DeletePosttypes/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				$('#PosttypeModal').modal('hide');
+				location.reload();
+			}		
+		});
+    });
+
+//ADD PRIMITIVE FIELDS AS A RESPONSE OF A FORM (EDIT POSTTYPE FORM)	
+	$(document).on ("click", "#EditFieldsButton", function (event) {
+			event.preventDefault();
+			var data = new FormData($('#EditFieldsForm').get(0));
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/addPosttypeEditField/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: PrimitiveEditResult
+			});
+	});
+
+	function PrimitiveEditResult(data, textStatus, jqXHR){
+		$(data).appendTo($("#editReturnedFields")).show( "slow" );
+		var posttypeHash = document.getElementById("currentPosttype").getAttribute("hash");
+		$('#SavePrimitive').attr("hash",posttypeHash);
+		var time = (new Date).getTime();
+		$('#SavePrimitive').attr("id",time);
+		$('#SavePrimitiveButton').attr("id",time);
+		$('#SavePrimitiveButton').attr("id",time);
+	}
+	
+	
+//ADD OR UPDATE PRIMITIVES
+	$(document).on ("click", "[updateClassEditModal]", function (event) {
+		selectedID=$(this).attr('id');
+		event.preventDefault();
+		var data = new FormData($('#'+ selectedID).get(0));
+		var posttypeHash = document.getElementById('currentPosttype').getAttribute("hash");
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('PosttypeHash', posttypeHash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/SavePrimitives/',
+			data: data,
+			idval: selectedID,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				if (data.trim() == "Data is saved!"){
+					$( "button[id="+this.idval+"][updateClassEditModal='true']" ).html( '<i class="fa fa-edit small" style="font-size:24px"></i>' );
+					$( "button[id="+this.idval+"][deleteClassEditModal='true']" ).attr("deleteClass","db");
+				}
+			}		
+		});
+    });
+
+//DELETE FIELDS
+	$(document).on ("click", "[deleteClassEditModal]", function (event) {
+		if ($(this).attr('deleteClassEditModal') == "db"){
+			selectedID=$(this).attr('id');
+			event.preventDefault();
+			var data = new FormData($('#'+ selectedID).get(0));
+			var posttypeHash = document.getElementById('currentPosttype').getAttribute("hash");
+			data.append('CommunityHash', '{{community_Hash}}');
+			data.append('DatatypeHash', posttypeHash);
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/DeleteDatatypeFields/',
+				data: data,
+				idval: selectedID,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: function(data, textStatus, jqXHR){
+					alert(data)
+					if (data.trim() == "Datatype is Deleted Successfully!"){
+						jQuery('#'+this.idval).remove();
+					}
+				}		
+			});
+		}else{
+			selectedID=$(this).attr('id');
+			jQuery('#'+selectedID).remove();
+		}
+    });
+
+	$(document).on ("click", "[editClass]", function (event) {
+		selectedID=$(this).attr('id');
+		event.preventDefault();
+		var data = new FormData($('#'+ selectedID).get(0));
+		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
+		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/EditDatatypeFields/',
+			data: data,
+			idval: selectedID,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+    });
 //
 	$(document).on ("click", "#Add_Post", function (event) {
 		event.preventDefault();

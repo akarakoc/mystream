@@ -376,7 +376,7 @@ def DeleteDatatypeFields_view(request):
     name = request.POST.get("name")
     HiddenPosts= Posts.objects.filter(propertyName=name,relatedDatatypes=Dt).delete()
     DatatypeFields.objects.filter(name=name).delete()
-    return render(None, 'tagSearch.html', {'form' : "Datatype is Deleted Successfully!"})
+    return render(None, 'tagSearch.html', {'form' : "Posttyype Field is Deleted Successfully!"})
 
 def EditPosttypes_view(request):
     CommunityHash = request.GET.get("community_Hash")
@@ -454,11 +454,24 @@ def ShowPosttypeFields_view(request):
                 form = AddTextEntry(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show})
                 context['form'+str(iter)]=form
             iter +=1
-        return render(None, 'showDataTypeFields.html', {'form':context})
+        return render(None, 'showDataTypeFields.html', {'form':context, 'posttypeHash':Dt.datatypeHash})
     else:
-        return render(None, 'showDataTypeFields.html', {'form':"Yes"})
+        return render(None, 'showDataTypeFields.html', {'form':"Yes", 'posttypeHash':Dt.datatypeHash})
 
+def DeletePosttypes_view(request):
+    CommunityHash = request.POST.get("CommunityHash")
+    PosttypeName = request.POST.get("PosttypeEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dt = Cm.datatypes_set.filter(name=PosttypeName)[0].delete()
+    return render(None, 'tagSearch.html', {'form':"Selected posttype is deleted succesfully!"})
 
+def addPosttypeEditField_view(request):
+    EnField = request.POST.get("Enumeration")
+    if EnField == 'on':
+        form = AddTextEntryEnum()
+    else:
+        form = AddTextEntry()
+    return render(None, 'modalPostEdit.html', {'form' : form })
 
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
