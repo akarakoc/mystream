@@ -500,7 +500,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 				dataType: "html",
 				success: function(data, textStatus, jqXHR){
 					alert(data)
-					if (data.trim() == "Datatype is Deleted Successfully!"){
+					if (data.trim() == "Posttyype Field is Deleted Successfully!"){
 						jQuery('#'+this.idval).remove();
 					}
 				}		
