@@ -1,12 +1,13 @@
 {% csrf_token %}
+<p id="currentPosttype" hash="{{ posttypeHash }}"></p>
 {% for key,value in form.items  %}
 <form method="post" action="" id="{{ key }}" enctype="multipart/form-data">
-{% csrf_token %}
-  <div class="container">
+
+  <div class="container"">
 
     <div class="row">
 		{% for field in value  %}
-		  <div class="col-sm-2">
+		  <div class="col-sm-2 small">
 			{{ field }} 
 		  </div>
 		{% endfor %}
@@ -17,8 +18,8 @@
 		<div class="col-sm-2">
 			<table>
 				<tr>
-					<td><button type="button" editClass="true" id ="{{ key }}" class="btn btn-outline-success"><i class="fas fa-edit" style="font-size:24px"></i></button></td>
-					<td><button type="button" removeClass="true" id ="{{ key }}" class="btn btn-outline-secondary"><i class="fa fa-trash" style="font-size:24px" aria-hidden="true"></i></button></td>
+					<td><button type="button" updateClassEditModal="true" id ="{{ key }}" class="btn btn-sm btn-outline-success"><i class="fas fa-edit" style="font-size:24px"></i></button></td>
+					<td><button type="button" deleteClassEditModal="db" id ="{{ key }}" class="btn btn-sm btn-outline-secondary"><i class="fa fa-trash" style="font-size:24px" aria-hidden="true"></i></button></td>
 				</tr>
 			</table>
 		</div>
@@ -26,8 +27,8 @@
 		<div class="col-sm-2">
 			<table>
 				<tr>
-					<td><button type="button" editClass="true" id ="{{ key }}" class="btn btn-outline-success"><i class="fas fa-edit" style="font-size:24px"></i></button></td>
-					<td><button type="button" removeClass="true" id ="{{ key }}" class="btn btn-outline-secondary"><i class="fa fa-trash" aria-hidden="true" style="font-size:24px"></i></button></td>
+					<td><button type="button" updateClassEditModal="true" id ="{{ key }}" class="btn btn-sm btn-outline-success"><i class="fas fa-edit" style="font-size:24px"></i></button></td>
+					<td><button type="button" deleteClassEditModal="db" id ="{{ key }}" class="btn btn-sm btn-outline-secondary"><i class="fa fa-trash" aria-hidden="true" style="font-size:24px"></i></button></td>
 				</tr>
 			</table>
 		</div>
@@ -35,4 +36,3 @@
     </div>     
   </div>
 {% endfor %}
-
