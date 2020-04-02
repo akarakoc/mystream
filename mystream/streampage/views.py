@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList
+from .forms import posttypeList, searchList
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -254,24 +254,6 @@ def DeletePosttypeMeta_view(request):
     dt.delete() 
     return JsonResponse({'form' : "Posttype is deleted Successfully!",'posttypeHash':dt_hash})
 	
-def PostPage(request):
-    if request.user.is_authenticated:
-        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
-        DatatypeHash = DatatypeResult[0].datatypeHash
-        DatatypeId = DatatypeResult[0].id		
-        RCommunityFilter = DatatypeResult[0].relatedCommunity
-        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
-        Primitive_List = DatatypeResult[0].datatypefields_set.all()
-        c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
-        c.execute(execution_string)
-        posts=c.fetchall()
-        paginator = Paginator(posts, 5)
-        page = request.GET.get('page')
-        post_resp = paginator.get_page(page)
-        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
-    else:
-        return HttpResponseRedirect("/streampage/login")
 
 def addPosttypeField_view(request):
     EnField = request.POST.get("Enumeration")
@@ -369,13 +351,13 @@ def SavePrimitives_view(request):
                     dtFields.save()
                     return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
 
-def DeleteDatatypeFields_view(request):
+def DeletePosttypeFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
     DatatypeHash = request.POST.get("DatatypeHash")
     Dt= Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     name = request.POST.get("name")
     HiddenPosts= Posts.objects.filter(propertyName=name,relatedDatatypes=Dt).delete()
-    DatatypeFields.objects.filter(name=name).delete()
+    DatatypeFields.objects.filter(name=name,relatedDatatype=Dt).delete()
     return render(None, 'tagSearch.html', {'form' : "Posttyype Field is Deleted Successfully!"})
 
 def EditPosttypes_view(request):
@@ -384,52 +366,6 @@ def EditPosttypes_view(request):
     form=posttypeList(cHash=CommunityHash)
     return render(request, 'modal.html', {'form': form})  
 
-def EditDatatypeFields_view(request):
-    name = request.POST.get("name")
-    type = request.POST.get("Types")
-    req = request.POST.get("Required")
-    show = request.POST.get("ShowPage")
-    CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    context[fields.name]=posttypeList(dtHash=DatatypeHash)
-    Dt=Datatypes.objects.get(datatypeHash=DatatypeHash)
-    Enumeration = request.POST.get("Enum")
-    dtFields = DatatypeFields.objects.filter(name=name,relatedDatatype=Dt)[0]
-    dtFields.fieldCreationDate = datetime.now()
-    dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
-    if req == 'on':
-        dtFields.fieldRequired = True
-    else:
-        dtFields.fieldRequired = False
-    if show == 'on':
-        dtFields.fronttableShow = True
-    else:
-        dtFields.fronttableShow = False	
-    if name == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
-    elif type == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
-    else:
-        if Enumeration is None:
-            typefield = Primitives.objects.get(name=type)
-            dtFields.name = name
-            dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-            dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-            dtFields.relatedPrimitives = typefield
-            dtFields.save()
-            return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
-        else:
-            if Enumeration == '':
-                return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
-            else:
-                typefield = Primitives.objects.get(name=type)
-                dtFields.name = name
-                dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-                dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-                dtFields.relatedPrimitives = typefield
-                dtFields.enumerations = Enumeration
-                dtFields.save()
-                return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
 
 def ShowPosttypeFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
@@ -472,9 +408,28 @@ def addPosttypeEditField_view(request):
     else:
         form = AddTextEntry()
     return render(None, 'modalPostEdit.html', {'form' : form })
-
+	
+def PostPage(request):
+    if request.user.is_authenticated:
+        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
+        DatatypeHash = DatatypeResult[0].datatypeHash
+        DatatypeId = DatatypeResult[0].id		
+        RCommunityFilter = DatatypeResult[0].relatedCommunity
+        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
+        Primitive_List = DatatypeResult[0].datatypefields_set.all()
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+		
 def ReturnPostFields_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
+    CommunityHash = request.POST.get("community_Hash")
     PosttypeName = request.POST.get("PosttypeEntry")
     Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
     Dt = Cm.datatypes_set.filter(name=PosttypeName)[0]
@@ -491,9 +446,10 @@ def ReturnPostFields_view(request):
             enumList = enum.split(",")				
             context[fields.name]=AddEnumaratedPost(en=enumList,nm=name)			
         else:
+            print(fields.relatedPrimitives.name)
             if fields.relatedPrimitives.name == "Text":
                 context[fields.name]=AddTextPost()
-            elif fields.relatedPrimitives.name == "TextArea":
+            elif fields.relatedPrimitives.name == "Text Area":
                 context[fields.name]=AddTextAreaPost()
             elif fields.relatedPrimitives.name == "Audio":
                 context[fields.name]=AddAudioPost(request.POST, request.FILES)
@@ -527,10 +483,19 @@ def ReturnPostFields_view(request):
             types = fields.relatedPrimitives.name
             req = fields.fieldRequired
             show = fields.fronttableShow
-            context["Tags"]=AddTagPost()
+        context["Tags"]=AddTagPost()
         iter += 1
-    return render(None, 'entryReturnFields.html', {'form' : context})
+    print(context)
+    return render(None, 'entryReturnFields.html', {'form' : context, 'posttypeHash':Dt.datatypeHash})
 
+
+def AddPostModal_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    context={}
+    form=posttypeList(cHash=CommunityHash)
+    return render(request, 'modal.html', {'form': form})  
+	
+	
 def handle_uploaded_postfile(f):
     filepath = 'streampage/static/uploads/posts/'+f.name
     with open(filepath, 'wb+') as destination:
@@ -539,8 +504,8 @@ def handle_uploaded_postfile(f):
     return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
 	
 def CreatePost_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
+    CommunityHash = request.POST.get("community_Hash")
+    DatatypeHash = request.POST.get("PosttypeHash")
     Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
     salt = uuid.uuid4().hex
@@ -645,72 +610,76 @@ def profilePage(request):
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
+		
+def chooseSearch_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    form=searchList(cHash=CommunityHash)
+    return render(request, 'modal.html', {'form': form})
 
 def ReturnSearchFields_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
+    CommunityHash = request.POST.get("community_Hash")
     DatatypeHash = request.POST.get("DatatypeHash")
-    Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
-    PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
-    iter=0
+    PostfieldName = request.POST.get("searchEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    PostFields = DatatypeFields.objects.filter(name=PostfieldName)
+    fields=PostFields[0]
     context={}
-    for fields in PostFields:
-        if fields.enumerations is not None:
-            name = fields.name
-            types = fields.relatedPrimitives.name
-            req = fields.fieldRequired
-            show = fields.fronttableShow
-            enum = fields.enumerations
-            enumList = enum.split(",")				
-            context[fields.name]=AddEnumaratedSearch(en=enumList,nm=name)			
-        else:
-            if fields.relatedPrimitives.name == "Text":
-                context[fields.name]=AddTextSearch()
-            elif fields.relatedPrimitives.name == "TextArea":
-                context[fields.name]=AddTextAreaSearch()
-            elif fields.relatedPrimitives.name == "Audio":
-                context[fields.name]=AddAudioSearch(request.POST, request.FILES)
-            elif fields.relatedPrimitives.name == "Boolean":
-                context[fields.name]=AddBooleanSearch()
-            elif fields.relatedPrimitives.name == "Date":
-                context[fields.name]=AddDateSearch()
-            elif fields.relatedPrimitives.name == "DateTime":
-                context[fields.name]=AddDateTimeSearch()
-            elif fields.relatedPrimitives.name == "Decimal":
-                context[fields.name]=AddDecimalSearch()
-            elif fields.relatedPrimitives.name == "E-mail":
-                context[fields.name]=AddEmailSearch()
-            elif fields.relatedPrimitives.name == "Float":
-                context[fields.name]=AddFloatSearch()
-            elif fields.relatedPrimitives.name == "IP Address":
-                context[fields.name]=AddIpAddressSearch()
-            elif fields.relatedPrimitives.name == "Image":
-                context[fields.name]=AddImageSearch(request.POST, request.FILES)
-            elif fields.relatedPrimitives.name == "Integer":
-                context[fields.name]=AddIntegerSearch()
-            elif fields.relatedPrimitives.name == "Location":
-                context[fields.name]=AddLocationSearch()
-            elif fields.relatedPrimitives.name == "Time":
-                context[fields.name]=AddTimeSearch()
-            elif fields.relatedPrimitives.name == "URL":
-                context[fields.name]=AddUrlSearch()
-            elif fields.relatedPrimitives.name == "Video":
-                context[fields.name]=AddVideoSearch(request.POST, request.FILES)
-            name = fields.name
-            types = fields.relatedPrimitives.name
-            req = fields.fieldRequired
-            show = fields.fronttableShow
-            context["Tags"]=AddTagSearch()
-        iter += 1
+    if fields.enumerations is not None:
+        name = fields.name
+        types = fields.relatedPrimitives.name
+        req = fields.fieldRequired
+        show = fields.fronttableShow
+        enum = fields.enumerations
+        enumList = enum.split(",")				
+        context[fields.name]=AddEnumaratedSearch(en=enumList,nm=name)			
+    else:
+        if fields.relatedPrimitives.name == "Text":
+            context[fields.name]=AddTextSearch()
+        elif fields.relatedPrimitives.name == "Text Area":
+            context[fields.name]=AddTextAreaSearch()
+        elif fields.relatedPrimitives.name == "Audio":
+            context[fields.name]=AddAudioSearch(request.POST, request.FILES)
+        elif fields.relatedPrimitives.name == "Boolean":
+            context[fields.name]=AddBooleanSearch()
+        elif fields.relatedPrimitives.name == "Date":
+            context[fields.name]=AddDateSearch()
+        elif fields.relatedPrimitives.name == "DateTime":
+            context[fields.name]=AddDateTimeSearch()
+        elif fields.relatedPrimitives.name == "Decimal":
+            context[fields.name]=AddDecimalSearch()
+        elif fields.relatedPrimitives.name == "E-mail":
+            context[fields.name]=AddEmailSearch()
+        elif fields.relatedPrimitives.name == "Float":
+            context[fields.name]=AddFloatSearch()
+        elif fields.relatedPrimitives.name == "IP Address":
+            context[fields.name]=AddIpAddressSearch()
+        elif fields.relatedPrimitives.name == "Image":
+            context[fields.name]=AddImageSearch(request.POST, request.FILES)
+        elif fields.relatedPrimitives.name == "Integer":
+            context[fields.name]=AddIntegerSearch()
+        elif fields.relatedPrimitives.name == "Location":
+            context[fields.name]=AddLocationSearch()
+        elif fields.relatedPrimitives.name == "Time":
+            context[fields.name]=AddTimeSearch()
+        elif fields.relatedPrimitives.name == "URL":
+            context[fields.name]=AddUrlSearch()
+        elif fields.relatedPrimitives.name == "Video":
+            context[fields.name]=AddVideoSearch(request.POST, request.FILES)
+        name = fields.name
+        types = fields.relatedPrimitives.name
+        req = fields.fieldRequired
+        show = fields.fronttableShow
+        #context["Tags"]=AddTagSearch()
     return render(None, 'entrySearchFields.html', {'form' : context})
 	
 def ReturnEntrySearchFields_view(request):
     CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    DatatypeResult = Datatypes.objects.filter(datatypeHash=DatatypeHash)
-    Dtfields = DatatypeFields.objects.filter(relatedDatatype=DatatypeResult[0])
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dtfields = Cm.datatypefields_set.all()
     if request.user.is_authenticated:
         querylist=[]
         for fields in Dtfields:
+            print(request.POST.get(fields.name+"_Value"))
             subquery=""
             if request.POST.get(fields.name+"_Value") != "":
                 if request.POST.get(fields.name+"_Condition") == "equals":
@@ -731,18 +700,16 @@ def ReturnEntrySearchFields_view(request):
                 elif request.POST.get(fields.name+"_Condition") == "more than":
                     subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" > "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
-        querystring = " and ".join(querylist)
-        DatatypeId = DatatypeResult[0].id		
+        querystring = " and ".join(querylist)	
         RCommunity = Communities.objects.filter(communityHash=CommunityHash)
-        Primitive_List = DatatypeResult[0].datatypefields_set.all()
         c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+' and '+querystring+') S GROUP BY "entryHash"'
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where '+querystring+') S GROUP BY "entryHash"'
         c.execute(execution_string)
         posts=c.fetchall()
         print(querystring)		
         paginator = Paginator(posts, 5)
         page = request.GET.get('page')
         post_resp = paginator.get_page(page) 
-        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
+        return render(request, 'posts.html', {'post_resp': post_resp,'Community_Name': RCommunity})
     else:
         return HttpResponseRedirect("/streampage/login")
