@@ -31,10 +31,10 @@ public class AnnotationRestController {
 	@ResponseBody
 	public AnnotationResponse annotateText(@RequestBody AnnotationRequest request) throws Exception {
 
-		AnnotationFactory factory = new AnnotationFactory();
-		TextAnnotation anno = (TextAnnotation)factory.createAnnotation(TextAnnotation.class);
-		anno = annotationService.saveTextAnnotation(anno);
+		TextAnnotation anno = annotationService.saveTextAnnotation(request.getTextAnno());
+		AnnotationResponse response = new AnnotationResponse();
+		response.setAnnoatation(anno);
+		return response;
 
-		return null;
 	}
 }

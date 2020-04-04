@@ -1,18 +1,20 @@
 package com.mystream.dom;
 
+import com.mongodb.lang.NonNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.net.URI;
 
-@Document(collection = "Serializer")
-public class Serializer {
+@Document(collection = "Target")
+public class Target {
 
-	@Id
 	@Getter
 	@Setter
+	@NonNull
 	private String id;
 
 	@Getter
@@ -21,10 +23,10 @@ public class Serializer {
 
 	@Getter
 	@Setter
-	private String name;
+	private String source;
 
 	@Getter
 	@Setter
-	private String homepage;
+	private Selector selector;
 
 }

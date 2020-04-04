@@ -1,19 +1,14 @@
 package com.mystream.dom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import sun.net.www.content.text.plain;
 
 public enum FormatEnum {
+	@JsonProperty("text/plain")
+	TEXT_PLAIN,
+	@JsonProperty("text/html")
+	TEXT_HTML,
+	@JsonProperty("image/png")
+	IMAGE_PNG;
 
-	TEXT_PLAIN("text/plain");
-
-
-	FormatEnum(String value) {
-		this.value = value;
-	}
-
-	private final String value;
-
-	public String getValue() {
-		return this.value;
-	}
 }

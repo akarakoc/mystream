@@ -6,8 +6,8 @@ import lombok.Setter;
 
 public class AnnotationRequest {
 
-	String type;
-
-
+	@Getter
+	@Setter
+	TextAnnotation textAnno;
 
 }

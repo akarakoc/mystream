@@ -19,9 +19,9 @@ public class TextAnnotationListener extends AbstractMongoEventListener<TextAnnot
 
 	@Override
 	public void onBeforeConvert(BeforeConvertEvent<TextAnnotation> event) {
-		if (event.getSource().getId() == null ) {
-			event.getSource().setId(sequenceGenerator.generateSequence(TextAnnotation.SEQUENCE_NAME));
-		}
+//		if (event.getSource().getId() == null ) {
+//			event.getSource().setId(sequenceGenerator.generateSequence(TextAnnotation.SEQUENCE_NAME));
+//		}
 	}
 
 

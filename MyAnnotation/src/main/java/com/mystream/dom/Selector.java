@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.net.URI;
 
-@Document(collection = "Serializer")
-public class Serializer {
+@Document(collection = "Selector")
+public class Selector {
 
 	@Id
 	@Getter
@@ -17,14 +17,14 @@ public class Serializer {
 
 	@Getter
 	@Setter
-	private TypeEnum type;
+	private Class type;
 
 	@Getter
 	@Setter
-	private String name;
+	private Long start;
 
 	@Getter
 	@Setter
-	private String homepage;
+	private Long end;
 
 }

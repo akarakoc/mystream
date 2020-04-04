@@ -1,0 +1,42 @@
+{
+  "anno" :  {
+    "id": "http://example.org/anno1",
+    "type": "Annotation",
+    "motivation": ["tagging", "commenting"],
+    "annotatedBy": {
+      "id": "http://example.org/agent1",
+      "type": "Annotator",
+      "name": "A. Person",
+      "nick": "agent1"
+    },
+    "serializedBy": {
+      "id": "http://example.org/agent2",
+      "type": "SoftwareAgent",
+      "name": "Code v2.1",
+      "homepage": "http://example.org/agent2/homepage1"
+    },
+    "body": [
+      {
+        "type": "SemanticTag",
+        "related": "http://dbpedia.org/resource/London"
+      },
+      {
+        "type": "EmbeddedContent",
+        "value": "One of my favorite cities",
+        "format": "text/plain",
+        "language": "en"
+      }
+    ],
+    "target": {
+      "id": "http://example.org/sptarget1",
+      "type": "SpecificResource",
+      "source": "http://example.org/source1",
+      "selector": {
+        "id": "http://example.org/selector1",
+        "type": "TextPositionSelector",
+        "start": 4096,
+        "end": 4104
+      }
+    }
+  }
+}

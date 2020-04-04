@@ -11,11 +11,11 @@ public class Annotator {
 	@Id
 	@Getter
 	@Setter
-	private Long id;
+	private String id;
 
 	@Getter
 	@Setter
-	private Class type;
+	private TypeEnum type;
 
 	@Getter
 	@Setter

@@ -1,35 +1,40 @@
 package com.mystream.dom;
 
+import com.mongodb.lang.NonNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.net.URI;
 
-@Document(collection = "Serializer")
+@Document(collection = "Body")
 public class Body {
 
-	@Id
 	@Getter
 	@Setter
-	private Long id;
+	@NonNull
+	@Field("@id")
+	private String id;
 
 	@Getter
 	@Setter
-	private Class type;
+	@NonNull
+	private TypeEnum type;
 
 	@Getter
 	@Setter
-	private URI related;
-
-	@Getter
-	@Setter
-	private String vaule;
-
-	@Getter
-	@Setter
+	@NonNull
 	private FormatEnum format;
+
+	@Getter
+	@Setter
+	private String related;
+
+	@Getter
+	@Setter
+	private String value;
 
 	@Getter
 	@Setter

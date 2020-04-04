@@ -1,19 +1,20 @@
 package com.mystream.dom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum LanguageEnum {
+	@JsonProperty("en")
+	ENGLISH,
+	@JsonProperty("tr")
+	TURKISH,
+	@JsonProperty("de")
+	GERMAN,
+	@JsonProperty("fr")
+	FRENCH,
+	@JsonProperty("es")
+	SPANISH,
+	@JsonProperty("it")
+	ITALIAN;
 
-	ENGLISH("en"),
-	TURKISH("tr"),
-	GERMAN("de");
 
-
-	LanguageEnum(String value) {
-		this.value = value;
-	}
-
-	private final String value;
-
-	public String getValue() {
-		return this.value;
-	}
 }
