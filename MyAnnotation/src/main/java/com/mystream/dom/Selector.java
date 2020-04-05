@@ -17,7 +17,7 @@ public class Selector {
 
 	@Getter
 	@Setter
-	private Class type;
+	private TypeEnum type;
 
 	@Getter
 	@Setter
