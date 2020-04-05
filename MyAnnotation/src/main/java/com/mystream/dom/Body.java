@@ -1,5 +1,6 @@
 package com.mystream.dom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.lang.NonNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class Body {
 	@Setter
 	@NonNull
 	@Field("@id")
+	@JsonProperty("@id")
 	private String id;
 
 	@Getter
