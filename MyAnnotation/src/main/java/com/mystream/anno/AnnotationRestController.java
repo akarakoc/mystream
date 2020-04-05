@@ -33,8 +33,18 @@ public class AnnotationRestController {
 
 		TextAnnotation anno = annotationService.saveTextAnnotation(request.getTextAnno());
 		AnnotationResponse response = new AnnotationResponse();
-		response.setAnnoatation(anno);
+		response.getResponse().put("annoList", anno );
 		return response;
 
+	}
+
+	@RequestMapping(name = "/searchAnnotation", produces = "application/json", method= RequestMethod.GET)
+	@ResponseBody
+	public AnnotationResponse searchAnnotation(){
+
+		List<TextAnnotation> annoList = annotationService.searchAnnotation();
+		AnnotationResponse response = new AnnotationResponse();
+		response.getResponse().put("annoList", annoList );
+		return response;
 	}
 }
