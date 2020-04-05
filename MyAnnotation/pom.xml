@@ -123,7 +123,27 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>2.0.13</version>
+				<configuration>
+					<appName>mystream-anno</appName>
+					<configVars>
+						<PORT>8080</PORT>
+						<JAVA_OPTS>-Xss512k -XX:+UseCompressedOops</JAVA_OPTS>
+					</configVars>
+					<processTypes>
+						<web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.mystream.MyAnnotationApplication</web>
+					</processTypes>
+					<buildpacks>
+						<buildpack>https://github.com/mcollina/heroku-buildpack-imagemagick</buildpack>
+						<buildpack>heroku/jvm</buildpack>
+					</buildpacks>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
 
 </project>
