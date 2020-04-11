@@ -641,7 +641,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){				
 				$('#SearchPostBody').html(data);
-				$('#chooseSearchButtons').html('<button type="button" id="AddSelectedSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Select Field</button>&nbsp;&nbsp;OR Search&nbsp;&nbsp;<button type="button" id="AddSFreeSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Free Field</button>');	
+				$('#chooseSearchButtons').html('<button type="button" id="AddSelectedSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Select Field</button>&nbsp;&nbsp;OR Search&nbsp;&nbsp;<button type="button" id="AddFreeSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Free Field</button>');	
 				$('#SearchPost').modal('show');
 			}		
 		});
@@ -662,6 +662,25 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){
 				$(data).appendTo($("#SearchEntry")).show( "slow" );			
+			}		
+		});
+    });
+	
+//RETURN FREE FIELDS
+$(document).on ("click", "#AddFreeSearch", function (event) {
+		event.preventDefault();
+		var data = new FormData();
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/ReturnFreeSearchFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$("#SearchEntry").html(data);			
 			}		
 		});
     });
@@ -719,7 +738,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		var data = new FormData($('#SearchEntry').get(0));
 		$.ajax({
 			type:'POST',
-			url: '/streampage/ReturnEntrySearchFields/',
+			url: '/streampage/ReturnEntrySearchResults/',
 			data: data,
 			processData: false,
 			contentType: false,

@@ -37,5 +37,6 @@ urlpatterns = [
 	path('CheckMembership/', views.CheckMembership_view, name = "CheckMembership"),
 	path('chooseSearch/', views.chooseSearch_view, name = "chooseSearch"),
 	path('ReturnSearchFields/', views.ReturnSearchFields_view, name = "ReturnSearchFields"),
-	path('ReturnEntrySearchFields/', views.ReturnEntrySearchFields_view, name = "ReturnEntrySearchFields"),
+	path('ReturnEntrySearchResults/', views.ReturnEntrySearchResults_view, name = "ReturnEntrySearchResults"),
+	path('ReturnFreeSearchFields/', views.ReturnFreeSearchFields_view, name = "ReturnFreeSearchFields"),
 ]

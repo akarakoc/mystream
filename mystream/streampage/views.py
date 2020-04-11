@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList
+from .forms import posttypeList, searchList, freeSearchField
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -672,7 +672,14 @@ def ReturnSearchFields_view(request):
         #context["Tags"]=AddTagSearch()
     return render(None, 'entrySearchFields.html', {'form' : context})
 	
-def ReturnEntrySearchFields_view(request):
+def ReturnFreeSearchFields_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    context={}
+    context["Free Search"]=freeSearchField()
+    return render(None, 'entrySearchFields.html', {'form' : context})
+	
+def ReturnEntrySearchResults_view(request):
     CommunityHash = request.POST.get("CommunityHash")
     Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
     Dtfields = Cm.datatypefields_set.all()

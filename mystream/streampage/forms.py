@@ -484,3 +484,10 @@ class searchList(forms.Form):
         name="Search Items"
         cnName = contextName.get(name,name)
         super(searchList, self).add_prefix(cnName)
+
+class freeSearchField(forms.Form):
+    TextEntry = forms.CharField(label='')
+    def __init__(self, *args, **kwargs):
+        super(freeSearchField, self).__init__(*args, **kwargs)
+        self.fields['TextEntry'].widget.attrs.update({'class': 'form-control'})
+        
