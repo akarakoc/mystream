@@ -184,7 +184,7 @@ def CreateCommunity_view(request):
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
 #TODO
-def PosttypePage(request):
+def PosttypePageBCK(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
         Community_List = Communities.objects.filter(communityHash=CommunityHash)
@@ -200,6 +200,32 @@ def PosttypePage(request):
     else:
         return HttpResponseRedirect("/streampage/login")
 
+def PosttypePage(request):
+    if request.user.is_authenticated:
+        CommunityHash = request.GET.get('showDataTypes')
+        Community_List = Communities.objects.filter(communityHash=CommunityHash)
+        currentCommunity = Community_List[0]
+        postEntries={}
+        c = connection.cursor()
+        postHashQuery='select "entryHash" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash"'
+        c.execute(postHashQuery)
+        posts=c.fetchall()
+        postInstance=[]
+        for hashes in posts:
+            currentObject={}
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
+            postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        print(postEntries)
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+		
 def PostPage(request):
     if request.user.is_authenticated:
         DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
@@ -514,8 +540,12 @@ def CreatePost_view(request):
     DatatypeHash = request.POST.get("PosttypeHash")
     Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
+    print(PostFields[0].name)
     salt = uuid.uuid4().hex
-    PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
+    try:
+        PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
+    except:
+        PostHash = hashlib.sha256(salt.encode() + uuid.uuid4().hex.upper()[0:9].encode()).hexdigest() + salt
     PostTime = datetime.now()         
     for fields in PostFields:
         if (fields.relatedPrimitives.name == "Image" or fields.relatedPrimitives.name == "Audio" or fields.relatedPrimitives.name == "Video") and request.POST.get(fields.name) != "":
