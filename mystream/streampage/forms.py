@@ -490,4 +490,10 @@ class freeSearchField(forms.Form):
     def __init__(self, *args, **kwargs):
         super(freeSearchField, self).__init__(*args, **kwargs)
         self.fields['TextEntry'].widget.attrs.update({'class': 'form-control'})
+		
+class textComment(forms.Form):
+    Comment = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(textComment, self).__init__(*args, **kwargs)
+        self.fields['Comment'].widget.attrs.update({'class': 'form-control'})
         

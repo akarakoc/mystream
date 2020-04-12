@@ -41,6 +41,43 @@
 			</button> 
 		</div>
   </div>
+  
+	{% for posts in post_resp %}
+	<div class="card mb-2">
+	  <table class="table p-2">
+		<tr>
+			<tr>
+				{% for key,val in posts.1.items %}
+				 <td>
+					<div class="row p-2">
+						<div class="col-sm-15">
+							<b>{{ key }}:&nbsp</b>
+							 {{ val }}
+						</div>
+					</div>
+				</td>
+				{% endfor %}
+				<td>
+					<div class="col-sm-2">
+						<button type="button" id = "deletePost" hash="{{ posts.0 }}" class="btn btn-outline-secondary"><i class="fa fa-trash" style="font-size:24px" aria-hidden="true"></i></button>
+					</div>
+				</td>
+			</tr>
+		  </table>
+		  <div class="row p-2 ">
+			  <div class="col-sm-10">
+				{% csrf_token %}
+				{{comment.as_p }}
+			   </div>
+			   <div class="col-sm-2 d-flex flex-row p-3">
+					<button type="button" id = "createComment" hash="{{ posts.0 }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
+			   </div>
+		  </div>
+		  
+	  </div>
+	  {% endfor %}
+	  
+	
 <!-- Modal Add Posttype-->
 	<div class="modal fade small" id="PosttypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -174,21 +211,47 @@
 			</div>
 		</div>
 	</div>
+	
+	
+<div id="map"></div>
+	 
+    <script>
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  var uluru = {lat: -25.344, lng: 131.036};
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 4, center: uluru});
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({position: uluru, map: map});
+}
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYBw5zZ3pv2dCbD-8lIdFUDQUkN_7T3yg&callback=initMap">
+    </script>
+	
+	
 <div class="pagination">
     <span class="step-links">
-        {% if dt_resp.has_previous %}
-            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page=1">&laquo; first</a>
-            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.previous_page_number }}">previous</a>
+        {% if post_resp.has_previous %}
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
-            Page {{ dt_resp.number }} of {{ dt_resp.paginator.num_pages }}.
+            Page {{ post_resp.number }} of {{ post_resp.paginator.num_pages }}.
         </span>
 
-        {% if dt_resp.has_next %}
-            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.next_page_number }}">next</a>
-            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.paginator.num_pages }}">last &raquo;</a>
+        {% if post_resp.has_next %}
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
-</div></div> 
+</div>
 {% endblock %}
