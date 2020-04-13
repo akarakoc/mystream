@@ -57,13 +57,13 @@
 			</div>
 			<div class="right small">Created by: {{ posts.posttype.0.fieldCreator }} at {{ posts.posttype.0.fieldCreationDate }}
 			</div>
-			<div>
+			<div class="p-2">
 				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ comm.communityHash }}">
-						<i class="fa fa-thumbs-up small" aria-hidden="true"></i> 
+						<i class="fas fa-exclamation-triangle small" aria-hidden="true"></i> 
 						Report
 				</button>
 				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ comm.communityHash }}">
-						<i class="fas fa-sign-in-alt small"></i> 
+						<i class="fas fa-stream small"></i> 
 						Subscribe
 				</button>
 					
@@ -105,20 +105,30 @@
 				</td>
 			</tr>
 		  </table>
-		  <div class="row p-2 ">
-			  <div class="col-sm-10">
-				{% csrf_token %}
-				{{comment.as_p }}
-			   </div>
-			   <div class="col-sm-2 d-flex flex-row p-3">
-					<button type="button" id = "createComment" hash="{{ posts.0 }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
-			   </div>
-		  </div>
-		  
-	  </div>
+		  <form id="{{ posts.postList.0.entryHash }}">
+			  <div class="row p-2 ">
+				  <div class="col-sm-10">
+					{% csrf_token %}
+					{{comment.as_p }}
+				   </div>
+				   <div class="col-sm-2 d-flex flex-row p-3">
+						<button type="button" id = "createComment" hash="{{ posts.postList.0.entryHash }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
+				   </div>	
+			  </div>
+		   </form>
+	    </div>
+		<table>
+		   {% for items in posts.comments %}
+		   <tr>
+			  <td><b>{{ items.postCommentCreator }}:</b></td>
+			  <td>{{ items.commentText }}</td>
+			  <td>{{ items.postCommentCreationDate }}</td>
+		   </tr>
+		   {% endfor %}
+		   </table>
 	  </div>
    </div>
-	  {% endfor %}
+   {% endfor %}
 	 
 	
 <!-- Modal Add Posttype-->

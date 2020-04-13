@@ -58,10 +58,19 @@ class DatatypeFields(models.Model):
     def __str__(self):
         return self.name  
     
-     
+class PostsMetaHash(models.Model):
+    relatedCommunity = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
+    relatedDatatypes = models.ForeignKey(Datatypes,on_delete=models.SET_NULL, null=True)
+    postMetaHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    postCreator = models.ForeignKey(communityUsers, related_name='postmetacreator', on_delete=models.SET_NULL, null=True)
+    postCreationDate= models.DateTimeField(null=True)
+    def __str__(self):
+        return self.postMetaHash
+		
 class Posts(models.Model):
     relatedCommunityforPost = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
     relatedDatatypes = models.ForeignKey(Datatypes,on_delete=models.SET_NULL, null=True)
+    relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
     entryHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
     propertyName = models.CharField(max_length=200, null=True, help_text='Enter name of type')
     propertyValue = models.CharField(max_length=200, null=True, help_text='Enter name of type')
@@ -74,9 +83,8 @@ class Posts(models.Model):
 		
 class PostComments(models.Model):
     relatedCommunityforComment = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
-    relatedDatatypes = models.ForeignKey(Datatypes,on_delete=models.SET_NULL, null=True)
-    relatedPost = models.ForeignKey(Posts,on_delete=models.SET_NULL, null=True)
-    entryHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
+    commentHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
     commentText = models.CharField(max_length=200, null=True, help_text='Enter name of type')
     postCommentCreator = models.ForeignKey(communityUsers, related_name='commentcreator', on_delete=models.SET_NULL, null=True)
     postCommentCreationDate= models.DateTimeField(null=True)

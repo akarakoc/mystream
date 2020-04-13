@@ -30,6 +30,7 @@ urlpatterns = [
 	path('AddPostModal/', views.AddPostModal_view, name = "AddPostModal"),
 	path('ReturnPostFields/', views.ReturnPostFields_view, name = "ReturnPostFields"),
 	path('CreatePost/', views.CreatePost_view, name = "CreatePost"),
+	path('CreatePostComment/', views.CreatePostComment_view, name = "CreatePostComment"),
 	path('DeletePost/', views.DeletePost_view, name = "DeletePost"),
 	path('JoinCommunity/', views.JoinCommunity_view, name = "JoinCommunity"),
 	path('LeftCommunity/', views.LeftCommunity_view, name = "LeftCommunity"),

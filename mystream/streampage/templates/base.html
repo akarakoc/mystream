@@ -749,7 +749,29 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		});
     });
 
+//POST COMMENTS
 
+	$(document).on ("click", "#createComment", function (event) {
+		event.preventDefault();
+		var relatedID = $(this).attr('hash');
+		var data = new FormData($('#'+relatedID).get(0));
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('post_Hash', relatedID);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CreatePostComment/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				location.reload();				
+			}		
+		});
+    });
+	
 	
 });
 
