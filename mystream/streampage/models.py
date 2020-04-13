@@ -71,6 +71,18 @@ class Posts(models.Model):
     postTagItems= models.CharField(max_length=2000, null=True, help_text='Enter Post Tags Item')
     def __str__(self):
         return self.propertyValue
+		
+class PostComments(models.Model):
+    relatedCommunityforComment = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
+    relatedDatatypes = models.ForeignKey(Datatypes,on_delete=models.SET_NULL, null=True)
+    relatedPost = models.ForeignKey(Posts,on_delete=models.SET_NULL, null=True)
+    entryHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    commentText = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    postCommentCreator = models.ForeignKey(communityUsers, related_name='commentcreator', on_delete=models.SET_NULL, null=True)
+    postCommentCreationDate= models.DateTimeField(null=True)
+    postCommentTag= models.CharField(max_length=2000, null=True, help_text='Enter Post Tags')
+    def __str__(self):
+        return self.commentText
 
 class CommunityTags(models.Model):
     communityTag = models.ForeignKey(Communities, related_name='commTag',on_delete=models.SET_NULL, null=True)

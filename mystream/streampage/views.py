@@ -225,7 +225,8 @@ def PosttypePage(request):
         return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
     else:
         return HttpResponseRedirect("/streampage/login")
-		
+
+
 def PostPage(request):
     if request.user.is_authenticated:
         DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
