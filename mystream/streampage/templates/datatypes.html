@@ -63,45 +63,55 @@
 						Report
 				</button>
 				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ comm.communityHash }}">
-						<i class="fas fa-stream small"></i> 
+						<i class="fas fa-stream small" aria-hidden="true"></i> 
 						Subscribe
 				</button>
+				<button type="button" id = "deletePost" hash="{{ posts.postList.0.entryHash }}" class="btn btn-sm btn-outline-secondary small">
+					<i class="fa fa-trash" aria-hidden="true"></i>
+				</button>
+
 					
 			</div>
 		</div>
 		<!-- Card Body -->
 	<div class="card-body">
-	  <div class="modal-body row">
-	  <table class="table p-2">
+	  <div class=" row">
+	  <table class="table small">
 		<tr>
 			<tr>
 				{% for fields in posts.postList %}
-				 <td>
-					<div class="row p-2">
-						<div class="col-sm-15">
 							{% for types in posts.posttype %}
 								{% if types.name == fields.propertyName  %}
 									{% if types.relatedPrimitives.name  == "Image"  %}
+									  <td width="250px" >
 										<b>{{ fields.propertyName }}:&nbsp</b>
-										<img src="{{ fields.propertyValue }}" width="125" height="100" class="img-thumbnail">
+										<img src="{{ fields.propertyValue }}" width="250px" height="200px">
+									  </td>
 									{% elif types.relatedPrimitives.name  == "Location"%}
-									<div id="googleMap" style="width:20%;height:100px;"></div>
-									{% else %}
+									   <td width="250px" >
 										<b>{{ fields.propertyName }}:&nbsp</b>
-										{{ fields.propertyValue }}
-										{{ types.relatedPrimitives.name }}
-										
+										<div id="googleMap" style="width:250px;height:200px;"></div>
+									   </td>
 									{% endif %}
 								{% endif %}
 							{% endfor %}
-						</div>
-					</div>
-				</td>
 				{% endfor %}
 				<td>
-					<div class="col-sm-2">
-						<button type="button" id = "deletePost" hash="{{ posts.postList.0.entryHash }}" class="btn btn-sm btn-outline-secondary"><i class="fa fa-trash" style="font-size:24px" aria-hidden="true"></i></button>
-					</div>
+				{% for fields in posts.postList %}
+					{% for types in posts.posttype %}
+						{% if types.name == fields.propertyName  %}
+							{% if types.relatedPrimitives.name  != "Image" and types.relatedPrimitives.name  != "Location" %}
+								<div class="row">
+									<b>{{ fields.propertyName }}:&nbsp</b>
+									{{ fields.propertyValue }}
+								</div>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+				<div class="row">
+					{{ fields.postTag }}
+				</div>
 				</td>
 			</tr>
 		  </table>
@@ -117,12 +127,12 @@
 			  </div>
 		   </form>
 	    </div>
-		<table>
+		<table class="small">
 		   {% for items in posts.comments %}
 		   <tr>
-			  <td><b>{{ items.postCommentCreator }}:</b></td>
-			  <td>{{ items.commentText }}</td>
-			  <td>{{ items.postCommentCreationDate }}</td>
+			  <td width="25px"><b>{{ items.postCommentCreator }}:</b></td>
+			  <td width="250px">{{ items.commentText }}</td>
+			  <td width="250px">{{ items.postCommentCreationDate }}</td>
 		   </tr>
 		   {% endfor %}
 		   </table>
