@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList, freeSearchField
+from .forms import posttypeList, searchList, freeSearchField, textComment
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -183,18 +183,69 @@ def CreateCommunity_view(request):
     tagentry.save() 
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
+#TODO
+def PosttypePageBCK(request):
+    if request.user.is_authenticated:
+        CommunityHash = request.GET.get('showDataTypes')
+        Community_List = Communities.objects.filter(communityHash=CommunityHash)
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts) S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+    else:
+        return HttpResponseRedirect("/streampage/login")
 
 def PosttypePage(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
         Community_List = Communities.objects.filter(communityHash=CommunityHash)
-        dt = Community_List[0].datatypes_set.all()
-        paginator = Paginator(dt, 5)
+        currentCommunity = Community_List[0]
+        postEntries={}
+        c = connection.cursor()
+        postHashQuery='select "entryHash" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash"'
+        c.execute(postHashQuery)
+        posts=c.fetchall()
+        postInstance=[]
+        for hashes in posts:
+            currentObject={}
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
+            postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        print(postEntries)
+        paginator = Paginator(posts, 5)
         page = request.GET.get('page')
-        dt_resp = paginator.get_page(page)
-        return render(request, 'datatypes.html', {'dt_resp': dt_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
     else:
         return HttpResponseRedirect("/streampage/login")
+
+
+def PostPage(request):
+    if request.user.is_authenticated:
+        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
+        DatatypeHash = DatatypeResult[0].datatypeHash
+        DatatypeId = DatatypeResult[0].id		
+        RCommunityFilter = DatatypeResult[0].relatedCommunity
+        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
+        Primitive_List = DatatypeResult[0].datatypefields_set.all()
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+
 
 def handle_uploaded_datatypefile(f):
     filepath = 'streampage/static/uploads/datatypes/'+f.name
@@ -409,24 +460,6 @@ def addPosttypeEditField_view(request):
         form = AddTextEntry()
     return render(None, 'modalPostEdit.html', {'form' : form })
 	
-def PostPage(request):
-    if request.user.is_authenticated:
-        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
-        DatatypeHash = DatatypeResult[0].datatypeHash
-        DatatypeId = DatatypeResult[0].id		
-        RCommunityFilter = DatatypeResult[0].relatedCommunity
-        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
-        Primitive_List = DatatypeResult[0].datatypefields_set.all()
-        c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
-        c.execute(execution_string)
-        posts=c.fetchall()
-        paginator = Paginator(posts, 5)
-        page = request.GET.get('page')
-        post_resp = paginator.get_page(page)
-        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
-    else:
-        return HttpResponseRedirect("/streampage/login")
 		
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("community_Hash")
@@ -508,8 +541,12 @@ def CreatePost_view(request):
     DatatypeHash = request.POST.get("PosttypeHash")
     Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
+    print(PostFields[0].name)
     salt = uuid.uuid4().hex
-    PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
+    try:
+        PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
+    except:
+        PostHash = hashlib.sha256(salt.encode() + uuid.uuid4().hex.upper()[0:9].encode()).hexdigest() + salt
     PostTime = datetime.now()         
     for fields in PostFields:
         if (fields.relatedPrimitives.name == "Image" or fields.relatedPrimitives.name == "Audio" or fields.relatedPrimitives.name == "Video") and request.POST.get(fields.name) != "":

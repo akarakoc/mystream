@@ -19,7 +19,7 @@
   </style>
 </head>
 
-<script> 
+<script>
 // Ajax GET data engine NON JSON //
 $.extend({
     zResponse: function(url, data) {
@@ -754,6 +754,8 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 });
 
 </script>
+
+	
 <body class=" bg-light">
 
 <!-- Main Content -->
@@ -815,10 +817,22 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		</div>
 	  </div>
 	</div>
-
 	<footer class="container-fluid text-center">
 	  <p>Copyright Mystream 2020</p>
 	</footer>
-	
+	<script>
+		function myMap() {
+		var mapProp= {
+		  center:new google.maps.LatLng(51.508742,-0.120850),
+		  zoom:5,
+		};
+		var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+		var uluru = {lat: 51.508742, lng: -0.120850};
+		var marker = new google.maps.Marker({position: uluru, map: map});
+		}
+		
+	</script>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYBw5zZ3pv2dCbD-8lIdFUDQUkN_7T3yg&callback=myMap"></script>
 </body>
 </html>

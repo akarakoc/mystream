@@ -41,6 +41,86 @@
 			</button> 
 		</div>
   </div>
+  
+	{% for posts in postEntries.postInstances %}
+	<div class="card mb-2">
+		<div class="d-flex flex-row align-items-center justify-content-between">
+            <div id="PosttypeName" class="left">
+				<h6 class="m-0 font-weight-bold text-primary" >
+				<button type="button" class="btn btn-sm">
+					<p id="Posttype">
+						<b>{{ posts.posttype.0.relatedDatatype}}</b>
+					</p>
+					
+				</button>
+				</h6>
+			</div>
+			<div class="right small">Created by: {{ posts.posttype.0.fieldCreator }} at {{ posts.posttype.0.fieldCreationDate }}
+			</div>
+			<div>
+				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ comm.communityHash }}">
+						<i class="fa fa-thumbs-up small" aria-hidden="true"></i> 
+						Report
+				</button>
+				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ comm.communityHash }}">
+						<i class="fas fa-sign-in-alt small"></i> 
+						Subscribe
+				</button>
+					
+			</div>
+		</div>
+		<!-- Card Body -->
+	<div class="card-body">
+	  <div class="modal-body row">
+	  <table class="table p-2">
+		<tr>
+			<tr>
+				{% for fields in posts.postList %}
+				 <td>
+					<div class="row p-2">
+						<div class="col-sm-15">
+							{% for types in posts.posttype %}
+								{% if types.name == fields.propertyName  %}
+									{% if types.relatedPrimitives.name  == "Image"  %}
+										<b>{{ fields.propertyName }}:&nbsp</b>
+										<img src="{{ fields.propertyValue }}" width="125" height="100" class="img-thumbnail">
+									{% elif types.relatedPrimitives.name  == "Location"%}
+									<div id="googleMap" style="width:20%;height:100px;"></div>
+									{% else %}
+										<b>{{ fields.propertyName }}:&nbsp</b>
+										{{ fields.propertyValue }}
+										{{ types.relatedPrimitives.name }}
+										
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</td>
+				{% endfor %}
+				<td>
+					<div class="col-sm-2">
+						<button type="button" id = "deletePost" hash="{{ posts.postList.0.entryHash }}" class="btn btn-sm btn-outline-secondary"><i class="fa fa-trash" style="font-size:24px" aria-hidden="true"></i></button>
+					</div>
+				</td>
+			</tr>
+		  </table>
+		  <div class="row p-2 ">
+			  <div class="col-sm-10">
+				{% csrf_token %}
+				{{comment.as_p }}
+			   </div>
+			   <div class="col-sm-2 d-flex flex-row p-3">
+					<button type="button" id = "createComment" hash="{{ posts.0 }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
+			   </div>
+		  </div>
+		  
+	  </div>
+	  </div>
+   </div>
+	  {% endfor %}
+	 
+	
 <!-- Modal Add Posttype-->
 	<div class="modal fade small" id="PosttypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -174,21 +254,24 @@
 			</div>
 		</div>
 	</div>
+	
+	 
+	
 <div class="pagination">
     <span class="step-links">
-        {% if dt_resp.has_previous %}
-            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page=1">&laquo; first</a>
-            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.previous_page_number }}">previous</a>
+        {% if post_resp.has_previous %}
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
-            Page {{ dt_resp.number }} of {{ dt_resp.paginator.num_pages }}.
+            Page {{ post_resp.number }} of {{ post_resp.paginator.num_pages }}.
         </span>
 
-        {% if dt_resp.has_next %}
-            <a href="http://18.219.3.42:8000/community/sendPosttypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.next_page_number }}">next</a>
-            <a href="http://18.219.3.42:8000/community/sendDatatypePage/?showDataTypes={{dt_resp.0.relatedCommunity}}&page={{ dt_resp.paginator.num_pages }}">last &raquo;</a>
+        {% if post_resp.has_next %}
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
+            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
-</div></div> 
+</div>
 {% endblock %}
