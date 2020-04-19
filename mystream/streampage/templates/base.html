@@ -19,7 +19,7 @@
   </style>
 </head>
 
-<script> 
+<script>
 // Ajax GET data engine NON JSON //
 $.extend({
     zResponse: function(url, data) {
@@ -47,7 +47,12 @@ $( document ).ready(function() {
 		$('#CommunityModalTitle').html("Add New Community");
 		$('#CommunityModal').modal('show');
 	});
-	
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////                                /////////////////////
+/////////////////////////        COMMUNITY               /////////////////////
+/////////////////////////                                /////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 //CREATE COMMUNITY (MODAL)
 	$('#createCommunity').submit(function(event){
 			event.preventDefault();
@@ -148,7 +153,13 @@ $( document ).ready(function() {
 			}		
 		});
 	});
-	
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////                                /////////////////////
+/////////////////////////        POSTTYPE                /////////////////////
+/////////////////////////                                /////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 //ADD POSTTYPE
 	$( "#AddPosttype" ).click(function() {
 		var requestFormData={Form:"Yes"};
@@ -195,51 +206,65 @@ $( document ).ready(function() {
 	});
 	
 	function PosttypeCreateResult(data, textStatus, jqXHR){
-		$('#editPosttypeButton').html('<button type="button" id="EditPosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;'+data["form"]+'<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>')
+		$('#editPosttypeButton').html('<button type="button" id="EditPosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeletePosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i> Delete Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;'+data["form"]+'<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>')
 		//$('#PosttypeResult').html('')
 		$('#footerAddPosttype').html('<form method="post" action="" id="AddFields" enctype="multipart/form-data">{% csrf_token %}<div class=""><button type="button" id="Fields" hash='+data["posttypeHash"]+' class="btn btn-sm btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add Field</button>&nbsp;&nbsp;<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label></div></form><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>')
 		$('input[name="name"]').attr('readonly', true);
 	}
-	
 
 
-/*SHOW POSTS
-	$( '.classD' ).click(function() {
-		var Dtname = $(this).attr('hash');
-		var PostParam={showPosts:Dtname};
-		var dt = $.zResponse("/streampage/sendPostPage",PostParam);
-		window.location = '/streampage/sendPostPage/?showPosts='+Dtname;							
-	});
-*/
-
-
-/*EDIT POSTTYPE INITIAL
-	$( '#AddFields' ).click(function() {
-		event.preventDefault();
-		var data = new FormData();
-		var posttypehash = $(this).attr('hash');
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', posttypehash);
-		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-		$.ajax({
-			type:'POST',
-			url: '/streampage/ShowPosttypeFields/',
-			data: data,
-			processData: false,
-			contentType: false,
-			dataType: "html",
-			success: DatatypeFields
-		});
+//EDIT POSTTYPE (ADD MODAL)
+	$(document).on ("click", "#EditPosttypeInitial", function (event) {
+			event.preventDefault();
+			var data = new FormData($('#createPosttype').get(0));
+			var posttypeHash = $(this).attr('hash');
+			data.append('Posttype_Hash', posttypeHash);
+			data.append('community_Hash', '{{community_Hash}}');
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/EditPosttypeMeta/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "json",
+				success: PosttypeEditResult			
+			});
 	});
 	
-	function DatatypeFields(data, textStatus, jqXHR){
-		//$('#CommunityModalTitle').html("Edit Datatypes");
-		$('#PosttypeResult').html(data);
-		//$('#CommunityModal').modal('show');
+	function PosttypeEditResult(data, textStatus, jqXHR){
+		$('#editPosttypeButton').html('<button type="button" id="EditPosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeletePosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i> Delete Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;'+data["form"]+'<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>')
 	}
-*/
+	
 
-//ADD PRIMITIVE FIELDS	
+//DELETE POSTTYPE (ADD MODAL)
+	$(document).on ("click", "#DeletePosttypeInitial", function (event) {
+			event.preventDefault();
+			var data = new FormData();
+			var posttypeHash = $(this).attr('hash');
+			data.append('Posttype_Hash', posttypeHash);
+			data.append('community_Hash', '{{community_Hash}}');
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/DeletePosttypeMeta/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "json",
+				success: PosttypeDeleteResult			
+			});
+	});
+	
+	function PosttypeDeleteResult(data, textStatus, jqXHR){
+		$('#editPosttypeButton').html('<button type="button" id="EditPosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeletePosttypeInitial" hash='+data["posttypeHash"]+' class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i> Delete Definition</button>&nbsp;&nbsp;&nbsp;&nbsp;'+data["form"]+'<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>')
+		alert(data["form"])
+		$('#PosttypeModal').modal('hide');
+		location.reload();
+	}
+
+
+//ADD PRIMITIVE FIELDS AS A RESPONSE OF A FORM	
 	$(document).on ("click", "#Fields", function (event) {
 			event.preventDefault();
 			var data = new FormData($('#AddFields').get(0));
@@ -257,19 +282,23 @@ $( document ).ready(function() {
 
 	function PrimitiveResult(data, textStatus, jqXHR){
 		$(data).appendTo($("#PosttypeResult")).show( "slow" );
+		var posttypeHash = document.getElementById("EditPosttypeInitial").getAttribute("hash");
+		$('#SavePrimitive').attr("hash",posttypeHash);
 		var time = (new Date).getTime();
 		$('#SavePrimitive').attr("id",time);
 		$('#SavePrimitiveButton').attr("id",time);
-		$('#SavePrimitiveButton').attr("id",time);		
+		$('#SavePrimitiveButton').attr("id",time);
 	}
 	
-	
+
+//ADD OR UPDATE PRIMITIVES
 	$(document).on ("click", "[updateClass]", function (event) {
 		selectedID=$(this).attr('id');
 		event.preventDefault();
 		var data = new FormData($('#'+ selectedID).get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		var posttypeHash = document.getElementById(selectedID).getAttribute("hash");
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('PosttypeHash', posttypeHash);
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
@@ -282,36 +311,42 @@ $( document ).ready(function() {
 			success: function(data, textStatus, jqXHR){
 				alert(data)
 				if (data.trim() == "Data is saved!"){
-					$( "button[id="+this.idval+"][updateClass='true']" ).html( '<i class="fa fa-check-circle" style="font-size:24px"></i>' );
+					$( "button[id="+this.idval+"][updateClass='true']" ).html( '<i class="fa fa-edit small" style="font-size:24px"></i>' );
+					$( "button[id="+this.idval+"][deleteClass='true']" ).attr("deleteClass","db");
 				}
 			}		
 		});
     });
-	
-	$(document).on ("click", "[removeClass]", function (event) {
-		selectedID=$(this).attr('id');
-		event.preventDefault();
-		var data = new FormData($('#'+ selectedID).get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
-		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-		$.ajax({
-			type:'POST',
-			url: '/streampage/DeleteDatatypeFields/',
-			data: data,
-			idval: selectedID,
-			processData: false,
-			contentType: false,
-			dataType: "html",
-			success: function(data, textStatus, jqXHR){
-				alert(data)
-				if (data.trim() == "Datatype is Deleted Successfully!"){
-					jQuery('#'+this.idval).remove();
-				}
-				$('#AddPost').modal('hide');
-				window.location.reload();
-			}		
-		});
+
+//DELETE FIELDS
+	$(document).on ("click", "[deleteClass]", function (event) {
+		if ($(this).attr('deleteClass') == "db"){
+			selectedID=$(this).attr('id');
+			event.preventDefault();
+			var data = new FormData($('#'+ selectedID).get(0));
+			var posttypeHash = document.getElementById(selectedID).getAttribute("hash");
+			data.append('CommunityHash', '{{community_Hash}}');
+			data.append('DatatypeHash', posttypeHash);
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/DeletePosttypeFields/',
+				data: data,
+				idval: selectedID,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: function(data, textStatus, jqXHR){
+					alert(data)
+					if (data.trim() == "Datatype is Deleted Successfully!"){
+						jQuery('#'+this.idval).remove();
+					}
+				}		
+			});
+		}else{
+			selectedID=$(this).attr('id');
+			jQuery('#'+selectedID).remove();
+		}
     });
 
 	$(document).on ("click", "[editClass]", function (event) {
@@ -335,18 +370,174 @@ $( document ).ready(function() {
 			}		
 		});
     });
-	
-	
-	$(document).on ("click", "[deleteClass]", function (event) {
-		selectedID=$(this).attr('id');
-		jQuery('#'+selectedID).remove();
+
+//////////////////////////EDIT POSTTYPE MODAL//////////////////////////////
+
+//EDIT POSTTYPE CHOOSE  (EDIT MODAL)
+	$(document).on ("click", "#Edit_Primitive", function (event) {
+		var requestFormData = {};
+		requestFormData["community_Hash"]= '{{community_Hash}}';
+		var editPosttypeForm = $.zResponse("/streampage/EditPosttypes",requestFormData);
+		$('#EditPosttypeModalBody').html(editPosttypeForm);
+		$('#editButtons').html('<button type="button" id="EditSelectedPosttype" hash="" class="btn btn-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i> Edit Selected</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeleteSelectedPosttype" hash="" class="btn btn-danger btn-sm"><i class="fas fa-trash" aria-hidden="true"></i> Delete Selected</button>&nbsp;&nbsp;&nbsp;&nbsp');
+		$('#editposttypeModalTitle').html("Edit Posttypes");
+		$('#EditPosttypeModal').modal('show');
+	});
+
+//EDIT MODAL FETCH SELECTED POSTTYPE FIELDS
+$(document).on ("click", "#EditSelectedPosttype", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#editPosttypeTrigger').get(0));
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/ShowPosttypeFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$('#editReturnedFields').html('<div class="container"><div class="row p-3" id="PrimitiveTable"><div class="col-sm-2">Name</div><div class="col-sm-2">Type</div><div class="col-sm-2">Required</div><div class="col-sm-2">Show</div><div class="col-sm-2">Enumerations</div><div class="col-sm-2">Action</div></div></div>'+data);
+				$('#footerEditPosttype').html('<form method="post" action="" id="EditFieldsForm" enctype="multipart/form-data">{% csrf_token %}<div class=""><button type="button" id="EditFieldsButton" hash='+data["posttypeHash"]+' class="btn btn-sm btn-outline-primary mr-auto"><i class="fa fa-plus" aria-hidden="true"></i> Add Field</button>&nbsp;&nbsp;<input type="checkbox" name="Enumeration" id="enumcheck"><label for="enumcheck">Enumeration?</label></div></form><button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>');
+				$('input[name="name"]').attr('readonly', true);
+			}		
+		});
     });
+
+
+//EDIT MODAL DELETE SELECTED POSTTYPE
+$(document).on ("click", "#DeleteSelectedPosttype", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#editPosttypeTrigger').get(0));
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/DeletePosttypes/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				$('#PosttypeModal').modal('hide');
+				location.reload();
+			}		
+		});
+    });
+
+//ADD PRIMITIVE FIELDS AS A RESPONSE OF A FORM (EDIT POSTTYPE FORM)	
+	$(document).on ("click", "#EditFieldsButton", function (event) {
+			event.preventDefault();
+			var data = new FormData($('#EditFieldsForm').get(0));
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/addPosttypeEditField/',
+				data: data,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: PrimitiveEditResult
+			});
+	});
+
+	function PrimitiveEditResult(data, textStatus, jqXHR){
+		$(data).appendTo($("#editReturnedFields")).show( "slow" );
+		var posttypeHash = document.getElementById("currentPosttype").getAttribute("hash");
+		$('#SavePrimitive').attr("hash",posttypeHash);
+		var time = (new Date).getTime();
+		$('#SavePrimitive').attr("id",time);
+		$('#SavePrimitiveButton').attr("id",time);
+		$('#SavePrimitiveButton').attr("id",time);
+	}
 	
+	
+//ADD OR UPDATE PRIMITIVES
+	$(document).on ("click", "[updateClassEditModal]", function (event) {
+		selectedID=$(this).attr('id');
+		event.preventDefault();
+		var data = new FormData($('#'+ selectedID).get(0));
+		var posttypeHash = document.getElementById('currentPosttype').getAttribute("hash");
+		data.append('CommunityHash', '{{community_Hash}}');
+		data.append('PosttypeHash', posttypeHash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/SavePrimitives/',
+			data: data,
+			idval: selectedID,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				if (data.trim() == "Data is saved!"){
+					$( "button[id="+this.idval+"][updateClassEditModal='true']" ).html( '<i class="fa fa-edit small" style="font-size:24px"></i>' );
+					$( "button[id="+this.idval+"][deleteClassEditModal='true']" ).attr("deleteClass","db");
+				}
+			}		
+		});
+    });
+
+//DELETE FIELDS
+	$(document).on ("click", "[deleteClassEditModal]", function (event) {
+		if ($(this).attr('deleteClassEditModal') == "db"){
+			selectedID=$(this).attr('id');
+			event.preventDefault();
+			var data = new FormData($('#'+ selectedID).get(0));
+			var posttypeHash = document.getElementById('currentPosttype').getAttribute("hash");
+			data.append('CommunityHash', '{{community_Hash}}');
+			data.append('DatatypeHash', posttypeHash);
+			data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+			$.ajax({
+				type:'POST',
+				url: '/streampage/DeletePosttypeFields/',
+				data: data,
+				idval: selectedID,
+				processData: false,
+				contentType: false,
+				dataType: "html",
+				success: function(data, textStatus, jqXHR){
+					alert(data)
+					if (data.trim() == "Posttyype Field is Deleted Successfully!"){
+						jQuery('#'+this.idval).remove();
+					}
+				}		
+			});
+		}else{
+			selectedID=$(this).attr('id');
+			jQuery('#'+selectedID).remove();
+		}
+    });
+
+//ADD POST MODAL FETCH POSTTYPES
 	$(document).on ("click", "#Add_Post", function (event) {
 		event.preventDefault();
 		var data = new FormData();
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/AddPostModal/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){				
+				$('#addPostModalBody').html(data);
+				$('#chooseButtons').html('<button type="button" id="AddSelectedPost" hash="" class="btn btn-primary btn-sm">Select Posttype</button>');
+				$('#AddPost').modal('show');
+			}		
+		});
+    });
+	
+//ADD POST FOR SELECTED POSTTYPE
+	$(document).on ("click", "#AddSelectedPost", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#addPostTrigger').get(0));
+		data.append('community_Hash', '{{community_Hash}}');
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
@@ -356,13 +547,13 @@ $( document ).ready(function() {
 			contentType: false,
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){				
-				$('#AddPostBody').html(data);
-				$('#AddPost').modal('show');
+				$('#returnedPostFields').html(data);	
 			}		
 		});
     });
 	
-	$(document).on ("click", "#SubmitEntry", function (event) {
+//SUBMIT POST
+	$(document).on ("click", "#SubmitPost", function (event) {
 		event.preventDefault();
 		$("div[entryInput='yes']").each(function() {
 			new_name=$(this).attr("id");
@@ -374,9 +565,10 @@ $( document ).ready(function() {
 			(new_name=$(this).text())
 			$(this).attr('value',new_name)
 		});
-		var data = new FormData($('#AddEntry').get(0));
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		var data = new FormData($('#AddPostReturned').get(0));
+		var posttypeHash = document.getElementById('ptHashId').getAttribute("hash");
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('PosttypeHash', posttypeHash);
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
@@ -431,12 +623,35 @@ $( document ).ready(function() {
 			}		
 		});
     });
-	
+
+
+//SEARCH POST (ADVANCED SEARCH)
+
 	$(document).on ("click", "#Search_Entry", function (event) {
 		event.preventDefault();
 		var data = new FormData();
-		data.append('CommunityHash', '{{ Community_Name.0.communityHash}}');
-		data.append('DatatypeHash', '{{ Datatype_Name.0.datatypeHash }}');
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/chooseSearch/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){				
+				$('#SearchPostBody').html(data);
+				$('#chooseSearchButtons').html('<button type="button" id="AddSelectedSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Select Field</button>&nbsp;&nbsp;OR Search&nbsp;&nbsp;<button type="button" id="AddFreeSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Free Field</button>');	
+				$('#SearchPost').modal('show');
+			}		
+		});
+    });
+
+//RETURN SEARCH FIELDS
+	$(document).on ("click", "#AddSelectedSearch", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#addSearchTrigger').get(0));
+		data.append('community_Hash', '{{community_Hash}}');
 		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
 		$.ajax({
 			type:'POST',
@@ -445,13 +660,51 @@ $( document ).ready(function() {
 			processData: false,
 			contentType: false,
 			dataType: "html",
-			success: function(data, textStatus, jqXHR){				
-				$('#SearchPostBody').html(data);
-				$('#SearchPost').modal('show');
+			success: function(data, textStatus, jqXHR){
+				$(data).appendTo($("#SearchEntry")).show( "slow" );			
 			}		
 		});
     });
 	
+//RETURN FREE FIELDS
+$(document).on ("click", "#AddFreeSearch", function (event) {
+		event.preventDefault();
+		var data = new FormData();
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/ReturnFreeSearchFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$("#SearchEntry").html(data);			
+			}		
+		});
+    });
+	
+//SUBMIT SEARCH FIELDS
+	$(document).on ("click", "#SubmitSearch2", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#SearchEntry').get(0));
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/test/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$(data).appendTo($("#returnedSearchFields")).show( "slow" );			
+			}		
+		});
+    });
+	
+
 	$(document).on ("click", "#SubmitSearch", function (event) {
 		event.preventDefault();
 		var i=0;
@@ -469,16 +722,31 @@ $( document ).ready(function() {
 			$("div[id='"+ats[i]+"']"+" > div > div > input").each(function() {
 				$(this).attr('name',ats[i]+"_Value")
 			});	
+			$("#id_EnumaratedSearchEntry").each(function() {
+				$(this).attr('name',ats[i]+"_Value")
+			});	
 		}
 		
 		$("option").each(function() {
 			(new_name=$(this).text())
 			$(this).attr('value',new_name)
-		});var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
-		$('#SearchEntry').append('<input type="hidden" name="CommunityHash" value="{{ Community_Name.0.communityHash}}" />');
-		$('#SearchEntry').append('<input type="hidden" name="DatatypeHash" value="{{ Datatype_Name.0.datatypeHash }}" />');
+		});
+		var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
+		$('#SearchEntry').append('<input type="hidden" name="CommunityHash" value="{{community_Hash}}" />');
 		$('#SearchEntry').append('<input type="hidden" name="csrfmiddlewaretoken" value="'+csrftoken+'" />');
-		$("#SearchEntry").attr('action', "/streampage/ReturnEntrySearchFields/").submit();
+		//$("#SearchEntry").attr('action', "/streampage/ReturnEntrySearchFields/").submit();
+		var data = new FormData($('#SearchEntry').get(0));
+		$.ajax({
+			type:'POST',
+			url: '/streampage/ReturnEntrySearchResults/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$(data).appendTo($("#SearchEntry")).show( "slow" );			
+			}		
+		});
     });
 
 
@@ -486,6 +754,8 @@ $( document ).ready(function() {
 });
 
 </script>
+
+	
 <body class=" bg-light">
 
 <!-- Main Content -->
@@ -547,10 +817,22 @@ $( document ).ready(function() {
 		</div>
 	  </div>
 	</div>
-
 	<footer class="container-fluid text-center">
-	  <p>Copyright Communityverse 2019</p>
+	  <p>Copyright Mystream 2020</p>
 	</footer>
-	
+	<script>
+		function myMap() {
+		var mapProp= {
+		  center:new google.maps.LatLng(51.508742,-0.120850),
+		  zoom:5,
+		};
+		var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+		var uluru = {lat: 51.508742, lng: -0.120850};
+		var marker = new google.maps.Marker({position: uluru, map: map});
+		}
+		
+	</script>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYBw5zZ3pv2dCbD-8lIdFUDQUkN_7T3yg&callback=myMap"></script>
 </body>
 </html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.9.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.mystream</groupId>
+	<artifactId>anno</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>MyAnnoation</name>
+	<description>Annotation Project for Mystream App</description>
+
+
+	<properties>
+		<java.version>1.8</java.version>
+		<slf4j.version>1.7.10</slf4j.version>
+		<wikidata.version>0.11.0</wikidata.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<!--        <dependency>-->
+		<!--            <groupId>org.springframework.boot</groupId>-->
+		<!--            <artifactId>spring-boot-starter-oauth2-client</artifactId>-->
+		<!--        </dependency>-->
+		<!--        <dependency>-->
+		<!--            <groupId>org.springframework.boot</groupId>-->
+		<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+		<!--        </dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-hal-browser</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- Used to set JRE version; will be used by IDEs like Eclipse as the
+                    target JRE (default is 1.5) -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>2.0.13</version>
+				<configuration>
+					<appName>mystream-anno</appName>
+					<configVars>
+						<PORT>8080</PORT>
+						<JAVA_OPTS>-Xss512k -XX:+UseCompressedOops</JAVA_OPTS>
+					</configVars>
+					<processTypes>
+						<web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.mystream.MyAnnotationApplication</web>
+					</processTypes>
+					<buildpacks>
+						<buildpack>https://github.com/mcollina/heroku-buildpack-imagemagick</buildpack>
+						<buildpack>heroku/jvm</buildpack>
+					</buildpacks>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

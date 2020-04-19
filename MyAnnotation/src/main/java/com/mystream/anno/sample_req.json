@@ -1,0 +1,42 @@
+{
+  "textAnno" :  {
+    "id": "http://example.org/anno1",
+    "type": ["Annotation"],
+    "motivation": ["tagging", "commenting"],
+    "annotatedBy": {
+      "id": "http://example.org/agent1",
+      "type": "Text",
+      "name": "A. Person",
+      "nick": "agent1"
+    },
+    "serializedBy": {
+      "id": "http://example.org/agent2",
+      "type": "Text",
+      "name": "Code v2.1",
+      "homepage": "http://example.org/agent2/homepage1"
+    },
+    "body": [
+      {
+        "type": "Text",
+        "related": "http://dbpedia.org/resource/London"
+      },
+      {
+        "type": "Text",
+        "value": "One of my favorite cities",
+        "format": "text/plain",
+        "language": "en"
+      }
+    ],
+    "target": [{
+      "id": "http://example.org/sptarget1",
+      "type": "Text",
+      "source": "http://example.org/source1",
+      "selector": {
+        "id": "http://example.org/selector1",
+        "type": "Text",
+        "start": 4096,
+        "end": 4104
+      }
+    }]
+  }
+}

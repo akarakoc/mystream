@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.db import connection
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from .forms import UsersLoginForm, UsersRegisterForm
+from .forms import UsersLoginForm, UsersRegisterForm, posttypeList, searchList, freeSearchField, textComment
 from .forms import UsersRegisterForm
 from .forms import AddCommunity
 from .forms import AddPosttype
@@ -33,165 +33,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.csrf import csrf_exempt
-from actstream import actions, models
 
-USER_MODEL = get_user_model()
-username_field = getattr(get_user_model(), 'USERNAME_FIELD', 'username')
+from .models import ActivityStreams
 
-
-def respond(request, code):
-    """
-    Responds to the request with the given response code.
-    If ``next`` is in the form, it will redirect instead.
-    """
-    redirect = request.GET.get('next', request.POST.get('next'))
-    if redirect:
-        return HttpResponseRedirect(redirect)
-    return type('Response%d' % code, (HttpResponse, ), {'status_code': code})()
-
-
-@login_required
-@csrf_exempt
-def follow_unfollow(request, content_type_id, object_id, flag=None, do_follow=True, actor_only=True):
-    """
-    Creates or deletes the follow relationship between ``request.user`` and the
-    actor defined by ``content_type_id``, ``object_id``.
-    """
-    ctype = get_object_or_404(ContentType, pk=content_type_id)
-    instance = get_object_or_404(ctype.model_class(), pk=object_id)
-
-    # If flag was omitted in url, None will pass to flag keyword argument
-    flag = flag or ''
-
-    if do_follow:
-        actions.follow(request.user, instance, actor_only=actor_only, flag=flag)
-        return respond(request, 201)   # CREATED
-
-    actions.unfollow(request.user, instance, flag=flag)
-    return respond(request, 204)   # NO CONTENT
-
-
-@login_required
-def stream(request):
-    """
-    Index page for authenticated user's activity stream. (Eg: Your feed at
-    github.com)
-    """
-
-    return render(
-        request,
-        'actstream/actor.html',
-        context={
-            'ctype': ContentType.objects.get_for_model(USER_MODEL),
-            'actor': request.user,
-            'action_list': models.user_stream(request.user)
-        }
-    )
-
-
-def followers(request, content_type_id, object_id, flag=None):
-    """
-    Creates a listing of ``User``s that follow the actor defined by
-    ``content_type_id``, ``object_id``.
-    """
-    ctype = get_object_or_404(ContentType, pk=content_type_id)
-    instance = get_object_or_404(ctype.model_class(), pk=object_id)
-    flag = flag or ''
-
-    return render(
-        request,
-        'actstream/followers.html',
-        {
-            'followers': models.followers(instance, flag=flag),
-            'actor': instance,
-        }
-    )
-
-
-def following(request, user_id, flag=None):
-    """
-    Returns a list of actors that the user identified by ``user_id``
-    is following (eg who im following).
-    """
-    instance = get_object_or_404(USER_MODEL, pk=user_id)
-    flag = flag or ''
-    return render(
-        request,
-        'actstream/following.html',
-        {
-            'following': models.following(instance, flag=flag),
-            'user': instance,
-        }
-    )
-
-
-def user(request, username):
-    """
-    ``User`` focused activity stream. (Eg: Profile page twitter.com/justquick)
-    """
-    instance = get_object_or_404(
-        USER_MODEL,
-        **{'is_active': True, username_field: username}
-    )
-    return render(
-        request,
-        'actstream/actor.html',
-        context={
-            'ctype': ContentType.objects.get_for_model(USER_MODEL),
-            'actor': instance, 'action_list': models.user_stream(instance)
-        }
-    )
-
-
-def detail(request, action_id):
-    """
-    ``Action`` detail view (pretty boring, mainly used for get_absolute_url)
-    """
-    return render(
-        request,
-        'actstream/detail.html',
-        {
-            'action': get_object_or_404(models.Action, pk=action_id)
-        }
-    )
-
-
-def actor(request, content_type_id, object_id):
-    """
-    ``Actor`` focused activity stream for actor defined by ``content_type_id``,
-    ``object_id``.
-    """
-    ctype = get_object_or_404(ContentType, pk=content_type_id)
-    instance = get_object_or_404(ctype.model_class(), pk=object_id)
-    return render(
-        request,
-        'actstream/actor.html',
-        {
-            'action_list': models.actor_stream(instance),
-            'actor': instance,
-            'ctype': ctype
-        }
-    )
-
-def model(request, content_type_id):
-    """
-    ``Actor`` focused activity stream for actor defined by ``content_type_id``,
-    ``object_id``.
-    """
-    ctype = get_object_or_404(ContentType, pk=content_type_id)
-    model_class = ctype.model_class()
-    return render(
-        request,
-        'actstream/actor.html',
-        {
-            'action_list': models.model_stream(model_class),
-            'ctype': ctype,
-            'actor': model_class
-        }
-    )
 
 def saveTagSearch_view(src):
-    SEARCHPAGE = src	
+    SEARCHPAGE = src
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
@@ -207,26 +54,26 @@ def saveTagSearch_view(src):
     items = ""
     for tt in DATA:
         titles = titles + tt['label']+","
-        items = items + tt['id']+","		
+        items = items + tt['id']+","
     return {'TITLE' : titles, "ITEM" : items}
 
 def saveTag_view(returneditems):
     looping = returneditems.replace("#",",").split(",")
     titles=""
-    items=""		
+    items=""
     for iter in looping:
-        if iter is not '':
+        if iter != '':
             resp=saveTagSearch_view(iter)
-            try:				
+            try:
                 titles = titles + resp["TITLE"]
                 items = items + resp["ITEM"]
             except:
                 print("!")
-    print({'TITLE' : titles, "ITEM" : items})	
+    print({'TITLE' : titles, "ITEM" : items})
     return {'TITLE' : titles, "ITEM" : items}
-	
+
 def LoginPage(request):
-    return render(request, 'login.html', {'community_resp': 'test'}) 
+    return render(request, 'login.html', {'community_resp': 'test'})
 
 def index(request):
     if request.user.is_authenticated:
@@ -249,20 +96,20 @@ def communityPage(request):
             return render(request, 'community.html', {})
     else:
         return HttpResponseRedirect("/streampage/login")
-		
-	
+
+
 def communityForm(request):
     form = AddCommunity()
     return render(request, 'modal.html', {'form': form})
-	
+
 def JoinCommunity_view(request):
     user = request.user
     userModel = communityUsers.objects.filter(nickName=user)[0]
     Comm = Communities.objects.get(communityHash=request.POST.get("community_Hash"))
     Comm.communityMembers.add(userModel)
-    Comm.save()	
+    Comm.save()
     return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
-	
+
 def LeftCommunity_view(request):
     return render(request, 'tagSearch.html', {'form': form})
 
@@ -273,21 +120,21 @@ def CheckMembership_view(request):
         return render(None, 'tagSearch.html', {'form': "Yes"})
     else:
         return render(None, 'tagSearch.html', {'form': "No"})
-	
+
 def VoteCommunity_view(request):
     user = request.user
     userModel = communityUsers.objects.filter(nickName=user)[0]
     Comm = Communities.objects.get(communityHash=request.POST.get("community_Hash"))
     Comm.communityPopularity.add(userModel)
     return render(request, 'tagSearch.html', {'form': form})
-	
+
 def posttypeForm(request):
     form = AddPosttype()
     return render(request, 'modal.html', {'form': form})
 
 def searchTag_view(request):
     txtSRC = request.GET.get('search_text')
-    SEARCHPAGE = txtSRC	
+    SEARCHPAGE = txtSRC
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
@@ -335,25 +182,98 @@ def CreateCommunity_view(request):
     comm.save()
     Tags = saveTag_view(request.POST.get("Community_Tags"))
     tagentry = CommunityTags()
-    relatedComm = Communities.objects.filter(communityHash=commhash)[0] 
+    relatedComm = Communities.objects.filter(communityHash=commhash)[0]
     tagentry.communityTag = relatedComm
-    tagentry.tagName = Tags["TITLE"] 
+    tagentry.tagName = Tags["TITLE"]
     tagentry.tagItem = Tags["ITEM"]
-    tagentry.save() 
+    tagentry.save()
+
+    creator = comm.communityCreator
+    activityStream = ActivityStreams()
+    description = {
+      "@context": "https://www.w3.org/ns/activitystreams",
+      "type": "Create",
+      "published": comm.communityCreationDate,
+      "actor": {
+          "id": "",
+          "name":communityUsers.objects.get(nickName=request.user)
+      },
+      "object": {
+          "id": "",
+          "type": "Community",
+          "name": comm.name,
+      }
+    }
+
+    jsonActivityStream = json.dumps(description)
+    activityStream.detail = jsonActivityStream
+    activityStream.save()
+
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
+#TODO
+def PosttypePageBCK(request):
+    if request.user.is_authenticated:
+        CommunityHash = request.GET.get('showDataTypes')
+        Community_List = Communities.objects.filter(communityHash=CommunityHash)
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts) S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+    else:
+        return HttpResponseRedirect("/streampage/login")
 
 def PosttypePage(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
         Community_List = Communities.objects.filter(communityHash=CommunityHash)
-        dt = Community_List[0].datatypes_set.all()
-        paginator = Paginator(dt, 5)
+        currentCommunity = Community_List[0]
+        postEntries={}
+        c = connection.cursor()
+        postHashQuery='select "entryHash" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash"'
+        c.execute(postHashQuery)
+        posts=c.fetchall()
+        postInstance=[]
+        for hashes in posts:
+            currentObject={}
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
+            postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        print(postEntries)
+        paginator = Paginator(posts, 5)
         page = request.GET.get('page')
-        dt_resp = paginator.get_page(page)
-        return render(request, 'datatypes.html', {'dt_resp': dt_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
     else:
         return HttpResponseRedirect("/streampage/login")
+
+
+def PostPage(request):
+    if request.user.is_authenticated:
+        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
+        DatatypeHash = DatatypeResult[0].datatypeHash
+        DatatypeId = DatatypeResult[0].id
+        RCommunityFilter = DatatypeResult[0].relatedCommunity
+        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
+        Primitive_List = DatatypeResult[0].datatypefields_set.all()
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+
 
 def handle_uploaded_datatypefile(f):
     filepath = 'streampage/static/uploads/datatypes/'+f.name
@@ -380,31 +300,39 @@ def CreatePosttype_view(request):
     dt.save()
     Tags = saveTag_view(request.POST.get("Posttype_Tags"))
     tagentry = DatatTypeTags()
-    relatedDt = Datatypes.objects.filter(datatypeHash=DtHash)[0] 
+    relatedDt = Datatypes.objects.filter(datatypeHash=DtHash)[0]
     tagentry.datatypeTag = relatedDt
-    tagentry.tagName = Tags["TITLE"] 
+    tagentry.tagName = Tags["TITLE"]
     tagentry.tagItem = Tags["ITEM"]
-    tagentry.save() 
-    return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
-	
-def PostPage(request):
-    if request.user.is_authenticated:
-        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
-        DatatypeHash = DatatypeResult[0].datatypeHash
-        DatatypeId = DatatypeResult[0].id		
-        RCommunityFilter = DatatypeResult[0].relatedCommunity
-        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
-        Primitive_List = DatatypeResult[0].datatypefields_set.all()
-        c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
-        c.execute(execution_string)
-        posts=c.fetchall()
-        paginator = Paginator(posts, 5)
-        page = request.GET.get('page')
-        post_resp = paginator.get_page(page)
-        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
-    else:
-        return HttpResponseRedirect("/streampage/login")
+    tagentry.save()
+    return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash})
+
+def EditPosttypeMeta_view(request):
+    dt_hash = request.POST.get("Posttype_Hash")
+    d_image=request.FILES.get("Posttype_Image")
+    image_path=handle_uploaded_datatypefile(d_image)
+    dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
+    dt.name = request.POST.get("Posttype_Name")
+    dt.datatypePhoto = image_path
+    dt.datatypeTags = request.POST.get("Posttype_Tags")
+    dt.datatypeCreationDate = datetime.now()
+    dt.datatypeCreator = communityUsers.objects.get(nickName=request.user)
+    dt.save()
+    Tags = saveTag_view(request.POST.get("Posttype_Tags"))
+    tagentry = DatatTypeTags()
+    relatedDt = Datatypes.objects.filter(datatypeHash=dt_hash)[0]
+    tagentry.datatypeTag = relatedDt
+    tagentry.tagName = Tags["TITLE"]
+    tagentry.tagItem = Tags["ITEM"]
+    tagentry.save()
+    return JsonResponse({'form' : "Posttype is updated Successfully!",'posttypeHash':dt_hash})
+
+def DeletePosttypeMeta_view(request):
+    dt_hash = request.POST.get("Posttype_Hash")
+    dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
+    dt.delete()
+    return JsonResponse({'form' : "Posttype is deleted Successfully!",'posttypeHash':dt_hash})
+
 
 def addPosttypeField_view(request):
     EnField = request.POST.get("Enumeration")
@@ -414,13 +342,121 @@ def addPosttypeField_view(request):
         form = AddTextEntry()
     return render(None, 'modalPost.html', {'form' : form })
 
+
+def SavePrimitives_view(request):
+    name = request.POST.get("name")
+    type = request.POST.get("Types")
+    req = request.POST.get("Required")
+    show = request.POST.get("ShowPage")
+    CommunityHash = request.POST.get("CommunityHash")
+    DatatypeHash = request.POST.get("PosttypeHash")
+    postType = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
+    try:
+        checkName = postType.datatypefields_set.filter(name=name)[0].name
+        if  checkName == name:
+            Enumeration = request.POST.get("Enum")
+            dtFields = DatatypeFields.objects.filter(name=name,relatedDatatype=postType)[0]
+            dtFields.fieldCreationDate = datetime.now()
+            dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
+            if req == 'on':
+                dtFields.fieldRequired = True
+            else:
+                dtFields.fieldRequired = False
+            if show == 'on':
+                dtFields.fronttableShow = True
+            else:
+                dtFields.fronttableShow = False
+            if name == '':
+                return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
+            elif type == '':
+                return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
+            else:
+                if Enumeration is None:
+                    typefield = Primitives.objects.get(name=type)
+                    dtFields.name = name
+                    dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                    dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                    dtFields.relatedPrimitives = typefield
+                    dtFields.save()
+                    return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
+                else:
+                    if Enumeration == '':
+                        return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+                    else:
+                        typefield = Primitives.objects.get(name=type)
+                        dtFields.name = name
+                        dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                        dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                        dtFields.relatedPrimitives = typefield
+                        dtFields.enumerations = Enumeration
+                        dtFields.save()
+                        return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
+    except:
+        Enumeration = request.POST.get("Enum")
+        dtFields = DatatypeFields()
+        dtFields.fieldCreationDate = datetime.now()
+        dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
+        if req == 'on':
+            dtFields.fieldRequired = True
+        else:
+            dtFields.fieldRequired = False
+        if show == 'on':
+            dtFields.fronttableShow = True
+        else:
+            dtFields.fronttableShow = False
+        if name == '':
+            return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
+        elif type == '':
+            return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
+        else:
+            if Enumeration is None:
+                typefield = Primitives.objects.get(name=type)
+                dtFields.name = name
+                dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                dtFields.relatedPrimitives = typefield
+                dtFields.save()
+                return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
+            else:
+                if Enumeration == '':
+                    return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
+                else:
+                    typefield = Primitives.objects.get(name=type)
+                    dtFields.name = name
+                    dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                    dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
+                    dtFields.relatedPrimitives = typefield
+                    dtFields.enumerations = Enumeration
+                    dtFields.save()
+                    return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
+
+def DeletePosttypeFields_view(request):
+    CommunityHash = request.POST.get("CommunityHash")
+    DatatypeHash = request.POST.get("DatatypeHash")
+    Dt= Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
+    name = request.POST.get("name")
+    HiddenPosts= Posts.objects.filter(propertyName=name,relatedDatatypes=Dt).delete()
+    DatatypeFields.objects.filter(name=name,relatedDatatype=Dt).delete()
+    return render(None, 'tagSearch.html', {'form' : "Posttyype Field is Deleted Successfully!"})
+
+def EditPosttypes_view(request):
+    CommunityHash = request.GET.get("community_Hash")
+    context={}
+    form=posttypeList(cHash=CommunityHash)
+    return render(request, 'modal.html', {'form': form})
+
+
 def ShowPosttypeFields_view(request):
-    relatedDt = Datatypes.objects.get(datatypeHash=request.POST.get("DatatypeHash"))
-    if DatatypeFields.objects.filter(relatedDatatype = relatedDt):
-        DtFields = DatatypeFields.objects.filter(relatedDatatype = relatedDt)
+    CommunityHash = request.POST.get("CommunityHash")
+    PosttypeName = request.POST.get("PosttypeEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dt = Cm.datatypes_set.filter(name=PosttypeName)[0]
+    PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
+    if DatatypeFields.objects.filter(relatedDatatype = Dt):
+        PtFields = DatatypeFields.objects.filter(relatedDatatype = Dt)
         context = {}
         iter=0
-        for fields in DtFields:
+        for fields in PtFields:
             name = fields.name
             Types = fields.relatedPrimitives
             Required = fields.fieldRequired
@@ -433,114 +469,31 @@ def ShowPosttypeFields_view(request):
                 form = AddTextEntry(initial={'name': name, 'Types': Types, 'Required': Required, 'ShowPage': Show})
                 context['form'+str(iter)]=form
             iter +=1
-        return render(None, 'showDataTypeFields.html', {'form':context})
+        return render(None, 'showDataTypeFields.html', {'form':context, 'posttypeHash':Dt.datatypeHash})
     else:
-        return render(None, 'showDataTypeFields.html', {'form':"Yes"})
-		
-def SavePrimitives_view(request):
-    name = request.POST.get("name")
-    type = request.POST.get("Types")
-    req = request.POST.get("Required")
-    show = request.POST.get("ShowPage")
-    CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    Enumeration = request.POST.get("Enum")
-    dtFields = DatatypeFields()
-    dtFields.fieldCreationDate = datetime.now()
-    dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
-    if req == 'on':
-        dtFields.fieldRequired = True
-    else:
-        dtFields.fieldRequired = False
-    if show == 'on':
-        dtFields.fronttableShow = True
-    else:
-        dtFields.fronttableShow = False	
-    if name == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
-    elif type == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
-    else:
-        if Enumeration is None:
-            typefield = Primitives.objects.get(name=type)
-            dtFields.name = name
-            dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-            dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-            dtFields.relatedPrimitives = typefield
-            dtFields.save()
-            return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
-        else:
-            if Enumeration == '':
-                return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
-            else:
-                typefield = Primitives.objects.get(name=type)
-                dtFields.name = name
-                dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-                dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-                dtFields.relatedPrimitives = typefield
-                dtFields.enumerations = Enumeration
-                dtFields.save()
-                return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
+        return render(None, 'showDataTypeFields.html', {'form':"Yes", 'posttypeHash':Dt.datatypeHash})
 
-def DeleteDatatypeFields_view(request):
+def DeletePosttypes_view(request):
     CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    Dt= Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
-    name = request.POST.get("name")
-    HiddenPosts= Posts.objects.filter(propertyName=name,relatedDatatypes=Dt).delete()
-    DatatypeFields.objects.filter(name=name).delete()
-    return render(None, 'tagSearch.html', {'form' : "Datatype is Deleted Successfully!"})
+    PosttypeName = request.POST.get("PosttypeEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dt = Cm.datatypes_set.filter(name=PosttypeName)[0].delete()
+    return render(None, 'tagSearch.html', {'form':"Selected posttype is deleted succesfully!"})
 
-def EditDatatypeFields_view(request):
-    name = request.POST.get("name")
-    type = request.POST.get("Types")
-    req = request.POST.get("Required")
-    show = request.POST.get("ShowPage")
-    CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    Dt=Datatypes.objects.get(datatypeHash=DatatypeHash)
-    Enumeration = request.POST.get("Enum")
-    dtFields = DatatypeFields.objects.filter(name=name,relatedDatatype=Dt)[0]
-    dtFields.fieldCreationDate = datetime.now()
-    dtFields.fieldCreator = communityUsers.objects.get(nickName=request.user)
-    if req == 'on':
-        dtFields.fieldRequired = True
+def addPosttypeEditField_view(request):
+    EnField = request.POST.get("Enumeration")
+    if EnField == 'on':
+        form = AddTextEntryEnum()
     else:
-        dtFields.fieldRequired = False
-    if show == 'on':
-        dtFields.fronttableShow = True
-    else:
-        dtFields.fronttableShow = False	
-    if name == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Enter The Name!!"})
-    elif type == '':
-        return render(None, 'tagSearch.html', {'form' : "Please Choose The Type!!"})
-    else:
-        if Enumeration is None:
-            typefield = Primitives.objects.get(name=type)
-            dtFields.name = name
-            dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-            dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-            dtFields.relatedPrimitives = typefield
-            dtFields.save()
-            return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
-        else:
-            if Enumeration == '':
-                return render(None, 'tagSearch.html', {'form' : "Please Enter the Enumeration Fields!"})
-            else:
-                typefield = Primitives.objects.get(name=type)
-                dtFields.name = name
-                dtFields.relatedDatatype = Datatypes.objects.get(datatypeHash=DatatypeHash)
-                dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
-                dtFields.relatedPrimitives = typefield
-                dtFields.enumerations = Enumeration
-                dtFields.save()
-                return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
-	
+        form = AddTextEntry()
+    return render(None, 'modalPostEdit.html', {'form' : form })
+
+
 def ReturnPostFields_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
+    CommunityHash = request.POST.get("community_Hash")
+    PosttypeName = request.POST.get("PosttypeEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dt = Cm.datatypes_set.filter(name=PosttypeName)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
     iter=0
     context={}
@@ -551,12 +504,13 @@ def ReturnPostFields_view(request):
             req = fields.fieldRequired
             show = fields.fronttableShow
             enum = fields.enumerations
-            enumList = enum.split(",")				
-            context[fields.name]=AddEnumaratedPost(en=enumList,nm=name)			
+            enumList = enum.split(",")
+            context[fields.name]=AddEnumaratedPost(en=enumList,nm=name)
         else:
+            print(fields.relatedPrimitives.name)
             if fields.relatedPrimitives.name == "Text":
                 context[fields.name]=AddTextPost()
-            elif fields.relatedPrimitives.name == "TextArea":
+            elif fields.relatedPrimitives.name == "Text Area":
                 context[fields.name]=AddTextAreaPost()
             elif fields.relatedPrimitives.name == "Audio":
                 context[fields.name]=AddAudioPost(request.POST, request.FILES)
@@ -590,9 +544,18 @@ def ReturnPostFields_view(request):
             types = fields.relatedPrimitives.name
             req = fields.fieldRequired
             show = fields.fronttableShow
-            context["Tags"]=AddTagPost()
+        context["Tags"]=AddTagPost()
         iter += 1
-    return render(None, 'entryReturnFields.html', {'form' : context})
+    print(context)
+    return render(None, 'entryReturnFields.html', {'form' : context, 'posttypeHash':Dt.datatypeHash})
+
+
+def AddPostModal_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    context={}
+    form=posttypeList(cHash=CommunityHash)
+    return render(request, 'modal.html', {'form': form})
+
 
 def handle_uploaded_postfile(f):
     filepath = 'streampage/static/uploads/posts/'+f.name
@@ -600,15 +563,19 @@ def handle_uploaded_postfile(f):
         for chunk in f.chunks():
             destination.write(chunk)
     return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
-	
+
 def CreatePost_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
+    CommunityHash = request.POST.get("community_Hash")
+    DatatypeHash = request.POST.get("PosttypeHash")
     Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
+    print(PostFields[0].name)
     salt = uuid.uuid4().hex
-    PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
-    PostTime = datetime.now()         
+    try:
+        PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
+    except:
+        PostHash = hashlib.sha256(salt.encode() + uuid.uuid4().hex.upper()[0:9].encode()).hexdigest() + salt
+    PostTime = datetime.now()
     for fields in PostFields:
         if (fields.relatedPrimitives.name == "Image" or fields.relatedPrimitives.name == "Audio" or fields.relatedPrimitives.name == "Video") and request.POST.get(fields.name) != "":
             p_image=request.FILES.get(fields.name)
@@ -622,7 +589,7 @@ def CreatePost_view(request):
             entry.postCreator = communityUsers.objects.get(nickName=request.user)
             entry.postCreationDate = PostTime
             entry.postTag = request.POST.get("Tags")
-            entry.save()		
+            entry.save()
         elif request.POST.get(fields.name) != "":
             entry = Posts()
             entry.propertyName = fields.name
@@ -639,19 +606,19 @@ def CreatePost_view(request):
                 return render(None, 'tagSearch.html', {'form' : fields.name+" is required!"})
     Tags = saveTag_view(request.POST.get("Tags"))
     tagentry = PostTags()
-    relatedPost = Posts.objects.filter(entryHash=PostHash)[0] 
+    relatedPost = Posts.objects.filter(entryHash=PostHash)[0]
     tagentry.relatedPostTag = relatedPost
-    tagentry.tagName = Tags["TITLE"] 
+    tagentry.tagName = Tags["TITLE"]
     tagentry.tagItem = Tags["ITEM"]
-    tagentry.save()  	
+    tagentry.save()
     return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
-    
+
 def DeletePost_view(request):
-    PostHash = request.POST.get("PostHash")	
-    Posts.objects.filter(entryHash=PostHash).delete()	
+    PostHash = request.POST.get("PostHash")
+    Posts.objects.filter(entryHash=PostHash).delete()
     return render(None, 'tagSearch.html', {'form' : "The Entry is deleted Successfully"})
-	
-	
+
+
 def login_view(request):
     form = UsersLoginForm(request.POST or None)
     if form.is_valid():
@@ -683,11 +650,11 @@ def register_view(request):
 	    "title" : "Register",
 	    "form" : form,
     })
- 
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/streampage/login")
-	
+
 def profilePage(request):
     if request.user.is_authenticated:
         username=request.user
@@ -704,76 +671,87 @@ def profilePage(request):
 	"Communities" : Community_List,
 	"Datatypes" : Datatype_List,
 	"Posts" : Post_List,
-	"Joined" : joined_Communities,	
+	"Joined" : joined_Communities,
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
 
+def chooseSearch_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    form=searchList(cHash=CommunityHash)
+    return render(request, 'modal.html', {'form': form})
+
 def ReturnSearchFields_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
+    CommunityHash = request.POST.get("community_Hash")
     DatatypeHash = request.POST.get("DatatypeHash")
-    Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
-    PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
-    iter=0
+    PostfieldName = request.POST.get("searchEntry")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    PostFields = DatatypeFields.objects.filter(name=PostfieldName)
+    fields=PostFields[0]
     context={}
-    for fields in PostFields:
-        if fields.enumerations is not None:
-            name = fields.name
-            types = fields.relatedPrimitives.name
-            req = fields.fieldRequired
-            show = fields.fronttableShow
-            enum = fields.enumerations
-            enumList = enum.split(",")				
-            context[fields.name]=AddEnumaratedSearch(en=enumList,nm=name)			
-        else:
-            if fields.relatedPrimitives.name == "Text":
-                context[fields.name]=AddTextSearch()
-            elif fields.relatedPrimitives.name == "TextArea":
-                context[fields.name]=AddTextAreaSearch()
-            elif fields.relatedPrimitives.name == "Audio":
-                context[fields.name]=AddAudioSearch(request.POST, request.FILES)
-            elif fields.relatedPrimitives.name == "Boolean":
-                context[fields.name]=AddBooleanSearch()
-            elif fields.relatedPrimitives.name == "Date":
-                context[fields.name]=AddDateSearch()
-            elif fields.relatedPrimitives.name == "DateTime":
-                context[fields.name]=AddDateTimeSearch()
-            elif fields.relatedPrimitives.name == "Decimal":
-                context[fields.name]=AddDecimalSearch()
-            elif fields.relatedPrimitives.name == "E-mail":
-                context[fields.name]=AddEmailSearch()
-            elif fields.relatedPrimitives.name == "Float":
-                context[fields.name]=AddFloatSearch()
-            elif fields.relatedPrimitives.name == "IP Address":
-                context[fields.name]=AddIpAddressSearch()
-            elif fields.relatedPrimitives.name == "Image":
-                context[fields.name]=AddImageSearch(request.POST, request.FILES)
-            elif fields.relatedPrimitives.name == "Integer":
-                context[fields.name]=AddIntegerSearch()
-            elif fields.relatedPrimitives.name == "Location":
-                context[fields.name]=AddLocationSearch()
-            elif fields.relatedPrimitives.name == "Time":
-                context[fields.name]=AddTimeSearch()
-            elif fields.relatedPrimitives.name == "URL":
-                context[fields.name]=AddUrlSearch()
-            elif fields.relatedPrimitives.name == "Video":
-                context[fields.name]=AddVideoSearch(request.POST, request.FILES)
-            name = fields.name
-            types = fields.relatedPrimitives.name
-            req = fields.fieldRequired
-            show = fields.fronttableShow
-            context["Tags"]=AddTagSearch()
-        iter += 1
+    if fields.enumerations is not None:
+        name = fields.name
+        types = fields.relatedPrimitives.name
+        req = fields.fieldRequired
+        show = fields.fronttableShow
+        enum = fields.enumerations
+        enumList = enum.split(",")
+        context[fields.name]=AddEnumaratedSearch(en=enumList,nm=name)
+    else:
+        if fields.relatedPrimitives.name == "Text":
+            context[fields.name]=AddTextSearch()
+        elif fields.relatedPrimitives.name == "Text Area":
+            context[fields.name]=AddTextAreaSearch()
+        elif fields.relatedPrimitives.name == "Audio":
+            context[fields.name]=AddAudioSearch(request.POST, request.FILES)
+        elif fields.relatedPrimitives.name == "Boolean":
+            context[fields.name]=AddBooleanSearch()
+        elif fields.relatedPrimitives.name == "Date":
+            context[fields.name]=AddDateSearch()
+        elif fields.relatedPrimitives.name == "DateTime":
+            context[fields.name]=AddDateTimeSearch()
+        elif fields.relatedPrimitives.name == "Decimal":
+            context[fields.name]=AddDecimalSearch()
+        elif fields.relatedPrimitives.name == "E-mail":
+            context[fields.name]=AddEmailSearch()
+        elif fields.relatedPrimitives.name == "Float":
+            context[fields.name]=AddFloatSearch()
+        elif fields.relatedPrimitives.name == "IP Address":
+            context[fields.name]=AddIpAddressSearch()
+        elif fields.relatedPrimitives.name == "Image":
+            context[fields.name]=AddImageSearch(request.POST, request.FILES)
+        elif fields.relatedPrimitives.name == "Integer":
+            context[fields.name]=AddIntegerSearch()
+        elif fields.relatedPrimitives.name == "Location":
+            context[fields.name]=AddLocationSearch()
+        elif fields.relatedPrimitives.name == "Time":
+            context[fields.name]=AddTimeSearch()
+        elif fields.relatedPrimitives.name == "URL":
+            context[fields.name]=AddUrlSearch()
+        elif fields.relatedPrimitives.name == "Video":
+            context[fields.name]=AddVideoSearch(request.POST, request.FILES)
+        name = fields.name
+        types = fields.relatedPrimitives.name
+        req = fields.fieldRequired
+        show = fields.fronttableShow
+        #context["Tags"]=AddTagSearch()
     return render(None, 'entrySearchFields.html', {'form' : context})
-	
-def ReturnEntrySearchFields_view(request):
+
+def ReturnFreeSearchFields_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    context={}
+    context["Free Search"]=freeSearchField()
+    return render(None, 'entrySearchFields.html', {'form' : context})
+
+def ReturnEntrySearchResults_view(request):
     CommunityHash = request.POST.get("CommunityHash")
-    DatatypeHash = request.POST.get("DatatypeHash")
-    DatatypeResult = Datatypes.objects.filter(datatypeHash=DatatypeHash)
-    Dtfields = DatatypeFields.objects.filter(relatedDatatype=DatatypeResult[0])
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    Dtfields = Cm.datatypefields_set.all()
     if request.user.is_authenticated:
         querylist=[]
         for fields in Dtfields:
+            print(request.POST.get(fields.name+"_Value"))
             subquery=""
             if request.POST.get(fields.name+"_Value") != "":
                 if request.POST.get(fields.name+"_Condition") == "equals":
@@ -795,17 +773,15 @@ def ReturnEntrySearchFields_view(request):
                     subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" > "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
         querystring = " and ".join(querylist)
-        DatatypeId = DatatypeResult[0].id		
         RCommunity = Communities.objects.filter(communityHash=CommunityHash)
-        Primitive_List = DatatypeResult[0].datatypefields_set.all()
         c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+' and '+querystring+') S GROUP BY "entryHash"'
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where '+querystring+') S GROUP BY "entryHash"'
         c.execute(execution_string)
         posts=c.fetchall()
-        print(querystring)		
+        print(querystring)
         paginator = Paginator(posts, 5)
         page = request.GET.get('page')
-        post_resp = paginator.get_page(page) 
-        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
+        post_resp = paginator.get_page(page)
+        return render(request, 'posts.html', {'post_resp': post_resp,'Community_Name': RCommunity})
     else:
         return HttpResponseRedirect("/streampage/login")

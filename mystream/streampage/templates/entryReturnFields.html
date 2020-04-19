@@ -1,5 +1,6 @@
 {% csrf_token %}
-<form method="post" action="" id="AddEntry" enctype="multipart/form-data">
+<p id="ptHashId" hash="{{ posttypeHash }}"></p>
+<form method="post" action="" id="AddPostReturned" enctype="multipart/form-data">
   <div class="container">
 	{% for key,val in form.items  %}
     <div class="row">

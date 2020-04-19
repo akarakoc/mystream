@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, get_user_model
 from django import forms
-from streampage.models import Primitives
+from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,Posts,CommunityTags,DatatTypeTags,PostTags,UserTags
 
 class UsersLoginForm(forms.Form):
     username = forms.CharField()
@@ -428,13 +428,14 @@ class AddEnumaratedSearch(forms.Form):
         super(AddEnumaratedSearch, self).__init__(*args, **kwargs)
         ChoiceList = ["equals", "contains","not equal","not contain"]
         self.fields['Condition'] = forms.ChoiceField(choices=tuple(enumerate(ChoiceList)),label='')
-        self.fields['EnumaratedEntry'] = forms.ChoiceField(choices=tuple(enumerate(enum)),label='')
-        self.fields['EnumaratedEntry'].widget.attrs.update({'class': 'form-control'})
+        self.fields['EnumaratedSearchEntry'] = forms.ChoiceField(choices=tuple(enumerate(enum)),label='')
+        self.fields['EnumaratedSearchEntry'].widget.attrs.update({'class': 'form-control'})
         self.fields['Condition'].widget.attrs.update({'class': 'form-control'})
         contextName={}
         contextName['name']=name
         cnName = contextName.get(name,name)
         super(AddEnumaratedSearch, self).add_prefix(cnName)
+
         
 class AddLocationSearch(forms.Form):
     Operand = ["","AND", "OR"]
@@ -460,12 +461,39 @@ class AddTagSearch(forms.Form):
 
 class posttypeList(forms.Form):	
     def __init__(self, *args, **kwargs):
-        enum = kwargs.pop('en')
-        name = kwargs.pop('nm')
+        cmHash = kwargs.pop('cHash')
+        print(cmHash)
         super(posttypeList, self).__init__(*args, **kwargs)
-        self.fields['EnumaratedEntry'] = forms.ChoiceField(choices=tuple(enumerate(enum)),label='')
-        self.fields['EnumaratedEntry'].widget.attrs.update({'class': 'form-control'})
-        self.fields['Condition'].widget.attrs.update({'class': 'form-control'})
+        CommList = Communities.objects.filter(communityHash=cmHash)[0]
+        self.fields['PosttypeEntry'] = forms.ModelChoiceField(queryset=CommList.datatypes_set.all().order_by('name'),label='',to_field_name="name")
+        self.fields['PosttypeEntry'].widget.attrs.update({'class': 'form-control'})
         contextName={}
+        name="Posttype"
         cnName = contextName.get(name,name)
         super(posttypeList, self).add_prefix(cnName)
+
+class searchList(forms.Form):	
+    def __init__(self, *args, **kwargs):
+        cmHash = kwargs.pop('cHash')
+        print(cmHash)
+        super(searchList, self).__init__(*args, **kwargs)
+        CommList = Communities.objects.filter(communityHash=cmHash)[0]
+        self.fields['searchEntry'] = forms.ModelChoiceField(queryset=CommList.datatypefields_set.all().order_by('name'),label='',to_field_name="name")
+        self.fields['searchEntry'].widget.attrs.update({'class': 'form-control'})
+        contextName={}
+        name="Search Items"
+        cnName = contextName.get(name,name)
+        super(searchList, self).add_prefix(cnName)
+
+class freeSearchField(forms.Form):
+    TextEntry = forms.CharField(label='')
+    def __init__(self, *args, **kwargs):
+        super(freeSearchField, self).__init__(*args, **kwargs)
+        self.fields['TextEntry'].widget.attrs.update({'class': 'form-control'})
+		
+class textComment(forms.Form):
+    Comment = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(textComment, self).__init__(*args, **kwargs)
+        self.fields['Comment'].widget.attrs.update({'class': 'form-control'})
+        
