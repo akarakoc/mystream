@@ -23,19 +23,21 @@ public class TextAnnotation implements Annotation  {
 	@Getter
 	@Setter
 	@NonNull
-	@Field("@id")
+	@Field("id")
 	@JsonProperty("@id")
 	private String id;
-
-	@OneToMany
-	@Field("@context")
-	@JsonProperty("@context")
-	private List<String> context;
 
 	@Getter
 	@Setter
 	@OneToMany
-	@Field("@type")
+	@Field("context")
+	@JsonProperty("@context")
+	private String context;
+
+	@Getter
+	@Setter
+	@OneToMany
+	@Field("type")
 	@JsonProperty("@type")
 	private List<TypeEnum> type;
 

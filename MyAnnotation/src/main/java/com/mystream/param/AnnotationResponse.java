@@ -1,13 +1,8 @@
-package com.mystream.anno;
+package com.mystream.param;
 
-import com.mystream.dom.Annotation;
-import com.mystream.dom.TextAnnotation;
-import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class AnnotationResponse {
 

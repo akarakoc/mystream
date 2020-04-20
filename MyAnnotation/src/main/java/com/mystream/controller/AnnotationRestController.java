@@ -1,25 +1,18 @@
-package com.mystream.anno;
+package com.mystream.controller;
 
-import com.mystream.dom.Annotation;
-import com.mystream.dom.AnnotationFactory;
+import com.mystream.dom.Constants;
+import com.mystream.param.AnnotationRequest;
+import com.mystream.param.AnnotationResponse;
 import com.mystream.dom.TextAnnotation;
-import com.mystream.repo.TextAnnotationRepository;
 import com.mystream.service.AnnotationService;
-import com.mystream.service.AnnotationServiceImpl;
-import com.mystream.service.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.soap.Text;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class AnnotationRestController {
@@ -30,6 +23,9 @@ public class AnnotationRestController {
 	@RequestMapping(name = "/annotateText", produces = "application/json", method= RequestMethod.POST)
 	@ResponseBody
 	public AnnotationResponse annotateText(@RequestBody AnnotationRequest request) throws Exception {
+
+		TextAnnotation annotation = request.getTextAnno();
+		annotation.setContext(Constants.ANNOTATION_CONTEXT_URI);
 
 		TextAnnotation anno = annotationService.saveTextAnnotation(request.getTextAnno());
 		AnnotationResponse response = new AnnotationResponse();
