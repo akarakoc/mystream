@@ -21,10 +21,11 @@ public class Selector {
 
 	@Getter
 	@Setter
-	private Long start;
+	private String conformsTo;
 
 	@Getter
 	@Setter
-	private Long end;
+	private String value;
+
 
 }
