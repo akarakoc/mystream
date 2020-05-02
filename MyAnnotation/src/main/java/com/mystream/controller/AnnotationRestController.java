@@ -24,7 +24,7 @@ public class AnnotationRestController {
 	@Autowired
 	AnnotationService annotationService;
 
-	@CrossOrigin(origins = "http://127.0.0.1:8000/")
+	@CrossOrigin(origins = "http://localhost:8000/")
 	@RequestMapping(name = "/annotateText", produces = "application/json", method= RequestMethod.POST)
 	@ResponseBody
 	public AnnotationResponse annotateText(@RequestBody AnnotationRequest request) throws Exception {
