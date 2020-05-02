@@ -10,9 +10,11 @@ import com.mystream.dom.TextAnnotation;
 import com.mystream.service.AnnotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +25,12 @@ public class AnnotationRestController {
 
 	@Autowired
 	AnnotationService annotationService;
+
+	@GetMapping("/annotation-javaconfig")
+	public AnnotationResponse annotationWithJavaconfig(@RequestParam(required=false, defaultValue="World") String name) {
+		System.out.println("==== in greeting ====");
+		return new AnnotationResponse();
+	}
 
 	@CrossOrigin(origins = "http://localhost:8000/")
 	@RequestMapping(name = "/annotateText", produces = "application/json", method= RequestMethod.POST)
