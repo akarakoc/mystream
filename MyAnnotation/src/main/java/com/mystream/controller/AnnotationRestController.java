@@ -44,6 +44,7 @@ public class AnnotationRestController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:8000/")
 	@RequestMapping(name = "/searchAnnotation", produces = "application/json", method= RequestMethod.GET)
 	@ResponseBody
 	public AnnotationResponse searchAnnotation(){
