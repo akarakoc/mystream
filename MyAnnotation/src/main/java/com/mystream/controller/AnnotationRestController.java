@@ -1,9 +1,10 @@
 package com.mystream.controller;
 
 import com.mystream.dom.Constants;
-import com.mystream.dom.Selector;
+import com.mystream.dom.selector.FragmentSelector;
+import com.mystream.dom.selector.Selector;
+import com.mystream.dom.selector.SelectorEnum;
 import com.mystream.dom.Target;
-import com.mystream.dom.TypeEnum;
 import com.mystream.param.AnnotationRequest;
 import com.mystream.param.AnnotationResponse;
 import com.mystream.dom.TextAnnotation;
@@ -40,10 +41,13 @@ public class AnnotationRestController {
 		TextAnnotation annotation = request.getTextAnno();
 		annotation.setContext(Constants.ANNOTATION_CONTEXT_URI);
 
-		for ( Target target : annotation.getTarget()) {
-			if(target.getSelector().equals(TypeEnum.FragmentSelector))
-				target.getSelector().setConformsTo(Constants.SELECTOR_FRAGMENT_CONFORMS_TO);
+		Target target = annotation.getTarget();
+		for ( Selector selector: target.getSelector()) {
+			if(target.getSelector().equals(SelectorEnum.FragmentSelector)){
+				((FragmentSelector)target.getSelector()).setConformsTo(Constants.SELECTOR_FRAGMENT_CONFORMS_TO);
+			}
 		}
+
 
 		TextAnnotation anno = annotationService.saveTextAnnotation(request.getTextAnno());
 		AnnotationResponse response = new AnnotationResponse();

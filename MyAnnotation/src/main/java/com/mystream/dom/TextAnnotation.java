@@ -43,7 +43,7 @@ public class TextAnnotation implements Annotation  {
 
 	@Getter
 	@Setter
-	private List<MotivationEnum> motivation;
+	private MotivationEnum motivation;
 
 	@Getter
 	@Setter
@@ -66,7 +66,11 @@ public class TextAnnotation implements Annotation  {
 	@Getter
 	@Setter
 	@NonNull
-	private List<Target> target;
+	private Target target;
+
+	@Getter
+	@Setter
+	private String canonical;
 
 
 

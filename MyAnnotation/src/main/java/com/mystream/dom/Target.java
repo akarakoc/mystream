@@ -1,13 +1,13 @@
 package com.mystream.dom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.lang.NonNull;
+import com.mystream.dom.selector.Selector;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.net.URI;
+import java.util.List;
 
 @Document(collection = "Target")
 public class Target {
@@ -27,6 +27,7 @@ public class Target {
 
 	@Getter
 	@Setter
-	private Selector selector;
+	@JsonProperty("selector")
+	private List<Selector> selector;
 
 }
