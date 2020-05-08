@@ -100,7 +100,7 @@
 				{% for fields in posts.postList %}
 					{% for types in posts.posttype %}
 						{% if types.name == fields.propertyName  %}
-							{% if types.relatedPrimitives.name  != "Image" and types.relatedPrimitives.name  != "Location" %}
+							{% if types.relatedPrimitives.name  != "Image" and types.relatedPrimitives.name  != "Location" and types.relatedPrimitives.name  != "Text Area" %}
 								<div class="row">
 									<b>{{ fields.propertyName }}:&nbsp</b>
 									{{ fields.propertyValue }}
@@ -109,6 +109,9 @@
 						{% endif %}
 					{% endfor %}
 				{% endfor %}
+				<div class="row">
+					<a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ posts.postList.0.entryHash }}">more >></a>	
+				</div>
 				<div class="row">
 					{{ fields.postTag }}
 				</div>

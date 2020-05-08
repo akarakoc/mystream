@@ -49,8 +49,7 @@ $(  createDialog =  function() {
       if ( valid ) {
 
          var remote ="https://mystream-anno.herokuapp.com/annoateText";
-         var local ="http://localhost:8080/annoateText";
-
+         var local = window.location.href;
          var textAnno = JSON.parse($( "#output" ).val());
 
          textAnno.body = [
@@ -120,9 +119,8 @@ $(  createDialog =  function() {
 $( document ).ready(function() {
 
     var remote ="https://mystream-anno.herokuapp.com/searchAnnotation";
-    var local ="http://localhost:8080/searchAnnotation";
-
-
+    var local = window.location.href;
+    console.log(local); 
     $.ajax({
       url: remote,
       success: function(data, status){

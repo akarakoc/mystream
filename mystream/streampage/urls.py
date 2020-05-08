@@ -40,4 +40,5 @@ urlpatterns = [
 	path('ReturnSearchFields/', views.ReturnSearchFields_view, name = "ReturnSearchFields"),
 	path('ReturnEntrySearchResults/', views.ReturnEntrySearchResults_view, name = "ReturnEntrySearchResults"),
 	path('ReturnFreeSearchFields/', views.ReturnFreeSearchFields_view, name = "ReturnFreeSearchFields"),
+	path('showPostDetails/', views.showPostDetails_view, name = "showPostDetails"),
 ]

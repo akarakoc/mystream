@@ -228,7 +228,27 @@ def PosttypePage(request):
     else:
         return HttpResponseRedirect("/streampage/login")
 
-
+def showPostDetails_view(request):
+    if request.user.is_authenticated:
+        EntryHash = request.GET.get('postHash')
+        queryPost = Posts.objects.filter(entryHash=EntryHash)
+        currentPost = queryPost[0]
+        relatedCommunity = currentPost.relatedCommunityforPost
+        relatedPosttype = currentPost.relatedDatatypes
+        postEntries={}
+        postInstance=[]
+        currentObject={}
+        postInfo = PostsMetaHash.objects.filter(postMetaHash=EntryHash)[0]
+        currentObject['postList']=Posts.objects.filter(entryHash=EntryHash)
+        currentObject['posttype']=Posts.objects.filter(entryHash=EntryHash)[0].relatedDatatypes.datatypefields_set.all()
+        currentObject['comments']=postInfo.postcomments_set.all()
+        postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        comment=textComment()
+        return render(request, 'postDetails.html', {'postEntries':postEntries, 'comment': comment, 'community':relatedCommunity, 'posttype': relatedPosttype })
+    else:
+        return HttpResponseRedirect("/streampage/login")
+    
 def PostPage(request):
     if request.user.is_authenticated:
         DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
@@ -572,7 +592,7 @@ def CreatePost_view(request):
             entry.postCreationDate = PostTime
             entry.postTag = request.POST.get("Tags")
             entry.save()		
-        elif request.POST.get(fields.name) != "":
+        elif request.POST.get(fields.name) != "" and fields.relatedPrimitives.name != "Boolean":
             entry = Posts()
             entry.propertyName = fields.name
             entry.propertyValue = request.POST.get(fields.name)
@@ -584,6 +604,29 @@ def CreatePost_view(request):
             entry.postCreationDate = PostTime
             entry.postTag = request.POST.get("Tags")
             entry.save()
+        elif fields.relatedPrimitives.name == "Boolean" and request.POST.get(fields.name) != "":
+            entry = Posts()
+            entry.propertyName = fields.name
+            if entry.propertyValue == "on":
+                entry.propertyValue = "Yes"
+                entry.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                entry.relatedCommunityforPost = Communities.objects.get(communityHash=CommunityHash)
+                entry.entryHash = PostHash
+                entry.relatedMeta = PostsMetaHash.objects.get(postMetaHash = PostHash)
+                entry.postCreator = communityUsers.objects.get(nickName=request.user)
+                entry.postCreationDate = PostTime
+                entry.postTag = request.POST.get("Tags")
+                entry.save()
+            else:
+                entry.propertyValue = "No"
+                entry.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                entry.relatedCommunityforPost = Communities.objects.get(communityHash=CommunityHash)
+                entry.entryHash = PostHash
+                entry.relatedMeta = PostsMetaHash.objects.get(postMetaHash = PostHash)
+                entry.postCreator = communityUsers.objects.get(nickName=request.user)
+                entry.postCreationDate = PostTime
+                entry.postTag = request.POST.get("Tags")
+                entry.save()
         else:
             if fields.fieldRequired == True:
                 return render(None, 'tagSearch.html', {'form' : fields.name+" is required!"})
