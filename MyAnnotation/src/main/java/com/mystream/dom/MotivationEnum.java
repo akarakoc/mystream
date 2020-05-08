@@ -2,6 +2,17 @@ package com.mystream.dom;
 
 public enum MotivationEnum {
 
-	tagging,
-	commenting;
+	assesing,
+	bookmarking,
+	classifying,
+	commenting,
+	describing,
+	editing,
+	highlighting,
+	identifying,
+	linking,
+	moderating,
+	questioning,
+	replying,
+	tagging;
 }
