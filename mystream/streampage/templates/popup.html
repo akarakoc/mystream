@@ -1,0 +1,65 @@
+{% load static %}
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Dialog - Modal form</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href={% static "css/popup.css" %}>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="{% static 'js/popup.js' %}"></script>
+  <script src="{% static 'js/annotation-model.js' %}"></script>
+
+
+</head>
+
+
+<body style="text-align:justify-all;position:center; top:10px; margin:5%" >
+
+        <span style="text-align:right;position:sticky; top:2px;"></span>
+        <h2 style="text-align: center;"  >
+            Web Annotation Demo
+        </h2>
+
+        <h2 style="text-align: left;"  >
+            Let’s Save a Little Water for Everyone
+        </h2>
+
+        <p>
+            Experts say keeping good hygiene would reduce the risk of transmitting and contracting the COVID-19. Indeed clean water is our first line of defence during this time of turbulence. Access to clean water is a basic human right and no one should fear losing their life because they couldn’t practice the first line of defence, which is hand washing. Kenya faces difficulty in water supply. Majority of Kenyans do not have access to clean water. However, this is not the time to live everything as deprivation. This is the time to promote solidarity through sharing the little resources we have. This crisis needs community more than ever and we need to do what is reasonable to keep everyone safe.
+        </p>
+        <p>
+            Recognizing that if there is a shortage of water for communities it will be difficult to get water to wash our hands. Given the importance of handwashing in preventing the spread of this virus, there is a need for increased water-saving and sharing. To save water, let’s start by breaking the unfavourable habits of leaving water taps running needlessly while washing our hands or when washing dishes. In addition, let’s fix all the leaks in our homes. This could save a lot of water that would have gone to waste. Let’s also shorten our showers. Alternatively, one can install a low flow showerhead. This will help save water for everyone. We can strive to ensure that everyone has access to water during and after this time of the virus to prevent the spread of infectious diseases.
+        </p>
+
+        <textarea id="output" style="height:80em;width:60%;pointer-events:none; margin-left:20%;margin-top:5%"
+                  placeholder="Web Annotation Data Model document appears here upon selection">
+
+        </textarea>
+
+    </body>
+
+
+
+<div id="dialog-form" title="Create Annotation">
+  <p class="validateTips">All form fields are required.</p>
+
+  <form>
+    <fieldset>
+      <label for="target">Target</label>
+      <input type="text" name="target" id="target" value="" class="text ui-widget-content ui-corner-all">
+      <label for="body">Body</label>
+      <input type="text" name="body" id="body" value="" class="text ui-widget-content ui-corner-all">
+
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
+</html>

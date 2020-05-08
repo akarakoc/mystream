@@ -1,4 +1,4 @@
-package com.mystream.anno;
+package com.mystream.param;
 
 import com.mystream.dom.TextAnnotation;
 import lombok.Getter;

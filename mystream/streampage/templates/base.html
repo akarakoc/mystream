@@ -7,19 +7,47 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}">
+  <link rel="stylesheet" href="{% static 'css/annotator.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/popup.css' %}">
   <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+ 
+  
   
   <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/sb-admin-2.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/tagsinput.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/popper.js' %}"></script>
+
+ 
   <style>
-  
+   
   </style>
 </head>
 
 <script>
+
+//Annotation
+/*
+   document.addEventListener("selectionchange", function() {
+     var selection = window.getSelection();
+       var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
+       var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
+       var output = document.getElementById('output');
+       output.value = json;
+	   //console.log(json);
+       //var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
+       //ab2.result.target.toSelection();
+     
+   });
+*/  
+/*
+var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
+var json = ab.toJSON(); // exports serialized version to JSON-LD 
+console.log(json); //dumps serialized version to developer console
+var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
+ab2.result.target.toSelection(); //highlights the original selection 
+*/
+
 // Ajax GET data engine NON JSON //
 $.extend({
     zResponse: function(url, data) {
@@ -749,7 +777,50 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		});
     });
 
+//POST COMMENTS
 
+	$(document).on ("click", "#createComment", function (event) {
+		event.preventDefault();
+		var relatedID = $(this).attr('hash');
+		var data = new FormData($('#'+relatedID).get(0));
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('post_Hash', relatedID);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CreatePostComment/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				location.reload();				
+			}		
+		});
+    });
+
+//POST COMMENT POST SITE
+	$(document).on ("click", "#createCommentPage", function (event) {
+		event.preventDefault();
+		var relatedID = $(this).attr('hash');
+		var data = new FormData($('#'+relatedID).get(0));
+		data.append('community_Hash', '{{community.communityHash}}');
+		data.append('post_Hash', relatedID);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CreatePostComment/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				location.reload();				
+			}		
+		});
+    });
 	
 });
 
@@ -811,7 +882,6 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		</div>
 		<div class="col-sm-8 text-left"> 
 		  {% block content %}{% endblock %}
-		  <hr>
 		</div>
 		<div class="col-sm-2 sidenav d-flex">
 		</div>
@@ -830,7 +900,6 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		var uluru = {lat: 51.508742, lng: -0.120850};
 		var marker = new google.maps.Marker({position: uluru, map: map});
 		}
-		
 	</script>
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYBw5zZ3pv2dCbD-8lIdFUDQUkN_7T3yg&callback=myMap"></script>

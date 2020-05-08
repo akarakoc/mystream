@@ -1,7 +1,8 @@
 package com.mystream.dom;
 
 public enum TypeEnum {
-	Annotation,
-	Image,
+	Annotation, // for annotation
+	Image,		// for body and target
+	SpecificResource, // for target
 	Text;
 }

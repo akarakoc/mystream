@@ -16,7 +16,7 @@ public class Body {
 	@Getter
 	@Setter
 	@NonNull
-	@Field("@id")
+	@Field("id")
 	@JsonProperty("@id")
 	private String id;
 

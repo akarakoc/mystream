@@ -33,9 +33,8 @@
       "source": "http://example.org/source1",
       "selector": {
         "id": "http://example.org/selector1",
-        "type": "Text",
-        "start": 4096,
-        "end": 4104
+        "type": "FragmentSelector",
+        "conformsTo": "http://www.w3.org/TR/media-frags/"
       }
     }]
   }
