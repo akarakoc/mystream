@@ -9,4 +9,6 @@ public interface AnnotationService {
 
 	public TextAnnotation saveTextAnnotation(TextAnnotation anno);
 	public List<TextAnnotation> searchAnnotation();
-}
+	public List<TextAnnotation> searchAnnotationWithSource( String source);
+
+	}

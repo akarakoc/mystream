@@ -23,5 +23,9 @@ public class AnnotationServiceImpl implements AnnotationService {
 		return textRepository.findAll();
 	}
 
+	@Override
+	public List<TextAnnotation> searchAnnotationWithSource( String source){
+		return textRepository.findByTarget_Source(source);
+	}
 
 }

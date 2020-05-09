@@ -123,8 +123,10 @@ $( document ).ready(function() {
     var local ="http://localhost:8080/searchAnnotation";
 
 
-    $.ajax({
+   $.ajax({
       url: remote,
+      data: { source : window.location.href },
+      contentType: 'application/json',
       success: function(data, status){
           console.log("okk");
           var jsonList = data.response.annoList;
