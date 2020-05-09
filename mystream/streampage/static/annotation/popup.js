@@ -119,10 +119,10 @@ $(  createDialog =  function() {
 $( document ).ready(function() {
 
     var remote ="https://mystream-anno.herokuapp.com/searchAnnotation";
-    var local = window.location.href;
-    console.log(local); 
+
     $.ajax({
       url: remote,
+	  data: {source : window.location.href},
       success: function(data, status){
           console.log("okk");
           var jsonList = data.response.annoList;

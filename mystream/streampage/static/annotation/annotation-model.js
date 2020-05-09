@@ -393,8 +393,6 @@ class SpecificResource{
         return this;
     }
     firstRange(){
-        console.log(this.source);
-		console.log(AnnotationBuilder.parseURL(window.location.href));
         if(this.source!=AnnotationBuilder.parseURL(window.location.href)){
             throw 'currently does not support selecting on other than current page. should add code to navigate to page or otherwise return null (but trying the first option before throwing null is best)';
         }
