@@ -9,6 +9,12 @@ public enum FormatEnum {
 	@JsonProperty("text/html")
 	TEXT_HTML,
 	@JsonProperty("image/png")
-	IMAGE_PNG;
+	IMAGE_PNG,
+	@JsonProperty("image/jpeg")
+	IMAGE_JPEG,
+	@JsonProperty("audio/mpeg")
+	IMAGE_MPEG;
+
+
 
 }
