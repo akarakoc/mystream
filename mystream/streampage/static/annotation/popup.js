@@ -92,29 +92,50 @@ function highlightCurrentAnnotations(){
 }
 
 function surroundSelection(source) {
-        var span = document.createElement("span");
-        span.style.fontWeight = "bold";
-        span.style.color = "black";
-        span.style.background = "#FFFF00";
-        span.title = "This is annotation for : " + source;
+    var span = document.createElement("span");
+    span.style.fontWeight = "bold";
+    span.style.color = "black";
+    span.style.background = "#FFFF00";
+    span.title = "This is annotation for : " + source;
 
-        var a = document.createElement('a');
-        a.href = source;
-        a.target = "_blank";
-        a.style.background = "yellow";
-        a.title = "This is annotation for : " + source;
-        span.appendChild(a);
+    var a = document.createElement('a');
+    a.href = source;
+    a.target = "_blank";
+    a.style.background = "yellow";
+    a.title = "This is annotation for : " + source;
+    span.appendChild(a);
 
-        if (window.getSelection) {
-            var sel = window.getSelection();
-            if (sel.rangeCount) {
-                var range = sel.getRangeAt(0).cloneRange();
-                range.surroundContents(a);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
+    if (window.getSelection) {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var range = sel.getRangeAt(0).cloneRange();
+            range.surroundContents(a);
+            sel.removeAllRanges();
+            sel.addRange(range);
         }
     }
+}
+
+function sendCreationRequest(post_data, textAnno){
+    $.ajax({
+        type: "POST",
+        url: annotate_remote,
+        data: JSON.stringify(post_data),
+        contentType: 'application/json',
+        success: function (data, status) {
+            console.log("ok");
+
+            var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(textAnno));
+            ab2.result.target.toSelection();
+            surroundSelection(textAnno.body[0].related);
+            alert("completed");
+        },
+        error: function () {
+            alert("Error");
+        }
+
+    });
+}
 
 function createAnnotation() {
     var valid = true;
@@ -123,39 +144,17 @@ function createAnnotation() {
 
     if (valid) {
         var textAnno = JSON.parse($("#output").val());
-
         textAnno.body = [
             {
                 "type": "Text",
                 "related": $("#body").val()
             }
         ]
-
         var post_data = {
             textAnno
         }
-
-        $.ajax({
-            type: "POST",
-            url: annotate_remote,
-            data: JSON.stringify(post_data),
-            contentType: 'application/json',
-            success: function (data, status) {
-                console.log("ok");
-
-                var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(textAnno));
-                ab2.result.target.toSelection();
-                surroundSelection(textAnno.body[0].related);
-                alert("completed");
-            },
-            error: function () {
-                alert("Error");
-            }
-
-        });
-
+        sendCreationRequest(post_data, textAnno);
     }
-    return valid;
 }
 
 /*******************************************/
