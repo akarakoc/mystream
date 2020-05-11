@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -126,3 +127,6 @@ class UserCircle(models.Model):
     tagItem = models.CharField(max_length=2000, null=True, help_text='Enter Community Tag Item')
     def __str__(self):
         return self.circleOwner
+
+    class ActivityStreams(models.Model):
+        detail = JSONField()
