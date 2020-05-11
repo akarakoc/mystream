@@ -20,6 +20,11 @@ public class TextAnnotation implements Annotation  {
 	@Transient
 	public static final String SEQUENCE_NAME = "text_anno_seq";
 
+	@Id
+	@Getter
+	@Setter
+	private String canonical;
+
 	@Getter
 	@Setter
 	@NonNull
@@ -68,9 +73,7 @@ public class TextAnnotation implements Annotation  {
 	@NonNull
 	private Target target;
 
-	@Getter
-	@Setter
-	private String canonical;
+
 
 
 

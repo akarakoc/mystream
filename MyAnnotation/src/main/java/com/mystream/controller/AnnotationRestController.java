@@ -33,7 +33,6 @@ public class AnnotationRestController {
 		return new AnnotationResponse();
 	}
 
-	@CrossOrigin(origins = "http://localhost:8000/")
 	@RequestMapping(name = "/annotateText", produces = "application/json", method= RequestMethod.POST)
 	@ResponseBody
 	public AnnotationResponse annotateText(@RequestBody AnnotationRequest request) throws Exception {
@@ -56,12 +55,11 @@ public class AnnotationRestController {
 
 	}
 
-	@CrossOrigin(origins = "http://localhost:8000/")
 	@RequestMapping(name = "/searchAnnotation", produces = "application/json", method= RequestMethod.GET)
 	@ResponseBody
-	public AnnotationResponse searchAnnotation(){
+	public AnnotationResponse searchAnnotation(@RequestParam(name = "source") String source){
 
-		List<TextAnnotation> annoList = annotationService.searchAnnotation();
+		List<TextAnnotation> annoList = annotationService.searchAnnotationWithSource(source);
 		AnnotationResponse response = new AnnotationResponse();
 		response.getResponse().put("annoList", annoList );
 		return response;
