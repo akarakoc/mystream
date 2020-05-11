@@ -30,6 +30,7 @@ urlpatterns = [
 	path('AddPostModal/', views.AddPostModal_view, name = "AddPostModal"),
 	path('ReturnPostFields/', views.ReturnPostFields_view, name = "ReturnPostFields"),
 	path('CreatePost/', views.CreatePost_view, name = "CreatePost"),
+	path('CreatePostComment/', views.CreatePostComment_view, name = "CreatePostComment"),
 	path('DeletePost/', views.DeletePost_view, name = "DeletePost"),
 	path('JoinCommunity/', views.JoinCommunity_view, name = "JoinCommunity"),
 	path('LeftCommunity/', views.LeftCommunity_view, name = "LeftCommunity"),
@@ -37,5 +38,7 @@ urlpatterns = [
 	path('CheckMembership/', views.CheckMembership_view, name = "CheckMembership"),
 	path('chooseSearch/', views.chooseSearch_view, name = "chooseSearch"),
 	path('ReturnSearchFields/', views.ReturnSearchFields_view, name = "ReturnSearchFields"),
-	path('ReturnEntrySearchFields/', views.ReturnEntrySearchFields_view, name = "ReturnEntrySearchFields"),
+	path('ReturnEntrySearchResults/', views.ReturnEntrySearchResults_view, name = "ReturnEntrySearchResults"),
+	path('ReturnFreeSearchFields/', views.ReturnFreeSearchFields_view, name = "ReturnFreeSearchFields"),
+	path('showPostDetails/', views.showPostDetails_view, name = "showPostDetails"),
 ]

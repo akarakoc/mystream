@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList
+from .forms import posttypeList, searchList, freeSearchField, textComment
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -27,7 +27,7 @@ import requests
 import uuid
 import hashlib
 from datetime import datetime
-from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,Posts,CommunityTags,DatatTypeTags,PostTags,UserTags
+from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags
 
 
 
@@ -183,18 +183,91 @@ def CreateCommunity_view(request):
     tagentry.save() 
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
+#TODO
+def PosttypePageBCK(request):
+    if request.user.is_authenticated:
+        CommunityHash = request.GET.get('showDataTypes')
+        Community_List = Communities.objects.filter(communityHash=CommunityHash)
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts) S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+    else:
+        return HttpResponseRedirect("/streampage/login")
 
 def PosttypePage(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
         Community_List = Communities.objects.filter(communityHash=CommunityHash)
-        dt = Community_List[0].datatypes_set.all()
-        paginator = Paginator(dt, 5)
+        currentCommunity = Community_List[0]
+        postEntries={}
+        c = connection.cursor()
+        postHashQuery='select "entryHash" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash"'
+        c.execute(postHashQuery)
+        posts=c.fetchall()
+        postInstance=[]
+        for hashes in posts:
+            currentObject={}
+            postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes[0])[0]
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
+            currentObject['comments']=postInfo.postcomments_set.all()
+            postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        print(postEntries)
+        paginator = Paginator(posts, 5)
         page = request.GET.get('page')
-        dt_resp = paginator.get_page(page)
-        return render(request, 'datatypes.html', {'dt_resp': dt_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
     else:
         return HttpResponseRedirect("/streampage/login")
+
+def showPostDetails_view(request):
+    if request.user.is_authenticated:
+        EntryHash = request.GET.get('postHash')
+        queryPost = Posts.objects.filter(entryHash=EntryHash)
+        currentPost = queryPost[0]
+        relatedCommunity = currentPost.relatedCommunityforPost
+        relatedPosttype = currentPost.relatedDatatypes
+        postEntries={}
+        postInstance=[]
+        currentObject={}
+        postInfo = PostsMetaHash.objects.filter(postMetaHash=EntryHash)[0]
+        currentObject['postList']=Posts.objects.filter(entryHash=EntryHash)
+        currentObject['posttype']=Posts.objects.filter(entryHash=EntryHash)[0].relatedDatatypes.datatypefields_set.all()
+        currentObject['comments']=postInfo.postcomments_set.all()
+        postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        comment=textComment()
+        return render(request, 'postDetails.html', {'postEntries':postEntries, 'comment': comment, 'community':relatedCommunity, 'posttype': relatedPosttype })
+    else:
+        return HttpResponseRedirect("/streampage/login")
+    
+def PostPage(request):
+    if request.user.is_authenticated:
+        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
+        DatatypeHash = DatatypeResult[0].datatypeHash
+        DatatypeId = DatatypeResult[0].id		
+        RCommunityFilter = DatatypeResult[0].relatedCommunity
+        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
+        Primitive_List = DatatypeResult[0].datatypefields_set.all()
+        c = connection.cursor()
+        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
+        c.execute(execution_string)
+        posts=c.fetchall()
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+
 
 def handle_uploaded_datatypefile(f):
     filepath = 'streampage/static/uploads/datatypes/'+f.name
@@ -409,24 +482,6 @@ def addPosttypeEditField_view(request):
         form = AddTextEntry()
     return render(None, 'modalPostEdit.html', {'form' : form })
 	
-def PostPage(request):
-    if request.user.is_authenticated:
-        DatatypeResult = Datatypes.objects.filter(datatypeHash=request.GET.get('showPosts'))
-        DatatypeHash = DatatypeResult[0].datatypeHash
-        DatatypeId = DatatypeResult[0].id		
-        RCommunityFilter = DatatypeResult[0].relatedCommunity
-        RCommunity = Communities.objects.filter(name=RCommunityFilter.name)
-        Primitive_List = DatatypeResult[0].datatypefields_set.all()
-        c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where "relatedDatatypes_id"='+str(DatatypeId)+') S GROUP BY "entryHash"'
-        c.execute(execution_string)
-        posts=c.fetchall()
-        paginator = Paginator(posts, 5)
-        page = request.GET.get('page')
-        post_resp = paginator.get_page(page)
-        return render(request, 'posts.html', {'post_resp': post_resp,'table_fields':Primitive_List,'Datatype_Id':DatatypeHash, 'Datatype_Name':DatatypeResult, 'Community_Name': RCommunity})
-    else:
-        return HttpResponseRedirect("/streampage/login")
 		
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("community_Hash")
@@ -508,9 +563,20 @@ def CreatePost_view(request):
     DatatypeHash = request.POST.get("PosttypeHash")
     Dt = Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     PostFields = DatatypeFields.objects.filter(relatedDatatype=Dt)
+    print(PostFields[0].name)
     salt = uuid.uuid4().hex
-    PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
-    PostTime = datetime.now()         
+    try:
+        PostHash = hashlib.sha256(salt.encode() + request.POST.get(PostFields[0].name).encode()).hexdigest() + salt
+    except:
+        PostHash = hashlib.sha256(salt.encode() + uuid.uuid4().hex.upper()[0:9].encode()).hexdigest() + salt
+    PostTime = datetime.now()
+    metaPost = PostsMetaHash()
+    metaPost.relatedCommunity = Communities.objects.get(communityHash=CommunityHash)
+    metaPost.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
+    metaPost.postCreator = communityUsers.objects.get(nickName=request.user)
+    metaPost.postCreationDate = PostTime
+    metaPost.postMetaHash = PostHash
+    metaPost.save()
     for fields in PostFields:
         if (fields.relatedPrimitives.name == "Image" or fields.relatedPrimitives.name == "Audio" or fields.relatedPrimitives.name == "Video") and request.POST.get(fields.name) != "":
             p_image=request.FILES.get(fields.name)
@@ -521,21 +587,46 @@ def CreatePost_view(request):
             entry.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
             entry.relatedCommunityforPost = Communities.objects.get(communityHash=CommunityHash)
             entry.entryHash = PostHash
+            entry.relatedMeta = PostsMetaHash.objects.get(postMetaHash = PostHash)
             entry.postCreator = communityUsers.objects.get(nickName=request.user)
             entry.postCreationDate = PostTime
             entry.postTag = request.POST.get("Tags")
             entry.save()		
-        elif request.POST.get(fields.name) != "":
+        elif request.POST.get(fields.name) != "" and fields.relatedPrimitives.name != "Boolean":
             entry = Posts()
             entry.propertyName = fields.name
             entry.propertyValue = request.POST.get(fields.name)
             entry.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
             entry.relatedCommunityforPost = Communities.objects.get(communityHash=CommunityHash)
             entry.entryHash = PostHash
+            entry.relatedMeta = PostsMetaHash.objects.get(postMetaHash = PostHash)
             entry.postCreator = communityUsers.objects.get(nickName=request.user)
             entry.postCreationDate = PostTime
             entry.postTag = request.POST.get("Tags")
             entry.save()
+        elif fields.relatedPrimitives.name == "Boolean" and request.POST.get(fields.name) != "":
+            entry = Posts()
+            entry.propertyName = fields.name
+            if entry.propertyValue == "on":
+                entry.propertyValue = "Yes"
+                entry.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                entry.relatedCommunityforPost = Communities.objects.get(communityHash=CommunityHash)
+                entry.entryHash = PostHash
+                entry.relatedMeta = PostsMetaHash.objects.get(postMetaHash = PostHash)
+                entry.postCreator = communityUsers.objects.get(nickName=request.user)
+                entry.postCreationDate = PostTime
+                entry.postTag = request.POST.get("Tags")
+                entry.save()
+            else:
+                entry.propertyValue = "No"
+                entry.relatedDatatypes = Datatypes.objects.get(datatypeHash=DatatypeHash)
+                entry.relatedCommunityforPost = Communities.objects.get(communityHash=CommunityHash)
+                entry.entryHash = PostHash
+                entry.relatedMeta = PostsMetaHash.objects.get(postMetaHash = PostHash)
+                entry.postCreator = communityUsers.objects.get(nickName=request.user)
+                entry.postCreationDate = PostTime
+                entry.postTag = request.POST.get("Tags")
+                entry.save()
         else:
             if fields.fieldRequired == True:
                 return render(None, 'tagSearch.html', {'form' : fields.name+" is required!"})
@@ -552,8 +643,25 @@ def DeletePost_view(request):
     PostHash = request.POST.get("PostHash")	
     Posts.objects.filter(entryHash=PostHash).delete()	
     return render(None, 'tagSearch.html', {'form' : "The Entry is deleted Successfully"})
-	
-	
+
+def CreatePostComment_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    postHash = request.POST.get("post_Hash")
+    salt = uuid.uuid4().hex
+    commentHash = hashlib.sha256(salt.encode() + request.POST.get("Comment").encode()).hexdigest() + salt
+    commentTime = datetime.now()
+    test = Posts.objects.filter(entryHash = postHash)[0]
+    print(test)
+    entryComment = PostComments()
+    entryComment.relatedCommunityforComment = Communities.objects.get(communityHash=CommunityHash)
+    entryComment.relatedMeta = PostsMetaHash.objects.get(postMetaHash = postHash)
+    entryComment.commentHash = commentHash
+    entryComment.commentText = request.POST.get("Comment")
+    entryComment.postCommentCreator = communityUsers.objects.get(nickName=request.user)
+    entryComment.postCommentCreationDate = commentTime
+    entryComment.save()	
+    return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
+
 def login_view(request):
     form = UsersLoginForm(request.POST or None)
     if form.is_valid():
@@ -672,7 +780,14 @@ def ReturnSearchFields_view(request):
         #context["Tags"]=AddTagSearch()
     return render(None, 'entrySearchFields.html', {'form' : context})
 	
-def ReturnEntrySearchFields_view(request):
+def ReturnFreeSearchFields_view(request):
+    CommunityHash = request.POST.get("community_Hash")
+    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    context={}
+    context["Free Search"]=freeSearchField()
+    return render(None, 'entrySearchFields.html', {'form' : context})
+	
+def ReturnEntrySearchResults_view(request):
     CommunityHash = request.POST.get("CommunityHash")
     Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
     Dtfields = Cm.datatypefields_set.all()

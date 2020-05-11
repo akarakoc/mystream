@@ -242,4 +242,3 @@ function checkRegexp( o, regexp, n ) {
     return true;
   }
 }
-

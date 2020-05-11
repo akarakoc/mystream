@@ -7,19 +7,47 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}">
+  <link rel="stylesheet" href="{% static 'css/annotator.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/popup.css' %}">
   <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+ 
+  
   
   <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/sb-admin-2.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/tagsinput.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/popper.js' %}"></script>
+
+ 
   <style>
-  
+   
   </style>
 </head>
 
-<script> 
+<script>
+
+//Annotation
+/*
+   document.addEventListener("selectionchange", function() {
+     var selection = window.getSelection();
+       var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
+       var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
+       var output = document.getElementById('output');
+       output.value = json;
+	   //console.log(json);
+       //var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
+       //ab2.result.target.toSelection();
+     
+   });
+*/  
+/*
+var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
+var json = ab.toJSON(); // exports serialized version to JSON-LD 
+console.log(json); //dumps serialized version to developer console
+var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
+ab2.result.target.toSelection(); //highlights the original selection 
+*/
+
 // Ajax GET data engine NON JSON //
 $.extend({
     zResponse: function(url, data) {
@@ -641,7 +669,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){				
 				$('#SearchPostBody').html(data);
-				$('#chooseSearchButtons').html('<button type="button" id="AddSelectedSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Select Field</button>&nbsp;&nbsp;OR Search&nbsp;&nbsp;<button type="button" id="AddSFreeSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Free Field</button>');	
+				$('#chooseSearchButtons').html('<button type="button" id="AddSelectedSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Select Field</button>&nbsp;&nbsp;OR Search&nbsp;&nbsp;<button type="button" id="AddFreeSearch" hash="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i>Free Field</button>');	
 				$('#SearchPost').modal('show');
 			}		
 		});
@@ -662,6 +690,25 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){
 				$(data).appendTo($("#SearchEntry")).show( "slow" );			
+			}		
+		});
+    });
+	
+//RETURN FREE FIELDS
+$(document).on ("click", "#AddFreeSearch", function (event) {
+		event.preventDefault();
+		var data = new FormData();
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/ReturnFreeSearchFields/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$("#SearchEntry").html(data);			
 			}		
 		});
     });
@@ -719,7 +766,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		var data = new FormData($('#SearchEntry').get(0));
 		$.ajax({
 			type:'POST',
-			url: '/streampage/ReturnEntrySearchFields/',
+			url: '/streampage/ReturnEntrySearchResults/',
 			data: data,
 			processData: false,
 			contentType: false,
@@ -730,11 +777,56 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		});
     });
 
+//POST COMMENTS
 
+	$(document).on ("click", "#createComment", function (event) {
+		event.preventDefault();
+		var relatedID = $(this).attr('hash');
+		var data = new FormData($('#'+relatedID).get(0));
+		data.append('community_Hash', '{{community_Hash}}');
+		data.append('post_Hash', relatedID);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CreatePostComment/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				location.reload();				
+			}		
+		});
+    });
+
+//POST COMMENT POST SITE
+	$(document).on ("click", "#createCommentPage", function (event) {
+		event.preventDefault();
+		var relatedID = $(this).attr('hash');
+		var data = new FormData($('#'+relatedID).get(0));
+		data.append('community_Hash', '{{community.communityHash}}');
+		data.append('post_Hash', relatedID);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CreatePostComment/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				location.reload();				
+			}		
+		});
+    });
 	
 });
 
 </script>
+
+	
 <body class=" bg-light">
 
 <!-- Main Content -->
@@ -790,16 +882,26 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		</div>
 		<div class="col-sm-8 text-left"> 
 		  {% block content %}{% endblock %}
-		  <hr>
 		</div>
 		<div class="col-sm-2 sidenav d-flex">
 		</div>
 	  </div>
 	</div>
-
 	<footer class="container-fluid text-center">
 	  <p>Copyright Mystream 2020</p>
 	</footer>
-	
+	<script>
+		function myMap() {
+		var mapProp= {
+		  center:new google.maps.LatLng(51.508742,-0.120850),
+		  zoom:5,
+		};
+		var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+		var uluru = {lat: 51.508742, lng: -0.120850};
+		var marker = new google.maps.Marker({position: uluru, map: map});
+		}
+	</script>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYBw5zZ3pv2dCbD-8lIdFUDQUkN_7T3yg&callback=myMap"></script>
 </body>
 </html>
