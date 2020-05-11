@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.postgres.fields import JSONField
 
 class Primitives(models.Model):
     name = models.CharField(max_length=200, null=True, help_text='Enter your primitive data types')
@@ -126,3 +126,6 @@ class UserCircle(models.Model):
     tagItem = models.CharField(max_length=2000, null=True, help_text='Enter Community Tag Item')
     def __str__(self):
         return self.circleOwner
+
+class ActivityStreams(models.Model):
+    detail = JSONField()

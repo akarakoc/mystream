@@ -27,7 +27,8 @@ import requests
 import uuid
 import hashlib
 from datetime import datetime
-from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags
+from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 
@@ -119,7 +120,7 @@ def JoinCommunity_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -142,7 +143,7 @@ def LeftCommunity_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -239,7 +240,7 @@ def CreateCommunity_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -383,7 +384,7 @@ def CreatePosttype_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -429,7 +430,7 @@ def EditPosttypeMeta_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -585,6 +586,7 @@ def DeletePosttypes_view(request):
     CommunityHash = request.POST.get("CommunityHash")
     PosttypeName = request.POST.get("PosttypeEntry")
     Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
+    print(Cm.datatypes_set.all())
     Dt = Cm.datatypes_set.filter(name=PosttypeName)[0].delete()
 
     activityStream = ActivityStreams()
@@ -604,11 +606,11 @@ def DeletePosttypes_view(request):
         "target": {
             "id": "",
             "type": "Community",
-            "name": Dt.relatedCommunity,
+            "name": Cm,
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -799,7 +801,7 @@ def CreatePost_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -848,7 +850,7 @@ def CreatePostComment_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description)
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
     activityStream.save()
 
@@ -874,7 +876,7 @@ def login_view(request):
             }
         }
 
-        jsonActivityStream = json.dumps(description)
+        jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
         activityStream.detail = jsonActivityStream
         activityStream.save()
 
@@ -909,7 +911,7 @@ def register_view(request):
             }
         }
 
-        jsonActivityStream = json.dumps(description)
+        jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
         activityStream.detail = jsonActivityStream
         activityStream.save()
 
