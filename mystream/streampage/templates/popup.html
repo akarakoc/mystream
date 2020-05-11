@@ -19,11 +19,9 @@
 
     <script src="{% static 'js/popup.js' %}"></script>
     <script src="{% static 'js/annotation-model.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-
-{#    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#}
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
 
@@ -53,17 +51,24 @@
 </p>
 
 
-<textarea id="output" style="height:4em;width:6%;pointer-events:none; margin-left:20%;margin-top:5%"
-          placeholder="Web Annotation Data Model document appears here upon selection"> </textarea>
 
-</body>
+<div id="popover-template">
+    <div class="popover" role="tooltip">
+        <div class="arrow"></div>
+        <h3 class="popover-header"></h3>
+        <div class="popover-body">
+        </div>
+    </div>
+</div>
 
 
-<div id="annotation-modal" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+<div id="annotation-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Create Annotation</h5>
+        <h5 class="modal-title" id="modalLongTitle">Create Annotation</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -84,11 +89,15 @@
               <div class="form-group">
                 <label for="type">Type</label>
                 <select class="form-control" id="type">
-                  <option value="TEXT">Text</option>
-                  <option value="IMAGE" >Image</option>
-                  <option value="VIDEO" >Video</option>
+                  <option value="Text">Text</option>
+                  <option value="Image" >Image</option>
+                  <option value="Video" >Video</option>
                 </select>
               </div>
+
+              <input type="hidden" class="form-control" id="canonical" >
+              <input type="hidden" class="form-control" id="jsonAnnotation" >
+
               <div class="modal-footer">
                   <button id="submit" type="submit" class="btn btn-primary">Create</button>
               </div>
@@ -99,6 +108,7 @@
     </div>
   </div>
 </div>
+
 
 
 </html>

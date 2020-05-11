@@ -15,6 +15,12 @@ public class AnnotationServiceImpl implements AnnotationService {
 
 	@Override
 	public TextAnnotation saveTextAnnotation(TextAnnotation anno){
+
+		TextAnnotation current = textRepository.findByCanonical(anno.getCanonical());
+		if(current != null){
+			current.setBody(anno.getBody());
+			return textRepository.save(current);
+		}
 		return textRepository.save(anno);
 	}
 

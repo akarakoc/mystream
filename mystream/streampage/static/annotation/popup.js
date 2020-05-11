@@ -1,4 +1,8 @@
 
+$(function () {
+  $('[data-toggle="popover"]').popover()
+});
+
 $( document ).ready(function() {
 
 /*******************************************/
@@ -33,19 +37,6 @@ $( document ).ready(function() {
 		return false;
 	});
 
-/*******************************************/
-/*  Add Tooltip
-/*******************************************/
-    $("span").hover(function () {
-            var title = $(this).attr("title");
-            $('<div/>', {
-                text: title,
-                class: 'box'
-            }).appendTo(this);
-        }, function () {
-            $(document).find("div.box").remove();
-        }
-    );
 
 });
 
@@ -62,7 +53,10 @@ $( document ).contextmenu(function(e) {
     var obj = JSON.parse(json);
     var pretty = JSON.stringify(obj, undefined, 4);
 
-    $( "#output" ).val(pretty);
+    $( "#jsonAnnotation" ).val(pretty);
+
+    $("#modalLongTitle").html("Create Annotation");
+    $("#submit").html("Create");
 
     $("#annotation-modal").modal()
 
@@ -83,40 +77,82 @@ function highlightCurrentAnnotations(){
           jsonList.forEach(function (json, index){
                                    var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(json));
                                    ab2.result.target.toSelection();
-                                   surroundSelection(json.body[0].related) ;
+                                   surroundSelection(json) ;
                                 });
-
       }
-
     });
 }
 
-function surroundSelection(source) {
-    var span = document.createElement("span");
-    span.style.fontWeight = "bold";
-    span.style.color = "black";
-    span.style.background = "#FFFF00";
-    span.title = "This is annotation for : " + source;
+function surroundSelection(json) {
 
-    var a = document.createElement('a');
-    a.href = source;
-    a.target = "_blank";
-    a.style.background = "yellow";
-    a.title = "This is annotation for : " + source;
-    span.appendChild(a);
+    var body = json.body[0];
+    var canonical = json.canonical;
 
-    if (window.getSelection) {
-        var sel = window.getSelection();
-        if (sel.rangeCount) {
-            var range = sel.getRangeAt(0).cloneRange();
-            range.surroundContents(a);
-            sel.removeAllRanges();
-            sel.addRange(range);
+    var isUpdate = $("#submit").html() == "Update";
+
+     if( !isUpdate ){
+        var span = document.createElement("span");
+        span.class="surroundSpan";
+        span.style.fontWeight = "bold";
+        span.style.color = "black";
+        span.style.background = "#FFFF00";
+
+        var a = document.createElement('a');
+        a.target = "_blank";
+        a.style.background = "yellow";
+
+        $(a).data("title", "Annotation");
+        $(a).data("html", true);
+        $(a).data("placement", "bottom");
+        $(a).data("container", "body");
+
+        $(a).data("template", $("#popover-template").textContent);
+
+        span.appendChild(a);
+
+        if (window.getSelection) {
+            var sel = window.getSelection();
+            if (sel.rangeCount) {
+                var range = sel.getRangeAt(0).cloneRange();
+                range.surroundContents(a);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
         }
-    }
+     }
+
+
+    var contentHTMLText =   "<div>" +
+                            "The word " + window.getSelection() + " is linked with a " + body.type +
+                            " <a href='" + body.related + "' target='_blank' > Go to Annotation </a> " +
+                            " <a class='updateAnnotation' data-body='" + body.related + "' data-type='" + body.type + "'   href='#'  > </a> " +
+                            " <button type='button' class='btn btn-warning updateAnnotation'" +
+                                "data-body='" + body.related +
+                                "' data-type='" + body.type +
+                                "' data-selected='" + window.getSelection() +
+                                "' data-json='" + JSON.stringify(json) +
+                                "'>Update Annotation</button>\n"
+                            "</div>";
+
+    $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'hover', sanitize:false, content: contentHTMLText});
+    $(document).on('click', ".updateAnnotation", function() {
+        $("#target").val($(this).data("selected"));
+        $("#body").val($(this).data("body"));
+        $("#type").val($(this).data("type"));
+        $("#jsonAnnotation").val(JSON.stringify($(this).data("json")));
+
+        // changes for update
+        $("#modalLongTitle").html("Update Annotation");
+        $("#submit").html("Update");
+
+        $("#annotation-modal").modal();
+      });
+
+
+
 }
 
-function sendCreationRequest(post_data, textAnno){
+function sendPostRequest(post_data, textAnno){
     $.ajax({
         type: "POST",
         url: annotate_remote,
@@ -127,7 +163,9 @@ function sendCreationRequest(post_data, textAnno){
 
             var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(textAnno));
             ab2.result.target.toSelection();
-            surroundSelection(textAnno.body[0].related);
+            location.reload();
+
+            surroundSelection(textAnno);
             alert("completed");
         },
         error: function () {
@@ -138,23 +176,37 @@ function sendCreationRequest(post_data, textAnno){
 }
 
 function createAnnotation() {
+    var type = $("#type").val();
+    var body = $("#body").val();
+
+    var jsonAnnotation = $("#jsonAnnotation").val();
+
     var valid = true;
     allFields.removeClass("ui-state-error");
-    valid = valid && checkRegexp(body, urlRegex, "failed");
+
+    if( type == "Image" || type == "Video" )
+        valid = valid && checkRegexp($("#body"), urlRegex, "failed");
 
     if (valid) {
-        var textAnno = JSON.parse($("#output").val());
-        textAnno.body = [
-            {
-                "type": "Text",
-                "related": $("#body").val()
-            }
-        ]
-        var post_data = {
-            textAnno
+        var content = {};
+        if( type == "Text" ){
+            content = { "type": "TextualBody", "format": "text/plain", "value": body };
+        }else if(  type == "Image" ){
+            content = { "id" : body, "type": "Image", "format":"image/jpeg", "related": body };
+        }else if(  type == "Video" ){
+            content = { "id" : body, "type": "Video", "format":"audio/mpeg", "related": body };
         }
-        sendCreationRequest(post_data, textAnno);
+
+        var textAnno = JSON.parse(jsonAnnotation);
+        textAnno.body = [ content ];
+
+        var post_data = { textAnno };
+        sendPostRequest(post_data, textAnno);
     }
+}
+
+function isNotEmpty(param){
+    return param != undefined && param != '' && param != null;
 }
 
 /*******************************************/

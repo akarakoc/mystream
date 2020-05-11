@@ -13,7 +13,7 @@ public enum FormatEnum {
 	@JsonProperty("image/jpeg")
 	IMAGE_JPEG,
 	@JsonProperty("audio/mpeg")
-	IMAGE_MPEG;
+	AUDIO_MPEG;
 
 
 

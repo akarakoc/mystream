@@ -9,11 +9,12 @@ import java.util.List;
 
 public interface TextAnnotationRepository extends MongoRepository<TextAnnotation, Long> {
 
-	@Query("{id:'?0'}")
-	public TextAnnotation findByID(Long id);
+	public TextAnnotation findByCanonical(String canonical);
 
 	public List<TextAnnotation> findAll();
 
 	public List<TextAnnotation> findByTarget_Source(String source);
+
+
 
 }
