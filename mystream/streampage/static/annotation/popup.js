@@ -1,6 +1,7 @@
 
 $(function () {
   $('[data-toggle="popover"]').popover()
+  $('.popover').attr('style','display:none');
 });
 
 $( document ).ready(function() {
