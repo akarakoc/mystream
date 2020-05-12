@@ -128,5 +128,5 @@ class UserCircle(models.Model):
     def __str__(self):
         return self.circleOwner
 
-    class ActivityStreams(models.Model):
-        detail = JSONField()
+class ActivityStreams(models.Model):
+    detail = JSONField()

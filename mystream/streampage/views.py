@@ -56,7 +56,7 @@ def saveTag_view(returneditems):
     titles=""
     items=""		
     for iter in looping:
-        if iter is not '':
+        if iter != '':
             resp=saveTagSearch_view(iter)
             try:				
                 titles = titles + resp["TITLE"]
@@ -107,7 +107,7 @@ def JoinCommunity_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Join",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
             "name": communityUsers.objects.get(nickName=request.user)
@@ -130,7 +130,7 @@ def LeftCommunity_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Left",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
             "name": communityUsers.objects.get(nickName=request.user)
@@ -227,10 +227,10 @@ def CreateCommunity_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Create",
-        "published": comm.communityCreationDate,
+        "published": comm.communityCreationDate.strftime("%H:%M:%S"),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": str(communityUsers.objects.get(nickName=request.user)),
         },
         "object": {
             "id": "",
@@ -366,10 +366,10 @@ def CreatePosttype_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Create",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": str(communityUsers.objects.get(nickName=request.user)),
         },
         "object": {
             "id": "",
@@ -412,10 +412,10 @@ def EditPosttypeMeta_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Edit",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": str(communityUsers.objects.get(nickName=request.user)),
         },
         "object": {
             "id": "",
@@ -591,10 +591,10 @@ def DeletePosttypes_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Delete",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": str(communityUsers.objects.get(nickName=request.user)),
         },
         "object": {
             "id": "",
@@ -782,10 +782,10 @@ def CreatePost_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Create",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": str(communityUsers.objects.get(nickName=request.user)),
         },
         "object": {
             "id": "",
@@ -831,10 +831,10 @@ def CreatePostComment_view(request):
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
         "type": "Create",
-        "published": datetime.now(),
+        "published": datetime.now().strftime("%H:%M:%S"),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": str(communityUsers.objects.get(nickName=request.user)),
         },
         "object": {
             "id": "",
@@ -867,10 +867,10 @@ def login_view(request):
         description = {
             "@context": "https://www.w3.org/ns/activitystreams",
             "type": "Login",
-            "published": datetime.now(),
+            "published": datetime.now().strftime("%H:%M:%S"),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=request.user)
+                "name": str(communityUsers.objects.get(nickName=request.user)),
             }
         }
 
@@ -902,10 +902,10 @@ def register_view(request):
         description = {
             "@context": "https://www.w3.org/ns/activitystreams",
             "type": "Register",
-            "published": datetime.now(),
+            "published": datetime.now().strftime("%H:%M:%S"),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=comUsers.nickName)
+                "name": str(communityUsers.objects.get(nickName=comUsers.nickName)),
             }
         }
 
