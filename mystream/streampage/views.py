@@ -149,6 +149,35 @@ def LeftCommunity_view(request):
 
     return render(request, 'tagSearch.html', {'form': form})
 
+def subscribePosttype_view(request):
+    user = request.user
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
+    Posttype.subscribers.add(userModel)
+    Posttype.save()
+
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "Subscribe",
+        "published": datetime.now(),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user)
+        },
+        "object": {
+            "id": "",
+            "type": "Posttype",
+            "name": Posttype.name,
+        }
+    }
+
+    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
+    activityStream.detail = jsonActivityStream
+    activityStream.save()
+
+    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+
 def CheckMembership_view(request):
     user = request.user
     userModel = communityUsers.objects.filter(nickName=user)[0]

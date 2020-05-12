@@ -58,11 +58,11 @@
 			<div class="right small">Created by: {{ posts.posttype.0.fieldCreator }} at {{ posts.posttype.0.fieldCreationDate }}
 			</div>
 			<div class="p-2">
-				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ comm.communityHash }}">
+				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ posts.postList.0.entryHash }}">
 						<i class="fas fa-exclamation-triangle small" aria-hidden="true"></i> 
 						Report
 				</button>
-				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ comm.communityHash }}">
+				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ posts.postList.0.entryHash }}">
 						<i class="fas fa-stream small" aria-hidden="true"></i> 
 						Subscribe
 				</button>
