@@ -1,6 +1,6 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-
+from django.contrib.postgres.fields import JSONField
 
 class Primitives(models.Model):
     name = models.CharField(max_length=200, null=True, help_text='Enter your primitive data types')
