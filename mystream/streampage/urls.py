@@ -41,6 +41,6 @@ urlpatterns = [
 	path('ReturnEntrySearchResults/', views.ReturnEntrySearchResults_view, name = "ReturnEntrySearchResults"),
 	path('ReturnFreeSearchFields/', views.ReturnFreeSearchFields_view, name = "ReturnFreeSearchFields"),
 	path('showPostDetails/', views.showPostDetails_view, name = "showPostDetails"),
-	path('subscribePosttype/', views.subscribePosttype_view, name = "subscribePosttype"),
+	path('subscribePosttype/', views.subscribePosttype_view, name = "subscribePosttype")
 	
 ]
