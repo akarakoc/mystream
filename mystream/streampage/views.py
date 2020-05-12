@@ -57,7 +57,7 @@ def saveTag_view(returneditems):
     titles=""
     items=""		
     for iter in looping:
-        if iter is not '':
+        if iter != '':
             resp=saveTagSearch_view(iter)
             try:				
                 titles = titles + resp["TITLE"]
@@ -181,11 +181,22 @@ def subscribePosttype_view(request):
 def fetchActivites_view(request):
     user = request.user    
     userModel = communityUsers.objects.filter(nickName=user)[0]
-    PosttypeList = Posttype.objects.filter(subscribers=user))
+    PosttypeList = Posttype.objects.filter(subscribers=user)
     for subs in PosttypeList:
-        subs.name
+        # c = connection.cursor()
+        # detailsQuery = 'select detail from streampage_activitystreams'
+        # c.execute(detailsQuery)
+        # details = c.fetchall()
+        # c = connection.cursor()
+        # detailsQuery = 'select type,name from openjson(@json,' + details + ') cross apply openjson(value,type) with (id int '$') cross apply openjson(value) with (fromCompanyId int '$.fromCompanyId') where fromCompanyId=4'
+        # c.execute(detailsQuery)
+        # details = c.fetchall()
+
+        activityDetailList = ActivityStreams.object.detail.object
+        firstFilteredList = [a for a in activityDetailList if a['type'] == 'Post Type']
+        filteredList = [f for f in firstFilteredList if f['name'] == subs.name]
         ### jsonda search edilip 
-    return render(request, 'abc.html', {'activites': community_resp})
+    return render(request, 'index.html', {'activities': filteredList})
 
 
 def CheckMembership_view(request):
@@ -281,6 +292,7 @@ def CreateCommunity_view(request):
 
     jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
     activityStream.detail = jsonActivityStream
+    print(activityStream.detail)
     activityStream.save()
 
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})

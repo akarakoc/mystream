@@ -1,4 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row">
+	{% for activity in activities %}
+	<div class="card shadow mb-4 col-md-12">
+			<!-- Card Body -->
+        <div class="card-body">
+			<div class="modal-body row">
+				<div class="col-md-9 small">
+					<b>{{ activity }}</b>
+				</div>
+			</div>
+		</div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
