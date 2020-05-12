@@ -178,6 +178,16 @@ def subscribePosttype_view(request):
 
     return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
 
+def fetchActivites_view(request):
+    user = request.user    
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    PosttypeList = Posttype.objects.filter(subscribers=user))
+    for subs in PosttypeList:
+        subs.name
+        ### jsonda search edilip 
+    return render(request, 'abc.html', {'activites': community_resp})
+
+
 def CheckMembership_view(request):
     user = request.user
     userModel = communityUsers.objects.filter(nickName=user)[0]
