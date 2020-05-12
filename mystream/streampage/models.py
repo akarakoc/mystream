@@ -43,6 +43,7 @@ class Datatypes(models.Model):
     datatypePhoto = models.CharField(max_length=200, null=True, help_text='datatype photo')
     datatypeTags = models.CharField(max_length=2000, null=True, help_text='Enter datatype Tags')
     datatypeHash = models.CharField(max_length=200, null=True, help_text='Enter datatype hash')
+    subscribers = models.ManyToManyField(communityUsers, related_name='subscribers', help_text='Select members')
     def __str__(self):
         return self.name
 		
@@ -127,6 +128,6 @@ class UserCircle(models.Model):
     tagItem = models.CharField(max_length=2000, null=True, help_text='Enter Community Tag Item')
     def __str__(self):
         return self.circleOwner
-
+		
 class ActivityStreams(models.Model):
     detail = JSONField()
