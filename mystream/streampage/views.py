@@ -1014,15 +1014,19 @@ def ReturnFreeSearchFields_view(request):
     return render(None, 'entrySearchFields.html', {'form' : context})
 	
 def ReturnEntrySearchResults_view(request):
-    CommunityHash = request.POST.get("CommunityHash")
-    Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
-    Dtfields = Cm.datatypefields_set.all()
+    CommunityHash = request.POST.get('CommunityHash')
+    Community_List = Communities.objects.filter(communityHash=CommunityHash)
+    currentCommunity = Community_List[0]
+    postEntries={}
+    Dtfields = currentCommunity.datatypefields_set.all()
     if request.user.is_authenticated:
         querylist=[]
+        querylistFree=[]
         for fields in Dtfields:
-            print(request.POST.get(fields.name+"_Value"))
+            print(request.POST.get("Free Search_Value"))
             subquery=""
-            if request.POST.get(fields.name+"_Value") != "":
+            subqueryFree=""
+            if request.POST.get(fields.name+"_Value"):
                 if request.POST.get(fields.name+"_Condition") == "equals":
                     subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
@@ -1041,16 +1045,41 @@ def ReturnEntrySearchResults_view(request):
                 elif request.POST.get(fields.name+"_Condition") == "more than":
                     subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND CAST(\"propertyValue\" as INTEGER)"+" > "+"'"+request.POST.get(fields.name+"_Value")+"')"
                     querylist.append(subquery)
-        querystring = " and ".join(querylist)	
+            elif request.POST.get(fields.name+"_Condition"):
+                if request.POST.get(fields.name+"_Condition") == "equals":
+                    subquery = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'No')"
+                    querylist.append(subquery)
+                elif request.POST.get(fields.name+"_Condition") == "not equal":
+                    subquery = "\"entryHash\" not in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" = "+"'No')"
+                    querylist.append(subquery)
+                
+            if request.POST.get("Free Search_Value"):
+                subqueryFree = "\"entryHash\" in (select \"entryHash\" from streampage_posts where \"propertyName\""+" = "+"'"+fields.name+"' AND \"propertyValue\""+" ~ "+"'"+request.POST.get("Free Search_Value")+"')"
+                querylistFree.append(subqueryFree)
+        querystring = " and ".join(querylist)
+        querystringFree = " or ".join(querylistFree)
         RCommunity = Communities.objects.filter(communityHash=CommunityHash)
         c = connection.cursor()
-        execution_string = 'select "entryHash",json_object_agg("propertyName","propertyValue") from (select "entryHash","propertyName","propertyValue" from streampage_posts where '+querystring+') S GROUP BY "entryHash"'
+        if querystring != "":
+            execution_string = 'select "entryHash" from streampage_posts where '+querystring+' and "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' GROUP BY "entryHash"'
+        elif querystringFree != "":
+            execution_string = 'select "entryHash" from streampage_posts where '+querystringFree+'  and "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' GROUP BY "entryHash"'
         c.execute(execution_string)
         posts=c.fetchall()
+        postInstance=[]
+        for hashes in posts:
+            currentObject={}
+            postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes[0])[0]
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
+            currentObject['comments']=postInfo.postcomments_set.all()
+            postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
         print(querystring)		
         paginator = Paginator(posts, 5)
         page = request.GET.get('page')
         post_resp = paginator.get_page(page) 
-        return render(request, 'posts.html', {'post_resp': post_resp,'Community_Name': RCommunity})
+        comment=textComment()
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
     else:
         return HttpResponseRedirect("/streampage/login")

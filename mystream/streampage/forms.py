@@ -320,7 +320,7 @@ class AddVideoSearch(forms.Form):
 		
 class AddBooleanSearch(forms.Form):
     Operand = ["","AND", "OR"]
-    ChoiceList = ["equals", "contains","not equal","not contain"]
+    ChoiceList = ["equals", "not equal"]
     Condition = forms.ChoiceField(choices=tuple(enumerate(ChoiceList)),label='')
     BooleanEntry = forms.BooleanField(initial=False, required=False,label='')
     def __init__(self, *args, **kwargs):
