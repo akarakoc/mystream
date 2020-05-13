@@ -90,7 +90,7 @@
 									{% elif types.relatedPrimitives.name  == "Location"%}
 									   <td width="250px" >
 										<b>{{ fields.propertyName }}:&nbsp</b>
-										<div id="googleMap" style="width:250px;height:200px;"></div>
+										<div id="googleMap" googleMap='yes' style="width:250px;height:200px;" coordinates="{{ fields.propertyValue }}"></div>
 									   </td>
 									{% endif %}
 								{% endif %}

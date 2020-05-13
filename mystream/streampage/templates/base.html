@@ -919,13 +919,15 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 	</footer>
 	<script>
 		function myMap() {
-		var mapProp= {
-		  center:new google.maps.LatLng(51.508742,-0.120850),
-		  zoom:5,
-		};
-		var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-		var uluru = {lat: 51.508742, lng: -0.120850};
-		var marker = new google.maps.Marker({position: uluru, map: map});
+			myCoordinates = [];
+			$("div[googleMap='yes']").each(function() {
+				var lat = $(this).attr("coordinates").split(",")[0];
+				var lng = $(this).attr("coordinates").split(",")[1];
+				var mapProp = {center:new google.maps.LatLng(lat,lng), zoom:5,};
+				var map = new google.maps.Map(this,mapProp);
+				var myLoc = {lat: lat, lng: lng};
+				var marker = new google.maps.Marker({position: myLoc, map: map});
+			});
 		}
 	</script>
 
