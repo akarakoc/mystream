@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
@@ -40,7 +39,6 @@ class Datatypes(models.Model):
     relatedCommunity = models.ForeignKey(Communities, help_text='Select related community',on_delete=models.SET_NULL, null=True)
     datatypeCreationDate= models.DateTimeField(null=True)
     datatypeEditionDate= models.DateTimeField(null=True)
-    datatypePhoto = models.CharField(max_length=200, null=True, help_text='datatype photo')
     datatypeTags = models.CharField(max_length=2000, null=True, help_text='Enter datatype Tags')
     datatypeHash = models.CharField(max_length=200, null=True, help_text='Enter datatype hash')
     subscribers = models.ManyToManyField(communityUsers, related_name='subscribers', help_text='Select members')

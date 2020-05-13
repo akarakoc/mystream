@@ -66,23 +66,58 @@ $.extend({
 });
 
 
-//ADD COMMUNITY
+
 $( document ).ready(function() {
-	$( "#AddCommunity" ).click(function() {
-		var requestFormData={Form:"Yes"};
-		var communityForm = $.zResponse("/streampage/sendCommunityForm",requestFormData);
-		$('#communityModalBody').html(communityForm);
-		$('#CommunityModalTitle').html("Add New Community");
-		$('#CommunityModal').modal('show');
-	});
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////                                /////////////////////
 /////////////////////////        COMMUNITY               /////////////////////
 /////////////////////////                                /////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
+//FETCH MODAL INFORMATION
+	$( "#AddCommunity" ).click(function() {
+		var requestFormData={Form:"Yes"};
+		var communityForm = $.zResponse("/streampage/sendCommunityForm",requestFormData);
+		$('#communityModalBody').html(communityForm);
+		$('#CommunityModalTitle').html("Add New Community");
+		var tagSelector = document.getElementById("communityTag");
+		if(!tagSelector){
+			$('#addCommunityTagDivision').append('<label for="communityTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="communityTag"></select><button type="click" id="addTagforCommunity" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
+		}
+		$('#CommunityModal').modal('show');
+	});
+	
+//REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
+	var tagSearch = function() {
+		$.ajax({
+            url: "/streampage/searchTag",
+            data: {
+				'search_text' : $('#id_Community_Name').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResult
+        });			
+	};	
+	function searchResult(data, textStatus, jqXHR){
+		var communityTagList = data.split("#");
+		$('#communityTag').html("");
+		for(var i=0; i< communityTagList.length; i++){
+			$('#communityTag').append( new Option(communityTagList[i],i));
+		}
+	}
+	$("body").on('keyup', "#id_Community_Name", tagSearch);
+	
+	$(document).on ("click", "#addTagforCommunity", function (event) {
+		var selectedName = $('#communityTag').find(":selected").text();
+		console.log(selectedName)
+		$("#id_Community_Tags").append("#"+selectedName);
+	});
+	
+
 //CREATE COMMUNITY (MODAL)
-	$('#createCommunity').submit(function(event){
+	$(document).on ("click", "#createCommunityButton", function (event) {
 			event.preventDefault();
 			var data = new FormData($('#createCommunity').get(0));
 			console.log($("input[name=csrfmiddlewaretoken]").val());
@@ -100,23 +135,6 @@ $( document ).ready(function() {
 	function CommunityCreateResult(data, textStatus, jqXHR){
 		$('#communityModalBody').html(data);
 	}
-//REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
-	var tagSearch = function() {
-		$.ajax({
-            url: "/streampage/searchTag",
-            data: {
-				'search_text' : $('#id_Community_Name').val(),
-				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
-			},
-			type: "GET",
-            dataType: "html",
-            success: searchResult
-        });			
-	};	
-	function searchResult(data, textStatus, jqXHR){
-		$('#id_Community_Tags').val(data.trim());
-	}
-	$("body").on('keyup', "#id_Community_Name", tagSearch);
 	
 //CHECK COMMUNITY MEMBERSHIP
 	$( '.classC' ).click(function() {
@@ -140,7 +158,7 @@ $( document ).ready(function() {
 					alert("You should join first!")
 				}
 			}
-		});								
+		});
 	});
 	
 //JOIN COMMUNITY
@@ -194,6 +212,10 @@ $( document ).ready(function() {
 		var communityForm = $.zResponse("/streampage/sendPosttypeForm",requestFormData);
 		$('#PosttypeModalBody').html(communityForm);
 		$('#posttypeModalTitle').html("Add New Posttype");
+		var tagSelector = document.getElementById("posttypeTag");
+		if(!tagSelector){
+			$('#addPosttypeTagDivision').append('<label for="posttypeTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="posttypeTag"></select><button type="click" id="addTagforPosttype" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
+		}
 		$('#PosttypeModal').modal('show');
 	});
 	
@@ -211,9 +233,18 @@ $( document ).ready(function() {
         });			
 	};	
 	function searchResultDt(data, textStatus, jqXHR){
-		$('#id_Posttype_Tags').val(data.trim());
+		var posttypeTagList = data.split("#");
+		$('#posttypeTag').html("");
+		for(var i=0; i< posttypeTagList.length; i++){
+			$('#posttypeTag').append( new Option(posttypeTagList[i],i));
+		}
 	}
 	$("body").on('keyup', "#id_Posttype_Name", tagSearchDt);
+
+	$(document).on ("click", "#addTagforPosttype", function (event) {
+		var selectedName = $('#posttypeTag').find(":selected").text();
+		$("#id_Posttype_Tags").append("#"+selectedName);
+	});
 	
 //CREATE POSTTYPE (MODAL)
 	$(document).on ("click", "#createPosttypeButton", function (event) {
@@ -574,11 +605,44 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 			processData: false,
 			contentType: false,
 			dataType: "html",
-			success: function(data, textStatus, jqXHR){				
-				$('#returnedPostFields').html(data);	
+			success: function(data, textStatus, jqXHR){
+				$('#returnedPostFields').html(data);
+				var tagSelector = document.getElementById("postTag");
+				if(!tagSelector){
+					$('#addPostTagDivision').append('<label for="postTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="postTag"></select><button type="click" id="addTagforPost" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
+				}
 			}		
 		});
     });
+
+	var tagSearchPt = function() {
+		$.ajax({
+            url: "/streampage/searchTag",
+            data: {
+				'search_text' : $('#id_TextEntry').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResultPt
+        });			
+	};	
+	function searchResultPt(data, textStatus, jqXHR){
+		var postTagList = data.split("#");
+		$('#postTag').html("");
+		for(var i=0; i< postTagList.length; i++){
+			$('#postTag').append( new Option(postTagList[i],i));
+		}
+	}
+	
+	$("body").on('keyup', "#id_TextEntry", tagSearchPt);
+	
+	$(document).on ("click", "#addTagforPost", function (event) {
+		var selectedName = $('#postTag').find(":selected").text();
+		console.log(selectedName)
+		$("#id_TagEntry").append("#"+selectedName);
+	});
+	
 	
 //SUBMIT POST
 	$(document).on ("click", "#SubmitPost", function (event) {
@@ -613,22 +677,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		});
     });
 	
-	var tagSearchPt = function() {
-		$.ajax({
-            url: "/streampage/searchTag",
-            data: {
-				'search_text' : $('#id_TextEntry').val(),
-				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
-			},
-			type: "GET",
-            dataType: "html",
-            success: searchResultPt
-        });			
-	};	
-	function searchResultPt(data, textStatus, jqXHR){
-		$('#id_TagEntry').val(data.trim());
-	}
-	$("body").on('keyup', "#id_TextEntry", tagSearchPt);
+//DELETE POST
 	
 	$(document).on ("click", "#deletePost", function (event) {
 		PostHash=$(this).attr('hash');
