@@ -361,15 +361,12 @@ def handle_uploaded_datatypefile(f):
 
 def CreatePosttype_view(request):
     form = AddPosttype(request.POST, request.FILES)
-    d_image=request.FILES.get("Posttype_Image")
-    image_path=handle_uploaded_datatypefile(d_image)
     dt = Datatypes()
     dt.name = request.POST.get("Posttype_Name")
     salt = uuid.uuid4().hex
     communityHash=request.POST.get("community_Hash")
     DtHash = hashlib.sha256(salt.encode() + dt.name.encode()).hexdigest() + salt
     dt.datatypeHash = DtHash
-    dt.datatypePhoto = image_path
     dt.relatedCommunity=Communities.objects.get(communityHash=request.POST.get("community_Hash"))
     dt.datatypeTags = request.POST.get("Posttype_Tags")
     dt.datatypeCreationDate = datetime.now()
@@ -694,9 +691,9 @@ def ReturnPostFields_view(request):
             types = fields.relatedPrimitives.name
             req = fields.fieldRequired
             show = fields.fronttableShow
-        context["Tags"]=AddTagPost()
         iter += 1
     print(context)
+    context["Tags"]=AddTagPost()
     return render(None, 'entryReturnFields.html', {'form' : context, 'posttypeHash':Dt.datatypeHash})
 
 
