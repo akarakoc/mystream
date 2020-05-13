@@ -72,7 +72,11 @@ def LoginPage(request):
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'index.html', {})
+        user = request.user    
+        userModel = communityUsers.objects.filter(nickName=user)[0]
+        PosttypeList = Datatypes.objects.filter(subscribers=userModel)
+        activityDetailList = ActivityStreams.objects.filter()
+        return render(request, 'index.html', {'activities': activityDetailList})
     else:
         return HttpResponseRedirect("/streampage/login")
 
@@ -107,11 +111,11 @@ def JoinCommunity_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Join",
-        "published": datetime.now(),
+        "type": "joined",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -119,10 +123,7 @@ def JoinCommunity_view(request):
             "name": Comm.name,
         }
     }
-
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
+    ActivityStreams.objects.create(detail = description)
 
     return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
 	
@@ -130,23 +131,19 @@ def LeftCommunity_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Left",
-        "published": datetime.now(),
+        "type": "left",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
             "type": "Community"
-            # "name": Comm.name,
+            #"name": Comm.name,
         }
     }
-
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
-
+    ActivityStreams.objects.create(detail = description)
     return render(request, 'tagSearch.html', {'form': form})
 
 def subscribePosttype_view(request):
@@ -159,11 +156,11 @@ def subscribePosttype_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Subscribe",
-        "published": datetime.now(),
+        "type": "subscribed",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -171,32 +168,8 @@ def subscribePosttype_view(request):
             "name": Posttype.name,
         }
     }
-
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
-
+    ActivityStreams.objects.create(detail = description)
     return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
-
-def fetchActivites_view(request):
-    user = request.user    
-    userModel = communityUsers.objects.filter(nickName=user)[0]
-    PosttypeList = Posttype.objects.filter(subscribers=user)
-    for subs in PosttypeList:
-        # c = connection.cursor()
-        # detailsQuery = 'select detail from streampage_activitystreams'
-        # c.execute(detailsQuery)
-        # details = c.fetchall()
-        # c = connection.cursor()
-        # detailsQuery = 'select type,name from openjson(@json,' + details + ') cross apply openjson(value,type) with (id int '$') cross apply openjson(value) with (fromCompanyId int '$.fromCompanyId') where fromCompanyId=4'
-        # c.execute(detailsQuery)
-        # details = c.fetchall()
-
-        activityDetailList = ActivityStreams.object.detail.object
-        firstFilteredList = [a for a in activityDetailList if a['type'] == 'Post Type']
-        filteredList = [f for f in firstFilteredList if f['name'] == subs.name]
-        ### jsonda search edilip 
-    return render(request, 'index.html', {'activities': filteredList})
 
 
 def CheckMembership_view(request):
@@ -277,11 +250,11 @@ def CreateCommunity_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Create",
-        "published": comm.communityCreationDate,
+        "type": "created",
+        "published": str(comm.communityCreationDate),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -290,11 +263,7 @@ def CreateCommunity_view(request):
         }
     }
 
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    print(activityStream.detail)
-    activityStream.save()
-
+    ActivityStreams.objects.create(detail = description)
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
 #TODO
@@ -417,11 +386,11 @@ def CreatePosttype_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Create",
-        "published": datetime.now(),
+        "type": "created",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -431,13 +400,14 @@ def CreatePosttype_view(request):
         "target": {
             "id": "",
             "type": "Community",
-            "name": dt.relatedCommunity,
+            "name": dt.relatedCommunity.name,
         }
     }
 
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
+    ActivityStreams.objects.create(detail = description)
+    #jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
+    #activityStream.detail = jsonActivityStream
+    #activityStream.save()
 
     return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
 	
@@ -463,11 +433,11 @@ def EditPosttypeMeta_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Edit",
-        "published": datetime.now(),
+        "type": "edited",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -477,14 +447,10 @@ def EditPosttypeMeta_view(request):
         "target": {
             "id": "",
             "type": "Community",
-            "name": dt.relatedCommunity,
+            "name": dt.relatedCommunity.name,
         }
     }
-
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
-
+    ActivityStreams.objects.create(detail = description)
     return JsonResponse({'form' : "Posttype is updated Successfully!",'posttypeHash':dt_hash})
 
 def DeletePosttypeMeta_view(request):
@@ -643,11 +609,11 @@ def DeletePosttypes_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Delete",
-        "published": datetime.now(),
+        "type": "deleted",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -657,13 +623,10 @@ def DeletePosttypes_view(request):
         "target": {
             "id": "",
             "type": "Community",
-            "name": Cm,
+            "name": Cm.name,
         }
     }
-
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
+    ActivityStreams.objects.create(detail = description)
 
     return render(None, 'tagSearch.html', {'form':"Selected posttype is deleted succesfully!"})
 
@@ -834,11 +797,11 @@ def CreatePost_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Create",
-        "published": datetime.now(),
+        "type": "created",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -848,14 +811,11 @@ def CreatePost_view(request):
         "target": {
             "id": "",
             "type": "Community",
-            "name": entry.relatedCommunityforPost,
+            "name": entry.relatedCommunityforPost.name,
         }
     }
 
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
-
+    ActivityStreams.objects.create(detail = description)
     return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
     
 def DeletePost_view(request):
@@ -883,11 +843,11 @@ def CreatePostComment_view(request):
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "Create",
-        "published": datetime.now(),
+        "type": "commented",
+        "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user)
+            "name": communityUsers.objects.get(nickName=request.user).nickName
         },
         "object": {
             "id": "",
@@ -896,16 +856,11 @@ def CreatePostComment_view(request):
         },
         "target": {
             "id": "",
-            "type": "Community",
-            "name": entryComment.relatedCommunityforPost,
+            "type": "Post",
+            "name": entryComment.relatedMeta.relatedDatatypes.name,
         }
     }
-
-    jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    activityStream.detail = jsonActivityStream
-    activityStream.save()
-
-
+    ActivityStreams.objects.create(detail = description)
     return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
 
 def login_view(request):
@@ -919,18 +874,15 @@ def login_view(request):
         activityStream = ActivityStreams()
         description = {
             "@context": "https://www.w3.org/ns/activitystreams",
-            "type": "Login",
-            "published": datetime.now(),
+            "type": "login",
+            "published": str(datetime.now()),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=request.user)
+                "name": communityUsers.objects.get(nickName=request.user).nickName
             }
         }
 
-        jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-        activityStream.detail = jsonActivityStream
-        activityStream.save()
-
+        ActivityStreams.objects.create(detail = description)
         return redirect("/streampage")
     return render(request, "login.html", {
 		"form" : form,
@@ -954,18 +906,14 @@ def register_view(request):
         activityStream = ActivityStreams()
         description = {
             "@context": "https://www.w3.org/ns/activitystreams",
-            "type": "Register",
-            "published": datetime.now(),
+            "type": "register",
+            "published": str(datetime.now()),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=comUsers.nickName)
+                "name": communityUsers.objects.get(nickName=comUsers.nickName).nickName
             }
         }
-
-        jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-        activityStream.detail = jsonActivityStream
-        activityStream.save()
-
+        ActivityStreams.objects.create(detail = description)
         return redirect("/streampage/login")
     return render(request, "login.html", {
 	    "title" : "Register",
