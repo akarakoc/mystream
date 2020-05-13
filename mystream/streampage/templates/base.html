@@ -750,9 +750,12 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 			$("div[id='"+ats[i]+"']"+" > div > div > input").each(function() {
 				$(this).attr('name',ats[i]+"_Value")
 			});	
+			
 			$("#id_EnumaratedSearchEntry").each(function() {
 				$(this).attr('name',ats[i]+"_Value")
+				$(this).attr('id',ats[i]+"_Value")
 			});	
+			
 		}
 		
 		$("option").each(function() {
@@ -762,7 +765,6 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
 		$('#SearchEntry').append('<input type="hidden" name="CommunityHash" value="{{community_Hash}}" />');
 		$('#SearchEntry').append('<input type="hidden" name="csrfmiddlewaretoken" value="'+csrftoken+'" />');
-		//$("#SearchEntry").attr('action', "/streampage/ReturnEntrySearchFields/").submit();
 		var data = new FormData($('#SearchEntry').get(0));
 		$.ajax({
 			type:'POST',
@@ -772,7 +774,12 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 			contentType: false,
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){
-				$(data).appendTo($("#SearchEntry")).show( "slow" );			
+				document.open();
+				document.write(data);
+				document.close();
+				$('#SearchPost').modal('hide');
+				//window.location.href = data;
+				//$(data).appendTo($("#SearchEntry")).show( "slow" );
 			}		
 		});
     });
