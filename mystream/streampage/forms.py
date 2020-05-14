@@ -256,7 +256,7 @@ class AddLocationPost(forms.Form):
     def __init__(self, *args, **kwargs):
         super(AddLocationPost, self).__init__(*args, **kwargs)
         self.fields['LocationEntry'].widget.attrs.update({'class': 'form-control'})
-        self.fields['LocationEntry'].initial = 'Choose from map!'
+        self.fields['LocationEntry'].initial = 'Choose from the map!'
 
 class AddTagPost(forms.Form):
     TagEntry = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}),label='')
@@ -495,4 +495,23 @@ class textComment(forms.Form):
     def __init__(self, *args, **kwargs):
         super(textComment, self).__init__(*args, **kwargs)
         self.fields['Comment'].widget.attrs.update({'class': 'form-control'})
+
+class ReportPost(forms.Form):
+    ChoiceList = ["Sensitive Data Disclosure", "Inappropriate Content","Other"]
+    Report_Reason = forms.ChoiceField(choices=tuple(enumerate(ChoiceList)),label='')
+    Description = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(ReportPost, self).__init__(*args, **kwargs)
+        self.fields['Report_Reason'].label = "Report Reason"
+        self.fields['Report_Reason'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Report Reason"})
+        self.fields['Description'].label = "Description"
+        self.fields['Description'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Descriptions"})
+    def clean(self, *args, **keyargs):
+        Posttype_Name = self.cleaned_data.get("Report Reason")
+        Posttype_Tags = self.cleaned_data.get("Description")
+        return super(ReportPost, self).clean(*args, **keyargs)
         

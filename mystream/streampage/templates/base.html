@@ -882,7 +882,7 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		});
     });
 	
-	//SUBSCRIBE POSTTYPE
+//SUBSCRIBE POSTTYPE
 	$( "#SubscribePost" ).click(function() {
 		var Phash = $(this).attr('hash');
 		var data = new FormData();
@@ -901,6 +901,14 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		});
 	});
 	
+//REPORT POST MODAL
+	$(document).on ("click", "#ReportPost", function (event) {
+		var requestFormData = {"FlagPost":"True"};
+		var reportPosttypeForm = $.zResponse("/streampage/reportPostModal",requestFormData);
+		$('#ReportPostBody').html(reportPosttypeForm);
+		$('#ReportPostTitle').html("Report Post");
+		$('#ReportPostModal').modal('show');
+	});
 	
 });
 
