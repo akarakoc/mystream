@@ -102,7 +102,27 @@ class AddCommunity(forms.Form):
         Community_Image = self.cleaned_data.get("Community Image")
         Community_Tags = self.cleaned_data.get("Community Tags")
         return super(AddCommunity, self).clean(*args, **keyargs) 
-		
+
+class EditCommunity(forms.Form):
+    Community_Description = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    Community_Image = forms.ImageField()
+    Private_Community = forms.BooleanField(initial=False, required=False)
+    Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(EditCommunity, self).__init__(*args, **kwargs)
+        self.fields['Community_Description'].label = "Community Description"
+        self.fields['Community_Description'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Community Description"})
+        self.fields['Community_Tags'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Community Tags"})
+        self.fields['Community_Tags'].label = "Community Tags"
+    def clean(self, *args, **keyargs):
+        Community_Description = self.cleaned_data.get("Community Description")
+        Community_Image = self.cleaned_data.get("Community Image")
+        Community_Tags = self.cleaned_data.get("Community Tags")
+        return super(EditCommunity, self).clean(*args, **keyargs) 
 
 class AddPosttype(forms.Form):
     Posttype_Name = forms.CharField()

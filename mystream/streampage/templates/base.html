@@ -200,7 +200,7 @@ $( document ).ready(function() {
 		});
 	});
 
-//DELETE
+//DELETE COMMUNITY
 	$( "#deleteCommunity" ).click(function() {
 		var Chash = $(this).attr('hash');
 		var data = new FormData();
@@ -220,7 +220,68 @@ $( document ).ready(function() {
 		});
 	});
 
+//EDIT COMMUNITY MODAL
+	$( "#Edit_Community" ).click(function() {
+		var requestFormData={Form:"Yes"};
+		var communityForm = $.zResponse("/streampage/EditCommunityModal",requestFormData);
+		$('#communityEditModalBody').html(communityForm);
+		$('#CommunityEditModalTitle').html("Edit Community Data");
+		var tagSelector = document.getElementById("communityTag");
+		if(!tagSelector){
+			$('#addCommunityTagDivision').append('<label for="communityTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="communityTag"></select><button type="click" id="addTagforEditCommunity" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
+		}
+		$('#CommunityEditModal').modal('show');
+	});
+	
+	//REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
+	var tagSearch = function() {
+		$.ajax({
+            url: "/streampage/searchTag",
+            data: {
+				'search_text' : $('#id_Community_Description').val(),
+				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+			},
+			type: "GET",
+            dataType: "html",
+            success: searchResult
+        });			
+	};	
+	function searchResult(data, textStatus, jqXHR){
+		var communityTagList = data.split("#");
+		$('#communityTag').html("");
+		for(var i=0; i< communityTagList.length; i++){
+			$('#communityTag').append( new Option(communityTagList[i],i));
+		}
+	}
+	$("body").on('keyup', "#id_Community_Description", tagSearch);
+	
+	$(document).on ("click", "#addTagforEditCommunity", function (event) {
+		var selectedName = $('#communityTag').find(":selected").text();
+		console.log(selectedName)
+		$("#id_Community_Tags").append("#"+selectedName);
+	});
+	
+	
+//EDIT COMMUNITY METADATA
 
+	$( "#editCommunityButton" ).click(function() {
+		event.preventDefault();
+		var data = new FormData($('#editCommunity').get(0));
+		data.append('community_Hash', "{{community_Hash}}");
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/EditCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+	});
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////                                /////////////////////
 /////////////////////////        POSTTYPE                /////////////////////
