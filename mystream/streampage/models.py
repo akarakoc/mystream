@@ -92,6 +92,16 @@ class PostComments(models.Model):
     def __str__(self):
         return self.commentText
 
+class ReportedPosts(models.Model):
+    relatedCommunity = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
+    relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
+    reason = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    description = models.CharField(max_length=2000, null=True, help_text='Enter name of type')
+    reportPostCreator = models.ForeignKey(communityUsers, related_name='reporttcreator', on_delete=models.SET_NULL, null=True)
+    reportPostCreationDate= models.DateTimeField(null=True)
+    def __str__(self):
+        return self.reason
+
 class CommunityTags(models.Model):
     communityTag = models.ForeignKey(Communities, related_name='commTag',on_delete=models.SET_NULL, null=True)
     tagName = models.CharField(max_length=2000, null=True, help_text='Enter Community Tag')
