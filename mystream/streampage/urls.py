@@ -3,18 +3,18 @@ from django.conf.urls import include
 from . import views
 
 
-    
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('login/', views.login_view, name='login'),
-    path('register/', views.register_view, name = "register"),
-    path('logout/', views.logout_view, name = "logout"),
-    path('profile/', views.profilePage, name = "profile"),
-    path('communities/', views.communityPage, name='index'),
-    path('sendCommunityForm/', views.communityForm, name='index'),
-    path('CreateCommunity/', views.CreateCommunity_view, name = "CreateCommunity"),
-    path('sendPosttypePage/', views.PosttypePage, name='index'),
-    path('sendPostPage/', views.PostPage, name='index'),
+path('', views.index, name='index'),
+	path('login/', views.login_view, name='login'),
+	path('register/', views.register_view, name = "register"),
+	path('logout/', views.logout_view, name = "logout"),
+	path('profile/', views.profilePage, name = "profile"),
+	path('communities/', views.communityPage, name='index'),
+	path('sendCommunityForm/', views.communityForm, name='index'),
+	path('CreateCommunity/', views.CreateCommunity_view, name = "CreateCommunity"),
+	path('DeleteCommunity/', views.DeleteCommunity_view, name = "DeleteCommunity"),
+	path('sendPosttypePage/', views.PosttypePage, name='index'),
+	path('sendPostPage/', views.PostPage, name='index'),
 	path('searchTag/', views.searchTag_view, name = "searchTag"),
 	path('sendPosttypeForm/', views.posttypeForm, name = "Call datatype form"),
 	path('CreatePosttype/', views.CreatePosttype_view, name = "CreatePosttype"),
