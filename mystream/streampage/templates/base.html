@@ -133,7 +133,8 @@ $( document ).ready(function() {
 	});
 	
 	function CommunityCreateResult(data, textStatus, jqXHR){
-		$('#communityModalBody').html(data);
+		alert(data);
+		window.location.reload();
 	}
 	
 //CHECK COMMUNITY MEMBERSHIP
@@ -282,6 +283,14 @@ $( document ).ready(function() {
 			}		
 		});
 	});
+	
+	
+//BROWSE COMMUNITY
+	$( '.classCBrowse' ).click(function() {
+		var Cname = $(this).attr('hash');
+		window.location = '/streampage/sendPosttypePageBrowse/?showDataTypes='+Cname;	
+	});
+	
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////                                /////////////////////
 /////////////////////////        POSTTYPE                /////////////////////

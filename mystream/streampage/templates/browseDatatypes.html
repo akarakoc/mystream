@@ -11,9 +11,6 @@
 			</div>			
 			<div class="">
 				Created by: {{ community.communityCreator }} at {{ community.communityCreationDate }}
-				<button type="button" id="Edit_Community" hash="{{ community.communityHash  }}" class="btn btn-outline-secondary btn-sm">
-					<i class="fas fa-edit" aria-hidden="true"></i>
-				</button>
 			</div>
 			
 		</div>
@@ -30,20 +27,6 @@
 	</div>
   </div>
   <div class="card mb-2">
-     <div class="p-2">
-			<button type="button" id="AddPosttype" class="btn btn-warning btn-sm">
-				<i class="fa fa-plus" aria-hidden="true"></i> Add Posttype
-			</button>
-			<button type="button" id="Edit_Primitive" class="btn btn-success btn-sm">
-				<i class="fas fa-edit" aria-hidden="true"></i>Edit Posttypes
-			</button>	
-			<button type="button" id="Add_Post" class="btn btn-danger btn-sm">
-				<i class="fa fa-plus" aria-hidden="true"></i> Add Post
-			</button>
-			<button type="button" id="Search_Entry" class="btn btn-primary btn-sm">
-				<i class="fa fa-search" aria-hidden="true"></i> Advanced Search
-			</button> 
-		</div>
   </div>
   
 	{% for posts in postEntries.postInstances %}
@@ -59,22 +42,7 @@
 				</button>
 				</h6>
 			</div>
-			<div class="right small">Created by: {{ posts.posttype.0.fieldCreator }} at {{ posts.posttype.0.fieldCreationDate }}
-			</div>
-			<div class="p-2">
-				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ posts.postList.0.entryHash }}">
-						<i class="fas fa-exclamation-triangle small" aria-hidden="true"></i> 
-						Report
-				</button>
-				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ posts.postList.0.entryHash }}">
-						<i class="fas fa-stream small" aria-hidden="true"></i> 
-						Subscribe
-				</button>
-				<button type="button" id = "deletePost" hash="{{ posts.postList.0.entryHash }}" class="btn btn-sm btn-outline-secondary small">
-					<i class="fa fa-trash" aria-hidden="true"></i>
-				</button>
-
-					
+			<div class="right small p-2">Created by: {{ posts.posttype.0.fieldCreator }} at {{ posts.posttype.0.fieldCreationDate }}
 			</div>
 		</div>
 		<!-- Card Body -->
@@ -114,7 +82,7 @@
 					{% endfor %}
 				{% endfor %}
 				<div class="row">
-					<a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ posts.postList.0.entryHash }}">more >></a>	
+					<a href="http://3.134.79.169:8000/streampage/showPostDetailsBrowse/?postHash={{ posts.postList.0.entryHash }}">more >></a>	
 				</div>
 				<div class="row">
 					{{ fields.postTag }}
@@ -122,17 +90,6 @@
 				</td>
 			</tr>
 		  </table>
-		  <form id="{{ posts.postList.0.entryHash }}">
-			  <div class="row p-2 ">
-				  <div class="col-sm-10">
-					{% csrf_token %}
-					{{comment.as_p }}
-				   </div>
-				   <div class="col-sm-2 d-flex flex-row p-3">
-						<button type="button" id = "createComment" hash="{{ posts.postList.0.entryHash }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
-				   </div>	
-			  </div>
-		   </form>
 	    </div>
 		<table class="small">
 		   {% for items in posts.comments %}
@@ -140,8 +97,8 @@
 			  <td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:30px;height:30px;"></td>
 			  <td width="30px"><b>{{ items.postCommentCreator }}:</b></td>
 			  <td width="300px">{{ items.commentText }}</td>
-			  <td width="100px">{{ items.postCommentCreationDate }}</td>
-			  <td width="20px"><button type="button" id = "deleteComment" hash="{{items.commentHash}}" class="btn btn-sm btn-outline-secondary align-self-end p-2"><i class="fas fa-minus-circle" style="font-size:16px" aria-hidden="true"></i></button></td>
+			  <td width="120px">{{ items.postCommentCreationDate }}</td>
+			  
 		   </tr>
 		   {% endfor %}
 		   </table>

@@ -1,0 +1,144 @@
+{% extends "base.html" %} 
+
+{% block content %}
+	<b>{{ community.name }} > {{ posttype.name }}</b><br><br>
+	<div class="right small">
+	<b>Creation Time: </b> {{ postEntries.postInstances.0.posttype.0.fieldCreationDate }}<br>
+	<b>      Creator: </b> {{ postEntries.postInstances.0.posttype.0.fieldCreator }}
+	</div><br><br>
+	<h5><b>INFORMATION</b><h5>
+		<table class="table small"
+		  <tr>
+		    <td>
+			<div class = "small">
+				{% for fields in postEntries.postInstances.0.postList %}
+					{% for types in postEntries.postInstances.0.posttype %}
+						{% if types.name == fields.propertyName  %}
+							{% if types.relatedPrimitives.name  != "Image" and types.relatedPrimitives.name  != "Location" %}
+								<b>{{ fields.propertyName }}:&nbsp</b>
+								{{ fields.propertyValue }}<br>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+				<div class="row">
+					{{ fields.postTag }}
+				</div>
+			</div>
+			</td>
+		  </tr>
+		</table><br><br>
+		<h5><b>MEDIA</b></h5>
+		<table class="table small">
+			<tr>
+				{% for fields in postEntries.postInstances.0.postList %}
+							{% for types in postEntries.postInstances.0.posttype %}
+								{% if types.name == fields.propertyName  %}
+									{% if types.relatedPrimitives.name  == "Image"  %}
+									  <td width="250px" >
+										<b>{{ fields.propertyName }}:&nbsp</b><br>
+										<img src="{{ fields.propertyValue }}" width="250px" height="200px">
+									  </td>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+				{% endfor %}
+			</tr>
+		</table><br><br>
+		<h5><b>LOCATION</b></h5>
+		<table class="table small">
+			<tr>
+				{% for fields in postEntries.postInstances.0.postList %}
+							{% for types in postEntries.postInstances.0.posttype %}
+								{% if types.name == fields.propertyName  %}
+									{% if types.relatedPrimitives.name  == "Location"%}
+									   <td width="250px" >
+										<b>{{ fields.propertyName }}:&nbsp</b><br>
+										<div id="googleMap" googleMap='yes' style="width:800px;height:500px;" coordinates="{{ fields.propertyValue }}"></div>
+									   </td>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+				{% endfor %}
+			</tr>
+		</table><br><br>
+		<h5><b>COMMENTS</b></h5>
+		<table class="table">
+			<tr>
+				<td>
+					<table class="small">
+					{% for items in postEntries.postInstances.0.comments %}
+					<tr hash="{{items.commentHash}}">
+						<td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:30px;height:30px;"></td>
+						<td><b>{{ items.postCommentCreator }}:</b></td>
+						<td width="560px">{{ items.commentText }}</td>
+						<td width="120px">{{ items.postCommentCreationDate }}</td>
+					</tr>
+						{% endfor %}
+					</table>
+				</td>
+			</tr>
+		 <table>
+	    </div>
+		{% load static %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href={% static "css/popup.css" %}>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script src="{% static 'annotation/popup.js' %}"></script>
+    <script src="{% static 'annotation/annotation-model.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<div id="annotation-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLongTitle">Create Annotation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div id="annotation-modal-form" class="modal-body">
+
+          <form>
+              <div class="form-group">
+                <label for="target">Target</label>
+                <input type="text" class="form-control" id="target" >
+              </div>
+              <div class="form-group">
+                <label for="body">Body</label>
+                <input type="text" class="form-control" id="body" >
+              </div>
+
+              <div class="form-group">
+                <label for="type">Type</label>
+                <select class="form-control" id="type">
+                  <option value="Text">Text</option>
+                  <option value="Image" >Image</option>
+                  <option value="Video" >Video</option>
+                </select>
+              </div>
+
+              <input type="hidden" class="form-control" id="canonical" >
+              <input type="hidden" class="form-control" id="jsonAnnotation" >
+
+              <div class="modal-footer">
+                  <button id="submit" type="submit" class="btn btn-primary">Create</button>
+              </div>
+
+            </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

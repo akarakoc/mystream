@@ -1,80 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>Welcome to Commuınityverse</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/sb-admin-2.min.js' %}"></script>
-  <link rel="stylesheet" href="{% static 'css/login.css' %}">
-  <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
+{% block content %}
 <style>
-html,body,.container {
-    height:100%;
-}
-.container {
-    width: 100%;
-}
-.row {
-    height: 100%;
-}
-.row .no-float {
-    float: none;
-}
-.footer {
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  color: white;
-  text-align: center;
-  
+	html,body,.container {
+		height:100%;
+	}
+	.container {
+		height:450px;
+	}
+	.row {
+		height: 100%;
+	}
+	.row .no-float {
+		float: none;
+	}
+	.footer {
+	  left: 0;
+	  bottom: 0;
+	  width: 100%;
+	  color: white;
+	  text-align: center;
+	    
 </style>
-<body>
-	<div>
-		<nav class="navbar navbar-expand-lg navbar-light bg-primary">
-		  <a class="navbar-brand" href="#">Navbar</a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		  </button>
-
-		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
-			  <li class="nav-item active">
-				<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-			  </li>
-			  <li class="nav-item">
-				<a class="nav-link" href="#">Link</a>
-			  </li>
-			</ul>
-			<form class="form-inline my-2 my-lg-0">
-			  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-			  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
-		  </div>
-		</nav>
-	</div>
-    <!-- End of Topbar -->
-
+{% load static %}
 	<div class="container">
 		<div class="row">	
 			<div class="col-md-7 bg-light">
 				<div class="container">
 				  <div class="row align-items-center justify-content-center">
-					<div class="col-sm-4 d-flex align-items-center">
-					  <img class="mx-auto d-block img-fluid" src="{% static 'uploads/logo/LogoDark.png' %}" alt="View">
-					</div>
+					<a href = "/streampage/browse"><img type="button" class="mx-auto d-block img-fluid" src="{% static 'uploads/logo/LogoDark.png' %}" alt="View" style="width:250px;height:250px;"></a>
 				  </div>
 				</div>
 			</div>
@@ -100,7 +54,7 @@ html,body,.container {
 									<p>Login failed!</p>
 								{% endif %}
 								{% if next %}
-									{% if user.is_authenticated %}								
+									{% if user.is_authenticated %}
 									{% else %}
 										<p>Please login!</p>
 									{% endif %}
@@ -112,8 +66,5 @@ html,body,.container {
 			</div>
 		</div>
 	</div>
-	<div class="footer">
-		<p>Footer</p>
-	</div>
-</body>
-</html>
+
+{% endblock %}
