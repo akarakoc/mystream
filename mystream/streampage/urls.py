@@ -34,13 +34,14 @@ urlpatterns = [
 	path('DeletePost/', views.DeletePost_view, name = "DeletePost"),
 	path('JoinCommunity/', views.JoinCommunity_view, name = "JoinCommunity"),
 	path('LeftCommunity/', views.LeftCommunity_view, name = "LeftCommunity"),
-	path('VoteCommunity/', views.VoteCommunity_view, name = "VoteCommunity"),		
+	path('VoteCommunity/', views.VoteCommunity_view, name = "VoteCommunity"),
 	path('CheckMembership/', views.CheckMembership_view, name = "CheckMembership"),
 	path('chooseSearch/', views.chooseSearch_view, name = "chooseSearch"),
 	path('ReturnSearchFields/', views.ReturnSearchFields_view, name = "ReturnSearchFields"),
 	path('ReturnEntrySearchResults/', views.ReturnEntrySearchResults_view, name = "ReturnEntrySearchResults"),
 	path('ReturnFreeSearchFields/', views.ReturnFreeSearchFields_view, name = "ReturnFreeSearchFields"),
 	path('showPostDetails/', views.showPostDetails_view, name = "showPostDetails"),
-	path('subscribePosttype/', views.subscribePosttype_view, name = "subscribePosttype")
+	path('subscribePosttype/', views.subscribePosttype_view, name = "subscribePosttype"),
+	path('reportPostModal/', views.reportPostModal_view, name = "reportPost"),
 	
 ]

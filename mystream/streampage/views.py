@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList, freeSearchField, textComment
+from .forms import posttypeList, searchList, freeSearchField, textComment,ReportPost
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -145,32 +145,6 @@ def LeftCommunity_view(request):
     }
     ActivityStreams.objects.create(detail = description)
     return render(request, 'tagSearch.html', {'form': form})
-
-def subscribePosttype_view(request):
-    user = request.user
-    userModel = communityUsers.objects.filter(nickName=user)[0]
-    Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
-    Posttype.subscribers.add(userModel)
-    Posttype.save()
-
-    activityStream = ActivityStreams()
-    description = {
-        "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "subscribed",
-        "published": str(datetime.now()),
-        "actor": {
-            "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
-        },
-        "object": {
-            "id": "",
-            "type": "Posttype",
-            "name": Posttype.name,
-        }
-    }
-    ActivityStreams.objects.create(detail = description)
-    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
-
 
 def CheckMembership_view(request):
     user = request.user
@@ -402,10 +376,6 @@ def CreatePosttype_view(request):
     }
 
     ActivityStreams.objects.create(detail = description)
-    #jsonActivityStream = json.dumps(description, indent=4, sort_keys=True, default=str)
-    #activityStream.detail = jsonActivityStream
-    #activityStream.save()
-
     return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
 	
 def EditPosttypeMeta_view(request):
@@ -634,8 +604,37 @@ def addPosttypeEditField_view(request):
     else:
         form = AddTextEntry()
     return render(None, 'modalPostEdit.html', {'form' : form })
-	
-		
+
+def subscribePosttype_view(request):
+    user = request.user
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
+    Posttype.subscribers.add(userModel)
+    Posttype.save()
+
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "subscribed",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName
+        },
+        "object": {
+            "id": "",
+            "type": "Posttype",
+            "name": Posttype.name,
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
+    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+
+def reportPostModal_view(request):
+    form = ReportPost()
+    return render(None, 'tagSearch.html', {'form' : form })
+
+
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("community_Hash")
     PosttypeName = request.POST.get("PosttypeEntry")
