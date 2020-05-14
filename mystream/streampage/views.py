@@ -12,9 +12,9 @@ from .forms import UsersRegisterForm
 from .forms import AddCommunity
 from .forms import AddPosttype
 from .forms import SendPrimitives
-from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
+from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost, textComment, ReportPost, EditCommunity
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList, freeSearchField, textComment, ReportPost
+from .forms import posttypeList, searchList, freeSearchField
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -100,6 +100,114 @@ def communityPage(request):
 def communityForm(request):
     form = AddCommunity()
     return render(request, 'modal.html', {'form': form})
+	
+def handle_uploaded_file(f):
+    filepath = 'streampage/static/uploads/communities/'+f.name
+    with open(filepath, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
+
+def CreateCommunity_view(request):
+    form = AddCommunity(request.POST, request.FILES)
+    c_image=request.FILES.get("Community_Image")
+    image_path=handle_uploaded_file(c_image)
+    comm = Communities()
+    comm.name = request.POST.get("Community_Name")
+    comm.description = request.POST.get("Community_Description")
+    salt = uuid.uuid4().hex
+    commhash =  hashlib.sha256(salt.encode() + comm.name.encode()).hexdigest() + salt
+    comm.communityHash = commhash
+    if request.POST.get("Private_Community"):
+        comm.communityPrv = True
+    else:
+        comm.communityPrv = False
+    comm.communityPhoto = image_path
+    comm.communityTags = request.POST.get("Community_Tags")
+    comm.communityCreationDate = datetime.now()
+    comm.communityCreator = communityUsers.objects.get(nickName=request.user)
+    comm.save()
+    comm.communityMembers.add(communityUsers.objects.get(nickName=request.user))
+    comm.save()
+    Tags = saveTag_view(request.POST.get("Community_Tags"))
+    tagentry = CommunityTags()
+    relatedComm = Communities.objects.filter(communityHash=commhash)[0] 
+    tagentry.communityTag = relatedComm
+    tagentry.tagName = Tags["TITLE"] 
+    tagentry.tagItem = Tags["ITEM"]
+    tagentry.save()
+
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "created",
+        "published": str(comm.communityCreationDate),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName
+        },
+        "object": {
+            "id": "",
+            "type": "Community",
+            "name": comm.name,
+        }
+    }
+
+    ActivityStreams.objects.create(detail = description)
+    return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
+
+
+def EditCommunityModal_view(request):
+    form = EditCommunity()
+    return render(request, 'modal.html', {'form': form})
+	
+def EditCommunity_view(request):
+    try:
+        form = EditCommunity(request.POST, request.FILES)
+        c_image=request.FILES.get("Community_Image")
+        image_path=handle_uploaded_file(c_image)
+        communityHash = request.POST.get("community_Hash")
+        comm = Communities.objects.filter(communityHash=communityHash)[0]
+        comm.description = request.POST.get("Community_Description")
+        if request.POST.get("Private_Community"):
+            comm.communityPrv = True
+        else:
+            comm.communityPrv = False
+        comm.communityPhoto = image_path
+        comm.communityTags = request.POST.get("Community_Tags")
+        comm.communityCreationDate = datetime.now()
+        comm.communityCreator = communityUsers.objects.get(nickName=request.user)
+        comm.save()
+        comm.communityMembers.add(communityUsers.objects.get(nickName=request.user))
+        comm.save()
+        Tags = saveTag_view(request.POST.get("Community_Tags"))
+        tagentry = CommunityTags()
+        relatedComm = comm
+        tagentry.communityTag = relatedComm
+        tagentry.tagName = Tags["TITLE"] 
+        tagentry.tagItem = Tags["ITEM"]
+        tagentry.save()
+        activityStream = ActivityStreams()
+        description = {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            "type": "edited",
+            "published": str(comm.communityCreationDate),
+            "actor": {
+                "id": "",
+                "name": communityUsers.objects.get(nickName=request.user).nickName
+            },
+            "object": {
+                "id": "",
+                "type": "Community",
+                "name": comm.name,
+            }
+        }
+        ActivityStreams.objects.create(detail = description)
+        return render(None, 'tagSearch.html', {'form' : "Community is edited Successfully!"})
+    except:
+        return render(None, 'tagSearch.html', {'form' : "Community cannot be Edited Successfully!"})
+
+
 	
 def JoinCommunity_view(request):
     user = request.user
@@ -195,61 +303,6 @@ def searchTag_view(request):
         titles+="#"+tt['label']
     return render(None, 'tagSearch.html', {'form' : titles})
 
-
-def handle_uploaded_file(f):
-    filepath = 'streampage/static/uploads/communities/'+f.name
-    with open(filepath, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-    return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
-
-def CreateCommunity_view(request):
-    form = AddCommunity(request.POST, request.FILES)
-    c_image=request.FILES.get("Community_Image")
-    image_path=handle_uploaded_file(c_image)
-    comm = Communities()
-    comm.name = request.POST.get("Community_Name")
-    comm.description = request.POST.get("Community_Description")
-    salt = uuid.uuid4().hex
-    commhash =  hashlib.sha256(salt.encode() + comm.name.encode()).hexdigest() + salt
-    comm.communityHash = commhash
-    if request.POST.get("Private_Community"):
-        comm.communityPrv = True
-    else:
-        comm.communityPrv = False
-    comm.communityPhoto = image_path
-    comm.communityTags = request.POST.get("Community_Tags")
-    comm.communityCreationDate = datetime.now()
-    comm.communityCreator = communityUsers.objects.get(nickName=request.user)
-    comm.save()
-    comm.communityMembers.add(communityUsers.objects.get(nickName=request.user))
-    comm.save()
-    Tags = saveTag_view(request.POST.get("Community_Tags"))
-    tagentry = CommunityTags()
-    relatedComm = Communities.objects.filter(communityHash=commhash)[0] 
-    tagentry.communityTag = relatedComm
-    tagentry.tagName = Tags["TITLE"] 
-    tagentry.tagItem = Tags["ITEM"]
-    tagentry.save()
-
-    activityStream = ActivityStreams()
-    description = {
-        "@context": "https://www.w3.org/ns/activitystreams",
-        "type": "created",
-        "published": str(comm.communityCreationDate),
-        "actor": {
-            "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
-        },
-        "object": {
-            "id": "",
-            "type": "Community",
-            "name": comm.name,
-        }
-    }
-
-    ActivityStreams.objects.create(detail = description)
-    return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
 #TODO
 def PosttypePageBCK(request):
