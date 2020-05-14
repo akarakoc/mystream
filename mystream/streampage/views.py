@@ -80,6 +80,65 @@ def index(request):
     else:
         return HttpResponseRedirect("/streampage/login")
 
+def browsePage(request):
+    if Communities.objects.all():
+        Community_List = Communities.objects.filter(communityPrv=False).order_by('-communityCreationDate')
+        paginator = Paginator(Community_List, 3)
+        page = request.GET.get('page')
+        community_resp = paginator.get_page(page)
+        return render(request, 'browse.html', {'community_resp': community_resp})
+    else:
+        return render(request, 'login.html', {})
+
+def PosttypePageBrowse(request):
+    try:
+        CommunityHash = request.GET.get('showDataTypes')
+        Community_List = Communities.objects.filter(communityHash=CommunityHash)
+        currentCommunity = Community_List[0]
+        postEntries={}
+        c = connection.cursor()
+        postHashQuery='select "entryHash" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash"'
+        c.execute(postHashQuery)
+        posts=c.fetchall()
+        postInstance=[]
+        for hashes in posts:
+            currentObject={}
+            postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes[0])[0]
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
+            currentObject['comments']=postInfo.postcomments_set.all()
+            postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        print(postEntries)
+        paginator = Paginator(posts, 5)
+        page = request.GET.get('page')
+        post_resp = paginator.get_page(page)
+        comment=textComment()
+        return render(request, 'browseDatatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+    except:
+        return HttpResponseRedirect("/streampage/login")
+
+def showPostDetailsBrowse_view(request):
+    try:
+        EntryHash = request.GET.get('postHash')
+        queryPost = Posts.objects.filter(entryHash=EntryHash)
+        currentPost = queryPost[0]
+        relatedCommunity = currentPost.relatedCommunityforPost
+        relatedPosttype = currentPost.relatedDatatypes
+        postEntries={}
+        postInstance=[]
+        currentObject={}
+        postInfo = PostsMetaHash.objects.filter(postMetaHash=EntryHash)[0]
+        currentObject['postList']=Posts.objects.filter(entryHash=EntryHash)
+        currentObject['posttype']=Posts.objects.filter(entryHash=EntryHash)[0].relatedDatatypes.datatypefields_set.all()
+        currentObject['comments']=postInfo.postcomments_set.all()
+        postInstance.append(currentObject)
+        postEntries['postInstances']=postInstance
+        comment=textComment()
+        return render(request, 'postDetailsBrowse.html', {'postEntries':postEntries, 'comment': comment, 'community':relatedCommunity, 'posttype': relatedPosttype })
+    except:
+        return HttpResponseRedirect("/streampage/login")
+
 def communityPage(request):
     if request.user.is_authenticated:
         if Communities.objects.all():
@@ -203,7 +262,7 @@ def EditCommunity_view(request):
             }
         }
         ActivityStreams.objects.create(detail = description)
-        return render(None, 'tagSearch.html', {'form' : "Community is edited Successfully!"})
+        return render(None, 'tagSearch.html', {'form' : "Community is Edited Successfully!"})
     except:
         return render(None, 'tagSearch.html', {'form' : "Community cannot be Edited Successfully!"})
 
