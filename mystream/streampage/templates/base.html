@@ -200,6 +200,27 @@ $( document ).ready(function() {
 		});
 	});
 
+//DELETE
+	$( "#deleteCommunity" ).click(function() {
+		var Chash = $(this).attr('hash');
+		var data = new FormData();
+		data.append('community_Hash', Chash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/DeleteCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+	});
+
+
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////                                /////////////////////
 /////////////////////////        POSTTYPE                /////////////////////

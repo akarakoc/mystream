@@ -160,7 +160,18 @@ def VoteCommunity_view(request):
     Comm = Communities.objects.get(communityHash=request.POST.get("community_Hash"))
     Comm.communityPopularity.add(userModel)
     return render(request, 'tagSearch.html', {'form': form})
-	
+
+def DeleteCommunity_view(request):
+    user = request.user
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    Comm = Communities.objects.get(communityHash=request.POST.get("community_Hash"))
+    name = Comm.name
+    try:
+        Comm.delete()
+        return render(None, 'tagSearch.html', {'form': name+" Community has been Deleted Successfully !"})
+    except:
+        return render(None, 'tagSearch.html', {'form': name+" Community cannot be Deleted!"})        
+
 def posttypeForm(request):
     form = AddPosttype()
     return render(request, 'modal.html', {'form': form})
