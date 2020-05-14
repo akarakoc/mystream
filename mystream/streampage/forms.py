@@ -256,6 +256,7 @@ class AddLocationPost(forms.Form):
     def __init__(self, *args, **kwargs):
         super(AddLocationPost, self).__init__(*args, **kwargs)
         self.fields['LocationEntry'].widget.attrs.update({'class': 'form-control'})
+        self.fields['LocationEntry'].initial = 'Choose from map!'
 
 class AddTagPost(forms.Form):
     TagEntry = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}),label='')

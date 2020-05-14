@@ -611,6 +611,10 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 				if(!tagSelector){
 					$('#addPostTagDivision').append('<label for="postTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="postTag"></select><button type="click" id="addTagforPost" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
 				}
+				var tagSelectorMap = document.getElementById("id_LocationEntry");
+				if(tagSelectorMap){
+					$('#map').show();
+				}	
 			}		
 		});
     });
@@ -979,6 +983,24 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 				myLoc['lng'] = lng;
 				console.log(myLoc);
 				var marker = new google.maps.Marker({position: myLoc, map: map});
+			});
+			
+			var latlng = new google.maps.LatLng(41.0847611, 29.0488512,17);
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: latlng,
+				zoom: 11,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			});
+			var marker = new google.maps.Marker({
+				position: latlng,
+				map: map,
+				title: 'Set lat/lon values for this property',
+				draggable: true
+			});
+			google.maps.event.addListener(marker, 'dragend', function(event) {
+				var latitude = event.latLng.lat();
+				var longitude = event.latLng.lng();
+				$('#id_LocationEntry').attr("value", latitude + ',' + longitude )
 			});
 		}
 	</script>
