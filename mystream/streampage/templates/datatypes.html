@@ -282,7 +282,7 @@
 		</div>
 	</div>
 	
-<!-- Modal Search Post -->
+<!-- Modal Report Post -->
 	<div class="modal fade" id="ReportPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal" role="document">
 			<div class="modal-content">
@@ -292,13 +292,15 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div id="ReportPostBody" class="modal-body">
-					{% csrf_token %}
-					{{form.as_p }}		
-				</div>
+				<form method="post" action="" id="reportFormTag" enctype="multipart/form-data">
+					<div id="ReportPostBody" class="modal-body">
+						{% csrf_token %}
+						{{form.as_p }}
+					</div>
+				</form>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="click" id="createCommunityButton" class="btn btn-primary">Create</button>
+					<button type="click" id="createPostReport" hash="" class="btn btn-primary">Create</button>
 				</div>
 			</div>
 		</div>

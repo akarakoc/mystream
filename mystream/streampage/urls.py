@@ -42,6 +42,7 @@ urlpatterns = [
 	path('ReturnFreeSearchFields/', views.ReturnFreeSearchFields_view, name = "ReturnFreeSearchFields"),
 	path('showPostDetails/', views.showPostDetails_view, name = "showPostDetails"),
 	path('subscribePosttype/', views.subscribePosttype_view, name = "subscribePosttype"),
-	path('reportPostModal/', views.reportPostModal_view, name = "reportPost"),
+	path('reportPostModal/', views.reportPostModal_view, name = "reportPostModal"),
+	path('reportPost/', views.reportPost_view, name = "reportPost"),
 	
 ]

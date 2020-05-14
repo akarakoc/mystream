@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList, freeSearchField, textComment,ReportPost
+from .forms import posttypeList, searchList, freeSearchField, textComment, ReportPost
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -27,7 +27,7 @@ import requests
 import uuid
 import hashlib
 from datetime import datetime
-from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams
+from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts
 from django.core.serializers.json import DjangoJSONEncoder
 
 
@@ -634,6 +634,24 @@ def reportPostModal_view(request):
     form = ReportPost()
     return render(None, 'tagSearch.html', {'form' : form })
 
+def reportPost_view(request):
+    PostHash = request.POST.get("post_Hash")
+    try:
+        PosttypeMeta = PostsMetaHash.objects.filter(postMetaHash=PostHash)[0]
+        Cm = PosttypeMeta.relatedCommunity
+        user = request.user
+        userModel = communityUsers.objects.filter(nickName=user)[0]
+        reportEntry = ReportedPosts()
+        reportEntry.relatedCommunity = Cm
+        reportEntry.relatedMeta = PosttypeMeta
+        reportEntry.reason = request.POST.get("Report_Reason")
+        reportEntry.description = request.POST.get("Description")
+        reportEntry.reportPostCreator = userModel
+        reportEntry.reportPostCreationDate = datetime.now()
+        reportEntry.save()
+        return render(None, 'tagSearch.html', {'form' : 'You successfully reported the post!' })
+    except:
+        return render(None, 'tagSearch.html', {'form' : 'Reporting is unsuccessfull!' })
 
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("community_Hash")
