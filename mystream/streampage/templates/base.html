@@ -881,6 +881,28 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 			}		
 		});
     });
+
+//DELETE COMMENT
+	$(document).on ("click", "#deleteComment", function (event) {
+		event.preventDefault();
+		var commentHash = $(this).attr('hash');
+		var data = new FormData();
+		data.append('comment_Hash', commentHash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/deletePostComment/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				location.reload();				
+			}		
+		});
+    });
+
 	
 //SUBSCRIBE POSTTYPE
 	$( "#SubscribePost" ).click(function() {

@@ -875,7 +875,38 @@ def CreatePostComment_view(request):
         }
     }
     ActivityStreams.objects.create(detail = description)
-    return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
+    return render(None, 'tagSearch.html', {'form' : "Successfully Commented on the Post!"})
+
+def deletePostComment_view(request):
+    commentHash = request.POST.get("comment_Hash")
+    comment = PostComments.objects.filter(commentHash=commentHash)[0]
+    try:
+        activityStream = ActivityStreams()
+        description = {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            "type": "deleted",
+            "published": str(datetime.now()),
+            "actor": {
+                "id": "",
+                "name": communityUsers.objects.get(nickName=request.user).nickName
+            },
+            "object": {
+                "id": "",
+                "type": "Comment",
+                "name": comment.commentText,
+            },
+            "target": {
+                "id": "",
+                "type": "Post",
+                "name": comment.relatedMeta.relatedDatatypes.name,
+            }
+        }
+        comment.delete()
+        ActivityStreams.objects.create(detail = description)
+        return render(None, 'tagSearch.html', {'form' : "The Comment is Deleted Successfully!"})
+    except:
+        return render(None, 'tagSearch.html', {'form' : "The Comment cannot be deleted!"})
+
 
 def login_view(request):
     form = UsersLoginForm(request.POST or None)
