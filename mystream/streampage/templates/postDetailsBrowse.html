@@ -69,10 +69,15 @@
 					<table class="small">
 					{% for items in postEntries.postInstances.0.comments %}
 					<tr hash="{{items.commentHash}}">
-						<td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:30px;height:30px;"></td>
+						{% if items.postCommentCreator.userPhoto  %}
+							<img src="{{ UserInfo.userPhoto }}" class="img-thumbnail">
+							<td><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></td>
+						{% else %}
+							<td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></td>
+						{% endif %}
 						<td><b>{{ items.postCommentCreator }}:</b></td>
-						<td width="560px">{{ items.commentText }}</td>
-						<td width="120px">{{ items.postCommentCreationDate }}</td>
+						<td width="550px">{{ items.commentText }}</td>
+						<td width="115px">{{ items.postCommentCreationDate }}</td>
 					</tr>
 						{% endfor %}
 					</table>
