@@ -50,5 +50,8 @@ path('', views.index, name='index'),
 	path('subscribePosttype/', views.subscribePosttype_view, name = "subscribePosttype"),
 	path('reportPostModal/', views.reportPostModal_view, name = "reportPostModal"),
 	path('reportPost/', views.reportPost_view, name = "reportPost"),
-	
+	path('uploadPhoto/', views.uploadPhoto_view, name = "uploadPhoto"),
+	path('uploadPhotoForm/', views.uploadPhotoForm_view, name = "uploadPhoto"),
+	path('EditUserModal/', views.EditUserModal_view, name = "EditUserModal"),
+	path('EditUser/', views.EditUser_view, name = "EditUser"),
 ]
