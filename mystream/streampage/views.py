@@ -27,7 +27,7 @@ import requests
 import uuid
 import hashlib
 from datetime import datetime
-from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts
+from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts,UserCircle
 from django.core.serializers.json import DjangoJSONEncoder
 
 
@@ -1097,6 +1097,11 @@ def profilePage(request):
         username=request.user
         CUser = communityUsers.objects.filter(nickName=username)[0]
         Community_List = CUser.creator.all()
+        reportList = []
+        for comm in Community_List:
+            reports = comm.reportedposts_set.all()
+            for rp in reports:
+                reportList.append(rp)
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
@@ -1105,7 +1110,8 @@ def profilePage(request):
 			"Datatypes" : Datatype_List,
 			"Posts" : Post_List,
 			"Joined" : joined_Communities,
-			"UserInfo" : CUser
+			"UserInfo" : CUser,
+			"ReportList": reportList
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1337,3 +1343,64 @@ def EditUser_view(request):
             return render(None, 'tagSearch.html', {'form' : 'The Information is Updated Successfully!'})
         except:
             return render(None, 'tagSearch.html', {'form' : 'The Information cannot be Updated!'})
+
+def UserPage_view(request):
+    if request.user.is_authenticated:
+        Username = request.GET.get('user')
+        CUser = communityUsers.objects.filter(nickName=Username)[0]
+        Community_List = CUser.creator.all()
+        Datatype_List = CUser.datatypecreator.all()
+        Post_List = CUser.postcreator.all()
+        joined_Communities = CUser.members.all()
+        if str(request.user) == str(Username):
+            return render(request, "profile.html", {
+				"Communities" : Community_List,
+				"Datatypes" : Datatype_List,
+				"Posts" : Post_List,
+				"Joined" : joined_Communities,
+				"UserInfo" : CUser
+			})
+        else:
+            return render(request, "user.html", {
+				"Communities" : Community_List,
+				"Datatypes" : Datatype_List,
+				"Posts" : Post_List,
+				"Joined" : joined_Communities,
+				"UserInfo" : CUser
+			})
+    else:
+        return HttpResponseRedirect("/streampage/login")
+
+def FollowUser_view(request):
+    user = request.user
+    Username = request.POST.get('user')
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    followingUser = communityUsers.objects.filter(nickName=Username)[0]
+    try:
+        circUser = UserCircle.objects.get(circleOwner=userModel)
+        circUser.circleUsers.add(followingUser)
+        circUser.save()
+    except:
+        circUser = UserCircle()
+        circUser.circleOwner = userModel
+        circUser.save()
+        addFollower = UserCircle.objects.get(circleOwner=userModel)
+        addFollower.circleUsers.add(followingUser)
+        addFollower.save()
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "followed",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName
+        },
+        "object": {
+            "id": "",
+            "type": "Username",
+            "name": user,
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
+    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
