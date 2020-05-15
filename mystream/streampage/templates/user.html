@@ -1,0 +1,117 @@
+{% extends "base.html" %} 
+
+{% block content %}
+{% load static %}
+
+<div class="card mb-2">
+	<!-- Card Body -->
+	<div class="card-body small">
+		<div class="d-flex flex-row align-items-center justify-content-between">
+			<div class="">
+				<h6><b>{{ UserInfo }}'s profile</b></h6>
+			</div>			
+			<div class="">
+			</div>
+			
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-sm-5">
+				<div>
+				<div>
+					{% if UserInfo.userPhoto  %}
+						<img src="{{ UserInfo.userPhoto }}" class="img-thumbnail"><br>
+					{% else %}
+						<img src="{% static 'uploads/profiles/default.jpg' %}" class="img-thumbnail"><br>
+					{% endif %}
+				</div>
+				<div id="followStatus">
+					<button type="button" id = "followUser" class="btn btn-sm btn-danger align-self-end p-2" style="width:100%" userName="{{ UserInfo.nickName }}"<i class="fa fa-users " style="font-size:16px" aria-hidden="true"> Follow </i><br>
+				</div>
+			</div>
+			<div>
+				<br>
+				<form method="post" action="" id="uploadPhotoForm" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div id="returnPhotoForm">
+					</div>
+				</form>
+			</div>
+			</div>
+			<div class="col-sm-7">
+				<p><b>Nickname:  </b>{{ UserInfo.nickName }}</p>
+				<p><b>E-Mail:  </b>{{ UserInfo.userMail }}</p>
+				<p><b>Bio:  </b>{{ UserInfo.userBio }}</p>
+			</div>
+		</div>
+	</div>
+	<div class="btn-group" role="group" aria-label="Basic example">
+		<button type="button" class="btn btn-primary">Owned Communities</button>
+		<button type="button" class="btn btn-primary">Following Communities</button>
+		<button type="button" class="btn btn-primary">Posts</button>
+		<button type="button" class="btn btn-primary">Activities</button>
+		<button type="button" class="btn btn-primary">Followers</button>
+		<button type="button" class="btn btn-primary">Following</button>
+		<button type="button" class="btn btn-primary">Alerts</button>
+	</div>
+  </div><br><br>
+	<div class="row">
+		
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Owned Communities</th>
+				</tr>
+				{% for c in Communities %}
+				<tr>
+					<td>{{c}}<br><td>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div> 
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Owned Datatypes</th>
+				</tr>
+				{% for d in Datatypes %}
+				<tr>					
+					<td>{{d}}<br></td>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Owned Posts</th>
+				</tr>
+				{% for p in Posts %}
+				<tr>
+					<td>{{p}}<td></br>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="row">
+			<table class="table">
+				<tr>
+					<th>Joined Communities</th>
+				</tr>
+				{% for j in Joined %}
+				<tr>
+					<td>{{j}}<td></br>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+		</div>
+    </div>
+{% endblock %}

@@ -52,66 +52,88 @@
 			</div>
 		</div>
 	</div>
-	<div class="btn-group" role="group" aria-label="Basic example">
-		<button type="button" class="btn btn-primary">Owned Communities</button>
-		<button type="button" class="btn btn-primary">Following Communities</button>
-		<button type="button" class="btn btn-primary">Posts</button>
-		<button type="button" class="btn btn-primary">Activities</button>
-		<button type="button" class="btn btn-primary">Followers</button>
-		<button type="button" class="btn btn-primary">Following</button>
-		<button type="button" class="btn btn-primary">Alerts</button>
+  </div>
+  
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#Alerts" role="tab">Alerts</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#OwnedCommunities" role="tab">Owned Communities</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#FollowingCommunities" role="tab">Following Communities</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#Activities" role="tab">Activities</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#Followers" role="tab">Followers</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#Following" role="tab">Following</a>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div class="tab-pane active" id="Alerts" role="tabpanel">
+<!-- Card Body -->
+<div class="card mb-2">
+	<div class="card-body small">
+		<div class="d-flex flex-row align-items-center justify-content-between">
+			<table class="table">
+			{{ReportList.0.relatedcommunity}}
+				<th>Community</th>
+				<th>Posttype</th>
+				<th>Reason</th>
+				<th>Creator</th>
+				<th>Date</th>
+				<th>Action</th>
+				{% for rp in ReportList %}
+				<tr>
+					<script>console.log({{ rp.reportpostcreationdate}});</script>
+					<td>{{ rp.relatedcommunity.name}}</td>
+					{% if rp.reason == '0' %}
+						<td>Sensitive Data Disclosure</td>
+					{% elif rp.reason == '1' %}
+						<td>Inappropriate Content</td>
+					{% elif rp.reason == '2' %}
+						<td>Other</td>
+					{% endif %}
+					<td>{{ rp.reason}}</td>
+					<td>{{ rp.reportpostcreationdate}}</td>
+				</tr>
+				<tr>
+					<td><b>Details</b></td><td>{{ rp.description}}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
-  </div><br><br>
-	<div class="row">
-		
-		<div class="col-sm-3">
-			<div class="row">
-			<table class="table">
-				<tr>
-					<th>Owned Communities</th>
-				</tr>
-				{% for c in Communities %}
-				<tr>
-					<td>{{c}}<br><td>
-				</tr>
-				{% endfor %}
-			</table>
-			</div>
-		</div> 
-		<div class="col-sm-3">
-			<div class="row">
-			<table class="table">
-				<tr>
-					<th>Owned Datatypes</th>
-				</tr>
-				{% for d in Datatypes %}
-				<tr>					
-					<td>{{d}}<br></td>
-				</tr>
-				{% endfor %}
-			</table>
+</div>
+</div>
+<div class="tab-pane" id="OwnedCommunities" role="tabpanel">
+<!-- Card Body -->
+	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
+				<table class="table">
+					{% for c in Communities %}
+					<tr>
+						<td>{{c}}<br><td>
+					</tr>
+					{% endfor %}
+				</table>
 			</div>
 		</div>
-		<div class="col-sm-3">
-			<div class="row">
+	</div>
+</div>
+<div class="tab-pane" id="FollowingCommunities" role="tabpanel">
+	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
 			<table class="table">
-				<tr>
-					<th>Owned Posts</th>
-				</tr>
-				{% for p in Posts %}
-				<tr>
-					<td>{{p}}<td></br>
-				</tr>
-				{% endfor %}
-			</table>
-			</div>
-		</div>
-		<div class="col-sm-3">
-			<div class="row">
-			<table class="table">
-				<tr>
-					<th>Joined Communities</th>
-				</tr>
 				{% for j in Joined %}
 				<tr>
 					<td>{{j}}<td></br>
@@ -120,9 +142,13 @@
 			</table>
 			</div>
 		</div>
-    </div>
-	
-	<!-- Community Edit Modal -->
+	</div>
+</div>
+  <div class="tab-pane" id="Activities" role="tabpanel">pane 4</div>
+  <div class="tab-pane" id="Activities" role="Followers">pane 4</div>
+  <div class="tab-pane" id="Activities" role="Following">pane 4</div>
+</div><br><br>
+<!-- Community Edit Modal -->
 	<div class="modal fade" id="UserEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal small" role="document">
 			<div class="modal-content">

@@ -18,7 +18,8 @@ class communityUsers(models.Model):
     userBirthDay = models.CharField(max_length=200, null=True, help_text='Community Point')
     userPhoto = models.CharField(max_length=200, null=True, help_text='Community Point')
     def __str__(self):        
-        return self.nickName	
+        return self.nickName
+
 
 class Communities(models.Model):
     name = models.CharField(max_length=200, null=True, help_text='Enter community name')
@@ -135,9 +136,9 @@ class UserTags(models.Model):
 class UserCircle(models.Model):
     circleOwner = models.OneToOneField(communityUsers, on_delete=models.SET_NULL, null=True)
     circleUsers = models.ManyToManyField(communityUsers, related_name='Followers', help_text='Select Members')
-    tagItem = models.CharField(max_length=2000, null=True, help_text='Enter Community Tag Item')
     def __str__(self):
         return self.circleOwner
+
 		
 class ActivityStreams(models.Model):
     detail = JSONField()

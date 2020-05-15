@@ -54,4 +54,6 @@ path('', views.index, name='index'),
 	path('uploadPhotoForm/', views.uploadPhotoForm_view, name = "uploadPhoto"),
 	path('EditUserModal/', views.EditUserModal_view, name = "EditUserModal"),
 	path('EditUser/', views.EditUser_view, name = "EditUser"),
+	path('UserPage/', views.UserPage_view, name = "UserPage"),
+	path('FollowUser/', views.FollowUser_view, name = "FollowUser"),
 ]
