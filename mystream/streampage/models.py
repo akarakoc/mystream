@@ -14,6 +14,8 @@ class communityUsers(models.Model):
     userPassword = models.CharField(max_length=200, null=True, help_text='Enter your password')	
     creationDate = models.DateTimeField(null=True)	
     communityPoint = models.CharField(max_length=200, null=True, help_text='Community Point')	
+    userBio = models.CharField(max_length=200, null=True, help_text='Community Point')
+    userBirthDay = models.CharField(max_length=200, null=True, help_text='Community Point')
     userPhoto = models.CharField(max_length=200, null=True, help_text='Community Point')
     def __str__(self):        
         return self.nickName	

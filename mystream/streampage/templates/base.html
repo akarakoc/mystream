@@ -234,7 +234,7 @@ $( document ).ready(function() {
 		$('#CommunityEditModal').modal('show');
 	});
 	
-	//REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
+//REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
 	var tagSearch = function() {
 		$.ajax({
             url: "/streampage/searchTag",
@@ -1044,7 +1044,72 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 	    });
 	});
 	
+	
+	//UPLOAD PROFILE PHOTO FORM
+	$(document).on ("click", "#addPhoto", function (event) {
+		var data = new FormData()
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/uploadPhotoForm/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				$("#replaceSave").html('<button type="button" id = "saveProfilePhoto" class="btn btn-sm btn-primary align-self-end p-2" style="width:100%"><i class="fa fa-save" style="font-size:16px" aria-hidden="true"> Save </i><br>');
+				$("#returnPhotoForm").html(data);
+			}		
+	    });
+	});
+	
+   //SAVE PROFILE PHOTO
+	$(document).on ("click", "#saveProfilePhoto", function (event) {
+		var data = new FormData($('#uploadPhotoForm').get(0));
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/uploadPhoto/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				window.location.reload();
+			}		
+	    });
+	});
+	
+	//EDIT USERINFO MODAL
+	$( "#Edit_User" ).click(function() {
+		var requestFormData={Form:"Yes"};
+		var userForm = $.zResponse("/streampage/EditUserModal",requestFormData);
+		$('#userEditModalBody').html(userForm);
+		$('#UserEditModalTitle').html("Edit Profile Data");
+		$('#UserEditModal').modal('show');
+	});
+	
+	//EDIT USERINFO METADATA
+	$(document).on ("click", "#editUserButton", function (event) {
+		event.preventDefault();
+		var data = new FormData($('#editUser').get(0));
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/EditUser/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+	});
 });
+
 
 
 </script>

@@ -14,7 +14,7 @@ from .forms import AddPosttype
 from .forms import SendPrimitives
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagPost, AddTextPost, AddTextAreaPost, AddImagePost, AddAudioPost, AddVideoPost, AddBooleanPost, AddEmailPost, AddIpAddressPost, AddUrlPost, AddDatePost, AddTimePost, AddDateTimePost, AddIntegerPost, AddDecimalPost, AddFloatPost, AddEnumaratedPost, AddLocationPost, textComment, ReportPost, EditCommunity
 from .forms import AddTextEntry, AddTextEntryEnum, AddTagSearch, AddTextSearch, AddTextAreaSearch, AddImageSearch, AddAudioSearch, AddVideoSearch, AddBooleanSearch, AddEmailSearch, AddIpAddressSearch, AddUrlSearch, AddDateSearch, AddTimeSearch, AddDateTimeSearch, AddIntegerSearch, AddDecimalSearch, AddFloatSearch, AddEnumaratedSearch, AddLocationSearch
-from .forms import posttypeList, searchList, freeSearchField
+from .forms import posttypeList, searchList, freeSearchField, EditUser
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -956,8 +956,8 @@ def CreatePost_view(request):
     return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
     
 def DeletePost_view(request):
-    PostHash = request.POST.get("PostHash")	
-    Posts.objects.filter(entryHash=PostHash).delete()	
+    PostHash = request.POST.get("PostHash")
+    Posts.objects.filter(entryHash=PostHash).delete()
     return render(None, 'tagSearch.html', {'form' : "The Entry is deleted Successfully"})
 
 def CreatePostComment_view(request):
@@ -1095,20 +1095,17 @@ def logout_view(request):
 def profilePage(request):
     if request.user.is_authenticated:
         username=request.user
-        info = communityUsers.objects.filter(nickName=username)
         CUser = communityUsers.objects.filter(nickName=username)[0]
         Community_List = CUser.creator.all()
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
         return render(request, "profile.html", {
-	"user" : username,
-	"additional" : info,
-	"title" : "Login",
-	"Communities" : Community_List,
-	"Datatypes" : Datatype_List,
-	"Posts" : Post_List,
-	"Joined" : joined_Communities,	
+			"Communities" : Community_List,
+			"Datatypes" : Datatype_List,
+			"Posts" : Post_List,
+			"Joined" : joined_Communities,
+			"UserInfo" : CUser
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1180,7 +1177,7 @@ def ReturnFreeSearchFields_view(request):
     context={}
     context["Free Search"]=freeSearchField()
     return render(None, 'entrySearchFields.html', {'form' : context})
-	
+
 def ReturnEntrySearchResults_view(request):
     CommunityHash = request.POST.get('CommunityHash')
     Community_List = Communities.objects.filter(communityHash=CommunityHash)
@@ -1251,3 +1248,92 @@ def ReturnEntrySearchResults_view(request):
         return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
     else:
         return HttpResponseRedirect("/streampage/login")
+
+
+def uploadPhotoForm_view(request):
+    form = AddImagePost()
+    return render(request, 'tagSearch.html', {'form': form})
+
+def handle_uploaded_profilefile(f):
+    filepath = 'streampage/static/uploads/profiles/'+f.name
+    with open(filepath, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
+
+def uploadPhoto_view(request):
+    if request.user.is_authenticated:
+        try:
+            u_image = request.FILES.get("ImageEntry")
+            userProfile = communityUsers.objects.get(nickName=request.user)
+            image_path = handle_uploaded_profilefile(u_image)
+            userProfile.userPhoto = image_path
+            userProfile.save()
+            activityStream = ActivityStreams()
+            description = {
+                "@context": "https://www.w3.org/ns/activitystreams",
+                "type": "uploaded",
+                "published": str(datetime.now()),
+                "actor": {
+                    "id": "",
+                    "name": communityUsers.objects.get(nickName=request.user).nickName
+                },
+                "object": {
+                    "id": "",
+                    "type": "Profile Photo",
+                    "name": image_path,
+                },
+                "target": {
+                    "id": "",
+                    "type": "Profile",
+                    #"name": dt.relatedCommunity.name,
+                }
+            }
+            ActivityStreams.objects.create(detail = description)
+            return render(None, 'tagSearch.html', {'form' : 'The Photo is Saved Successfully!'})
+        except:
+            return render(None, 'tagSearch.html', {'form' : 'The Photo cannot be Saved!'})
+
+def EditUserModal_view(request):
+    form = EditUser()
+    return render(request, 'modal.html', {'form': form})
+
+def EditUser_view(request):
+    if request.user.is_authenticated:
+        try:
+            name = request.POST.get("name")
+            surname = request.POST.get("surname")
+            birthday= request.POST.get("birth")
+            email = request.POST.get("email")
+            bio = request.POST.get("bio")
+            userProfile = communityUsers.objects.get(nickName=request.user)
+            userProfile.userName = name
+            userProfile.userSurname = surname
+            userProfile.userBirthDay = birthday
+            userProfile.userMail = email
+            userProfile.userBio = bio
+            userProfile.save()
+            activityStream = ActivityStreams()
+            description = {
+                "@context": "https://www.w3.org/ns/activitystreams",
+                "type": "edited",
+                "published": str(datetime.now()),
+                "actor": {
+                    "id": "",
+                    "name": communityUsers.objects.get(nickName=request.user).nickName
+                },
+                "object": {
+                    "id": "",
+                    "type": "Profile Information",
+                    "name": email,
+                },
+                "target": {
+                    "id": "",
+                    "type": "Profile Information",
+                    #"name": dt.relatedCommunity.name,
+                }
+            }
+            ActivityStreams.objects.create(detail = description)
+            return render(None, 'tagSearch.html', {'form' : 'The Information is Updated Successfully!'})
+        except:
+            return render(None, 'tagSearch.html', {'form' : 'The Information cannot be Updated!'})

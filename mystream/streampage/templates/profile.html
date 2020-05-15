@@ -2,28 +2,57 @@
 
 {% block content %}
 {% load static %}
-	<div class="row">
-		<div class="col-md-3">
-			<img src="{% static 'uploads/profiles/default.jpg' %}" class="img-thumbnail"><br>
+
+<div class="card mb-2">
+	<!-- Card Body -->
+	<div class="card-body small">
+		<div class="d-flex flex-row align-items-center justify-content-between">
+			<div class="">
+				<h6><b>{{ UserInfo }}'s profile</b></h6>
+			</div>			
+			<div class="">
+				<button type="button" id="Edit_User"  class="btn btn-outline-secondary btn-sm">
+					<i class="fas fa-edit" aria-hidden="true"></i>
+				</button>
+			</div>
+			
 		</div>
-		<div class="col-sm-5">
-			<div class="row">
-				<b>Nickname:&nbsp</b>{{ user }}
+		<br>
+		<div class="row">
+			<div class="col-sm-5">
+				<div>
+				<div>
+					{% if UserInfo.userPhoto  %}
+						<img src="{{ UserInfo.userPhoto }}" class="img-thumbnail"><br>
+					{% else %}
+						<img src="{% static 'uploads/profiles/default.jpg' %}" class="img-thumbnail"><br>
+					{% endif %}
+				</div>
+				<div id="replaceSave">
+					<button type="button" id = "addPhoto" class="btn btn-sm btn-primary align-self-end p-2" style="width:100%"><i class="fa fa-camera" style="font-size:16px" aria-hidden="true"> Upload Photo</i><br>
+				</div>
 			</div>
-			<div class="row">
-				<b>Name:</b>
+			<div>
+				<br>
+				<form method="post" action="" id="uploadPhotoForm" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div id="returnPhotoForm">
+					</div>
+				</form>
 			</div>
-			<div class="row">
-				<b>E-Mail:</b>
 			</div>
-			<div class="row">
-				<b>Community Point:</b>
+			<div class="col-sm-7">
+				<p id="UserMetaData">{{ community.description }}</p>
+				<p><b>Nickname:  </b>{{ UserInfo.nickName }}</p>
+				<p><b>Name:  </b>{{ UserInfo.userName }}</p>
+				<p><b>Surname:  </b>{{ UserInfo.userSurname }}</p>
+				<p><b>Birthday:  </b>{{ UserInfo.userBirthDay }}</p>
+				<p><b>E-Mail:  </b>{{ UserInfo.userMail }}</p>
+				<p><b>Bio:  </b>{{ UserInfo.userBio }}</p>
 			</div>
-			<div class="row">
-				<b>Created:</b>
-			</div>
-		</div> 
-    </div>
+		</div>
+	</div>
+  </div><br><br>
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="row">
@@ -82,4 +111,28 @@
 			</div>
 		</div>
     </div>
+	
+	<!-- Community Edit Modal -->
+	<div class="modal fade" id="UserEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal small" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<b><h8 class="modal-title" id="UserEditModalTitle"></h8></b>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" action="" id="editUser" enctype="multipart/form-data">
+					<div id="userEditModalBody" class="modal-body">
+						{% csrf_token %}
+						{{form.as_p }}		
+					</div>
+				</form>
+				<div class="modal-footer small">
+					<button type="button" class="btn btn-secondary small" data-dismiss="modal">Close</button>
+					<button type="click" id="editUserButton" class="btn btn-primary small">Edit</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

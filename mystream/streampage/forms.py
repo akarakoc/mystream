@@ -534,4 +534,25 @@ class ReportPost(forms.Form):
         Posttype_Name = self.cleaned_data.get("Report Reason")
         Posttype_Tags = self.cleaned_data.get("Description")
         return super(ReportPost, self).clean(*args, **keyargs)
+
+class EditUser(forms.Form):
+    name = forms.CharField()
+    surname = forms.CharField()
+    birth = forms.CharField()
+    email = forms.CharField()
+    bio = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(EditUser, self).__init__(*args, **kwargs)
+        self.fields['email'].label = "email"
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"e-mail"})
+        self.fields['bio'].label = "bio"
+        self.fields['bio'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"bio"})
+    def clean(self, *args, **keyargs):
+        Posttype_Name = self.cleaned_data.get("email")
+        Posttype_Tags = self.cleaned_data.get("bio")
+        return super(EditUser, self).clean(*args, **keyargs)
         
