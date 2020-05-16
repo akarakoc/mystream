@@ -88,7 +88,7 @@ class PostComments(models.Model):
     relatedCommunityforComment = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
     relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
     commentHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
-    commentText = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    commentText = models.CharField(max_length=2000, null=True, help_text='Enter name of type')
     postCommentCreator = models.ForeignKey(communityUsers, related_name='commentcreator', on_delete=models.SET_NULL, null=True)
     postCommentCreationDate= models.DateTimeField(null=True)
     postCommentTag= models.CharField(max_length=2000, null=True, help_text='Enter Post Tags')
@@ -96,12 +96,13 @@ class PostComments(models.Model):
         return self.commentText
 
 class ReportedPosts(models.Model):
+    reportHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
     relatedCommunity = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
     relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
     reason = models.CharField(max_length=200, null=True, help_text='Enter name of type')
     description = models.CharField(max_length=2000, null=True, help_text='Enter name of type')
     reportPostCreator = models.ForeignKey(communityUsers, related_name='reporttcreator', on_delete=models.SET_NULL, null=True)
-    reportPostCreationDate= models.DateTimeField(null=True)
+    reportPostCreationDate = models.DateTimeField(null=True)
     def __str__(self):
         return self.reason
 

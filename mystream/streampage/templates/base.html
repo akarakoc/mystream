@@ -1045,6 +1045,25 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 	    });
 	});
 	
+//RESOLVE REPORT
+	$(document).on ("click", "#problemSolved", function (event) {
+		var Phash = $(this).attr('hash');
+		var data = new FormData($('#reportFormTag').get(0));
+		data.append('post_Hash', Phash);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/reportPostDelete/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data);
+				window.location.reload()
+			}		
+	    });
+	});
 	
 	//UPLOAD PROFILE PHOTO FORM
 	$(document).on ("click", "#addPhoto", function (event) {
