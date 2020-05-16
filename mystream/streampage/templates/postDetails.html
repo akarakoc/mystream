@@ -80,13 +80,14 @@
 					   <table class="small">
 					   {% for items in postEntries.postInstances.0.comments %}
 					   <tr hash="{{items.commentHash}}">
+					   
 					    {% if items.postCommentCreator.userPhoto  %}
-							<img src="{{ UserInfo.userPhoto }}" class="img-thumbnail">
-							<td><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></td>
+							<td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></a></td>
 						{% else %}
-							<td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></td>
+							<td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></a></td>
 						{% endif %}
-						  <td><b>{{ items.postCommentCreator }}:</b></td>
+						  
+						  <td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><b>{{ items.postCommentCreator }}:</b></a></td>
 						  <td width="550px">{{ items.commentText }}</td>
 						  <td width="95px">{{ items.postCommentCreationDate }}</td>
 						  <td width="20px"><button type="button" id = "deleteComment" hash="{{items.commentHash}}" class="btn btn-sm btn-outline-secondary align-self-end p-2"><i class="fas fa-minus-circle" style="font-size:16px" aria-hidden="true"></i></td>
