@@ -10,11 +10,14 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href={% static "css/popup.css" %}>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
 
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
 
 
     <script src="{% static 'js/popup.js' %}"></script>
@@ -22,7 +25,6 @@
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
 
 
 
@@ -40,6 +42,10 @@
     Let’s Save a Little Water for Everyone
 </h2>
 
+<img>
+    <img id="sea" src="{% static 'images/sea.jpg' %}" class="annotatable" >
+</div>
+
 <p>
     Experts say keeping good hygiene would reduce the risk of transmitting and contracting the COVID-19. Indeed clean
     water is our first line of defence during this time of turbulence. Access to clean water is a basic human right and
@@ -52,7 +58,55 @@
 
 
 
-<div id="popover-template">
+
+
+
+
+
+</body>
+
+
+<div class="annoContainer" id="annoContainer" style="display: none">
+    <div class="input-group mb-3 search" >
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon3">Search Annotation</span>
+      </div>
+      <input type="text" class="form-control" id="searchAnnotation" aria-describedby="basic-addon3">
+    </div>
+</div>
+
+<div class="slideButton" style="display: block">
+    <button id="slideButton" type="button" class="btn btn-warning">
+        <svg class="bi bi-bookmarks-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M2 4a2 2 0 012-2h6a2 2 0 012 2v12l-5-3-5 3V4z" clip-rule="evenodd"/>
+          <path d="M14 14l-1-.6V2a1 1 0 00-1-1H4.268A2 2 0 016 0h6a2 2 0 012 2v12z"/>
+        </svg>
+    </button>
+</div>
+
+<div  class="openHighlightButton" style="display: block">
+    <button id="openHighlightButton" type="button" class="btn btn-warning">
+        <svg class="bi bi-eye-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+          <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" clip-rule="evenodd"/>
+        </svg>
+    </button>
+</div>
+
+<div class="closeHighlightButton" style="display: block">
+    <button id="closeHighlightButton"  type="button" class="btn btn-warning">
+        <svg class="bi bi-eye" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
+        </svg>
+    </button>
+</div>
+
+
+
+
+
+<div id="popover-template" style="display:none">
     <div class="popover" role="tooltip">
         <div class="arrow"></div>
         <h3 class="popover-header"></h3>
@@ -61,14 +115,26 @@
     </div>
 </div>
 
-
+<div aria-live="polite" aria-atomic="true" style="position: absolute; top: 30px; left: 30px; min-height: 200px; min-width: 500px;">
+  <div class="toast" style="position: absolute; top: 0; left: 0;">
+    <div class="toast-header" style="background-color: #f9bb00;">
+      <strong class="mr-auto toast-title "> Header </strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+        Content
+    </div>
+  </div>
+</div>
 
 
 <div id="annotation-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLongTitle">Create Annotation</h5>
+      <div class="modal-header" style="background-color: #f9bb00;">
+        <h5 class="modal-title" id="modalLongTitle" >Create Annotation</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -89,7 +155,7 @@
               <div class="form-group">
                 <label for="type">Type</label>
                 <select class="form-control" id="type">
-                  <option value="Text">Text</option>
+                  <option value="TextualBody">Text</option>
                   <option value="Image" >Image</option>
                   <option value="Video" >Video</option>
                 </select>
@@ -99,7 +165,7 @@
               <input type="hidden" class="form-control" id="jsonAnnotation" >
 
               <div class="modal-footer">
-                  <button id="submit" type="submit" class="btn btn-primary">Create</button>
+                  <button id="submit" type="submit" class="btn btn-warning">Create</button>
               </div>
 
             </form>

@@ -1,9 +1,13 @@
 
 $(function () {
-  $('[data-toggle="popover"]').popover()
+    $('[data-toggle="popover"]').popover();
 });
 
+
+
+
 $( document ).ready(function() {
+
 
 /*******************************************/
 /*  Define Variables
@@ -26,23 +30,21 @@ $( document ).ready(function() {
     annotate_remote = "https://mystream-anno.herokuapp.com/annoateText";
     annotate_local = "http://localhost:8080/annoateText";
 
-    highlightCurrentAnnotations();
+    visualizeAnnotations();
 
 /*******************************************/
 /*  Annotation Submit
 /*******************************************/
-   $("#annotation-modal-form").submit(function(event){
-        event.preventDefault();
-		createAnnotation();
-		return false;
-	});
 
 
 });
 
 
+
+
 $( document ).contextmenu(function(e) {
-      var ab = new AnnotationBuilder().highlight();
+
+    var ab = new AnnotationBuilder().highlight();
     ab.result.target.toSelection();
     var json = ab.toJSON();
     // var ab2 = new AnnotationBuilder().fromJSON(json);
@@ -63,10 +65,105 @@ $( document ).contextmenu(function(e) {
     e.preventDefault();
 });
 
+$(document).on('submit', "#annotation-modal-form", function(event) {
+    event.preventDefault();
+    createAnnotation();
+    return false;
+});
+
+
+$(document).on('keyup', "#searchAnnotation", function() {
+    var annoIndex;
+    var searchKey = $("#searchAnnotation").val();
+
+    if( searchKey == '' || searchKey == undefined || searchKey == null || searchKey == "*")
+        $(".annoDiv").css("display", "block");
+
+    var btnList = $(".updateAnnotation");
+
+    $.each(btnList, function(index, btn) {
+        var json = JSON.stringify($(btn).data("json"));
+        annoIndex = $(btn).attr("id").split("anno-update-bttn-")[1];
+        if(json.toLowerCase().includes(searchKey.toLowerCase()))
+            $("#anno-div-" + annoIndex).css("display","block");
+        else
+            $("#anno-div-" + annoIndex).css("display","none");
+    });
+});
+
+$(document).on('click', ".updateAnnotation", function() {
+    $(".popover").hide();
+    $("#target").val($(this).data("selected"));
+    $("#body").val($(this).data("body"));
+    $("#type").val($(this).data("type"));
+    $("#jsonAnnotation").val(JSON.stringify($(this).data("json")));
+
+    // changes for update
+    $("#modalLongTitle").html("Update Annotation");
+    $("#submit").html("Update");
+
+    $("#annotation-modal").modal();
+  });
+
+$(document).on('click', "#slideButton", function() {
+    $( "#annoContainer").toggle('blind',1000);
+});
+
+$(document).on('click', "#openHighlightButton", function() {
+    $( "#closeHighlightButton").css("display", "block");
+    $(this).css("display", "none");
+
+    var annoList = $(".annotationSelector");
+
+    $.each(annoList, function(index, a) {
+        $(a).addClass("highlightedAnnotation");
+    });
+});
+
+$(document).on('click', "#closeHighlightButton", function() {
+    $( "#openHighlightButton").css("display", "block");
+    $(this).css("display", "none");
+
+    var annoList = $(".annotationSelector");
+
+    $.each(annoList, function(index, a) {
+        $(a).removeClass("highlightedAnnotation");
+    });
+});
+
+$(document).on('click', ".annotationSelector", function() {
+
+    $(".popover").hide();
+
+    var popId = $(this).attr("id");
+
+
+    if($(this).hasClass("highlightedAnnotation")) {
+        $(this).popover('show');
+         setTimeout(function() {
+            $("#" + popId).popover('hide');
+        }, 3000);
+    }else{
+        $(this).popover('hide');
+    }
+});
+
+
+
+
+
+
+function showMessage(title, message){
+    $('.toast-title').html(title);
+    $('.toast-body').html(message);
+    $('.toast').toast({ delay: 3000 });
+    $('.toast').toast('show');
+}
+
 /*******************************************/
 /*  Annotation Functions
 /*******************************************/
-function highlightCurrentAnnotations(){
+function visualizeAnnotations(){
     $.ajax({
       url: search_remote,
       data: { source : window.location.href },
@@ -74,14 +171,77 @@ function highlightCurrentAnnotations(){
       success: function(data, status){
           console.log("okk");
           var jsonList = data.response.annoList;
-          jsonList.forEach(function (json, index){
-                                   var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(json));
-                                   ab2.result.target.toSelection();
-                                   surroundSelection(json) ;
+
+          $.each(jsonList, function(index, json) {
+                                try {
+                                    var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(json));
+                                    ab2.result.target.toSelection();
+
+                                    surroundSelection(json) ;
+
+                                    addAnnotationToSidebar(json, index);
+
+                                }catch(error){
+                                    console.log(error);
+                                    console.log(json);
+
+                                }
+
                                 });
       }
     });
 }
+
+function addAnnotationToSidebar(json, index){
+
+    var body = json.body[0];
+
+    var buttonBody;
+
+    var annotationContent = "";
+    if (body.type == 'TextualBody') {
+        annotationContent = body.value;
+        buttonBody = body.value;
+    }else{
+         annotationContent = body.related;
+         buttonBody = body.related;
+    }
+
+    annotationContent = annotationContent.replace(urlRegex, " <a  href='//$1' target='_blank' >$1</a> ");
+
+    var annoDivId = "anno-div-" + index;
+    var annoTitleId = "anno-title-" + index;
+    var annoContentId = "anno-content-" + index;
+    var annoUpdateId = "anno-update-bttn-" + index;
+
+    $('.annoContainer').append(
+        "<div id='" + annoDivId + "' class='annoDiv'>  " +
+        "<div id='" + annoTitleId + "' class='annoTitle'>" +
+            "<label> " + window.getSelection() + "</label>" +
+        "</div>" +
+        "<div>" +
+            "<label> <i> Type </i>:" + body.type + " </label>" +
+        "</div>" +
+        "<div>" +
+            "<label> <i> Content </i> : </label>" +
+            "<label id='" + annoContentId + "'>" + annotationContent + " </label>" +
+        "</div>" +
+        "<div>" +
+            // "<label>Json : </label>" +
+            // "<label> " + JSON.stringify(json) + "</label>" +
+        "</div>" +
+        "<button id='" + annoUpdateId + "' type='button' class='btn btn-warning updateAnnotation'" +
+            " data-body='" + buttonBody +
+            "' data-type='" + body.type +
+            "' data-selected='" + window.getSelection() +
+            "' data-json='" + JSON.stringify(json) +
+            "'>Update Annotation" +
+        "</button>" +
+        "</div>"
+    );
+}
+
+
 
 function surroundSelection(json) {
 
@@ -95,11 +255,16 @@ function surroundSelection(json) {
         span.class="surroundSpan";
         span.style.fontWeight = "bold";
         span.style.color = "black";
-        span.style.background = "#FFFF00";
 
         var a = document.createElement('a');
         a.target = "_blank";
-        a.style.background = "yellow";
+        var id = json.canonical;
+        id = id.replace("urn:uuid:","");
+        // a.style.background = "#ffd969";
+        $(a).addClass("highlightedAnnotation");
+        $(a).addClass("annotationSelector");
+        $(a).attr("id", id);
+
 
         $(a).data("title", "Annotation");
         $(a).data("html", true);
@@ -120,37 +285,49 @@ function surroundSelection(json) {
             }
         }
      }
+    var buttonBody;
+    var annotationContent = "";
+    var addGoToButton = false;
+    var addTextualContent = false;
+
+     if(body.type == 'TextualBody'){
+         annotationContent = body.value;
+         addTextualContent = true;
+         buttonBody = body.value
+     }else{
+         annotationContent = body.related;
+         addGoToButton = true;
+         buttonBody = body.related;
+     }
+      annotationContent = annotationContent.replace( urlRegex,  " <a  href='//$1' target='_blank' >$1</a> ");
 
 
-    var contentHTMLText =   "<div>" +
-                            "The word " + window.getSelection() + " is linked with a " + body.type +
-                            " <a href='" + body.related + "' target='_blank' > Go to Annotation </a> " +
-                            " <a class='updateAnnotation' data-body='" + body.related + "' data-type='" + body.type + "'   href='#'  > </a> " +
-                            " <button type='button' class='btn btn-warning updateAnnotation'" +
-                                "data-body='" + body.related +
+    var contentHTMLText  =  "<div>" +
+                            "The word " + window.getSelection() + " is linked with a " + body.type;
+    if(addGoToButton)
+        contentHTMLText +=  " <a href='" + body.related + "' target='_blank' > Go to Annotation </a> ";
+
+    if(addTextualContent)
+        contentHTMLText +=  "<div>" + " <strong> Annotation Content </strong> " +
+                            " <span>" +  annotationContent + "</span>" + "</div>";
+
+    contentHTMLText     +=  " <button type='button' class='btn btn-warning updateAnnotation'" +
+                                " data-body='" + buttonBody +
                                 "' data-type='" + body.type +
                                 "' data-selected='" + window.getSelection() +
                                 "' data-json='" + JSON.stringify(json) +
                                 "'>Update Annotation</button>\n"
                             "</div>";
 
-    $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'hover', sanitize:false, content: contentHTMLText});
-    $(document).on('click', ".updateAnnotation", function() {
-        $("#target").val($(this).data("selected"));
-        $("#body").val($(this).data("body"));
-        $("#type").val($(this).data("type"));
-        $("#jsonAnnotation").val(JSON.stringify($(this).data("json")));
-
-        // changes for update
-        $("#modalLongTitle").html("Update Annotation");
-        $("#submit").html("Update");
-
-        $("#annotation-modal").modal();
-      });
-
+    $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'click', sanitize:false, content: contentHTMLText});
 
 
 }
+
+
+
+
+
 
 function sendPostRequest(post_data, textAnno){
     $.ajax({
@@ -163,13 +340,20 @@ function sendPostRequest(post_data, textAnno){
 
             var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(textAnno));
             ab2.result.target.toSelection();
-            location.reload();
 
             surroundSelection(textAnno);
-            alert("completed");
+
+            if($("#submit").html() == "Update")
+                showMessage("Info", "Annotation is updated successfully. ");
+            else
+                showMessage("Info", "Annotation is created successfully. ");
+
+            $("#annotation-modal").modal('hide');
+            //location.reload();
+
         },
         error: function () {
-            alert("Error");
+            showMessage("Error", "Errors occured while creating annoation !");
         }
 
     });
@@ -189,7 +373,7 @@ function createAnnotation() {
 
     if (valid) {
         var content = {};
-        if( type == "Text" ){
+        if( type == "TextualBody" ){
             content = { "type": "TextualBody", "format": "text/plain", "value": body };
         }else if(  type == "Image" ){
             content = { "id" : body, "type": "Image", "format":"image/jpeg", "related": body };
@@ -242,3 +426,5 @@ function checkRegexp( o, regexp, n ) {
     return true;
   }
 }
+
+

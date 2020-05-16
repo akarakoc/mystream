@@ -7,3 +7,39 @@ div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%;
 div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
 .ui-dialog .ui-state-error { padding: .3em; }
 .validateTips { border: 1px solid transparent; padding: 0.3em; }
+.annoTitle {
+    color: #212529;
+    background-color: #f9bb00;
+    border-color: #f9bb00;
+}
+.annoContainer {
+    width: 425px;
+    background-color: #ffd969;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}
+.slideButton {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}
+.openHighlightButton, .closeHighlightButton{
+    position: fixed;
+    top: 0px;
+    right: 3.5em;
+}
+
+.highlightedAnnotation{
+    background-color: #ffd969;
+}
+
+.toast-header, #annotation-modal .modal-header{
+   background-color: #f9bb00;
+}
+.annoContainer span { background-color: #f9bb00; border-color: #f9bb00;}
+.annoContainer input { border-color: #f9bb00;}
+.annoTitle label { margin:1%; font-weight: 500 !important;}
+.annoContainer div label { margin:1%; font-weight: 200; }
+.annoContainer .annoDiv { padding: 2%;}
+.annoContainer .search { padding-right: 3%; padding-left: 3%; padding-top: 10%;}
