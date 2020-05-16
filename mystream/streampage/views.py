@@ -203,12 +203,14 @@ def CreateCommunity_view(request):
         "published": str(comm.communityCreationDate),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
             "type": "Community",
             "name": comm.name,
+            "hash": comm.communityHash
         }
     }
 
@@ -253,12 +255,14 @@ def EditCommunity_view(request):
             "published": str(comm.communityCreationDate),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=request.user).nickName
+                "name": communityUsers.objects.get(nickName=request.user).nickName,
+                "photo": communityUsers.objects.get(nickName=request.user).userPhoto
             },
             "object": {
                 "id": "",
                 "type": "Community",
                 "name": comm.name,
+                "hash": comm.communityHash
             }
         }
         ActivityStreams.objects.create(detail = description)
@@ -282,12 +286,14 @@ def JoinCommunity_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
             "type": "Community",
             "name": Comm.name,
+            "hash": Comm.communityHash
         }
     }
     ActivityStreams.objects.create(detail = description)
@@ -335,6 +341,23 @@ def DeleteCommunity_view(request):
     name = Comm.name
     try:
         Comm.delete()
+        activityStream = ActivityStreams()
+        description = {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            "type": "deleted",
+            "published": str(datetime.now()),
+            "actor": {
+                "id": "",
+                "name": communityUsers.objects.get(nickName=request.user).nickName,
+                "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+            },
+            "object": {
+                "id": "",
+                "type": "Community",
+                "name": name,
+            }
+        }
+        ActivityStreams.objects.create(detail = description)
         return render(None, 'tagSearch.html', {'form': name+" Community has been Deleted Successfully !"})
     except:
         return render(None, 'tagSearch.html', {'form': name+" Community cannot be Deleted!"})        
@@ -484,30 +507,28 @@ def CreatePosttype_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
-            "type": "Post Type",
+            "type": "Posttype",
             "name": dt.name,
         },
         "target": {
             "id": "",
             "type": "Community",
             "name": dt.relatedCommunity.name,
+            "hash": dt.relatedCommunity.communityHash,
         }
     }
-
     ActivityStreams.objects.create(detail = description)
     return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
 	
 def EditPosttypeMeta_view(request):
     dt_hash = request.POST.get("Posttype_Hash")
-    d_image=request.FILES.get("Posttype_Image")
-    image_path=handle_uploaded_datatypefile(d_image)
     dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
     dt.name = request.POST.get("Posttype_Name")
-    dt.datatypePhoto = image_path
     dt.datatypeTags = request.POST.get("Posttype_Tags")
     dt.datatypeCreationDate = datetime.now()
     dt.datatypeCreator = communityUsers.objects.get(nickName=request.user)
@@ -519,7 +540,6 @@ def EditPosttypeMeta_view(request):
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save()
-
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -527,17 +547,19 @@ def EditPosttypeMeta_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
-            "type": "Post Type",
+            "type": "Posttype",
             "name": dt.name,
         },
         "target": {
             "id": "",
             "type": "Community",
             "name": dt.relatedCommunity.name,
+            "hash": dt.relatedCommunity.communityHash
         }
     }
     ActivityStreams.objects.create(detail = description)
@@ -546,6 +568,29 @@ def EditPosttypeMeta_view(request):
 def DeletePosttypeMeta_view(request):
     dt_hash = request.POST.get("Posttype_Hash")
     dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "deleted",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+        },
+        "object": {
+            "id": "",
+            "type": "Posttype",
+            "name": dt.name,
+        },
+        "target": {
+            "id": "",
+            "type": "Community",
+            "name": dt.relatedCommunity.name,
+            "hash": dt.relatedCommunity.communityHash
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
     dt.delete()
     return JsonResponse({'form' : "Posttype is deleted Successfully!",'posttypeHash':dt_hash})
 	
@@ -594,6 +639,29 @@ def SavePrimitives_view(request):
                     dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
                     dtFields.relatedPrimitives = typefield
                     dtFields.save()
+                    activityStream = ActivityStreams()
+                    description = {
+                        "@context": "https://www.w3.org/ns/activitystreams",
+                        "type": "updated",
+                        "published": str(datetime.now()),
+                        "actor": {
+                            "id": "",
+                            "name": communityUsers.objects.get(nickName=request.user).nickName,
+                            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+                        },
+                        "object": {
+                            "id": "",
+                            "type": "PosttypeField",
+                            "name": Datatypes.objects.get(datatypeHash=DatatypeHash).name
+                        },
+                        "target": {
+                            "id": "",
+                            "type": "Community",
+                            "name": Communities.objects.get(communityHash=CommunityHash).name,
+                            "hash": Communities.objects.get(communityHash=CommunityHash).communityHash,
+                        }
+                    }
+                    ActivityStreams.objects.create(detail = description)
                     return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
                 else:
                     if Enumeration == '':
@@ -606,6 +674,29 @@ def SavePrimitives_view(request):
                         dtFields.relatedPrimitives = typefield
                         dtFields.enumerations = Enumeration
                         dtFields.save()
+                        activityStream = ActivityStreams()
+                        description = {
+                            "@context": "https://www.w3.org/ns/activitystreams",
+                            "type": "updated",
+                            "published": str(datetime.now()),
+                            "actor": {
+                                "id": "",
+                                "name": communityUsers.objects.get(nickName=request.user).nickName,
+                                "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+                            },
+                            "object": {
+                                "id": "",
+                                "type": "PosttypeField",
+                                "name": Datatypes.objects.get(datatypeHash=DatatypeHash).name
+                            },
+                            "target": {
+                                "id": "",
+                                "type": "Community",
+                                "name": Communities.objects.get(communityHash=CommunityHash).name,
+                                "hash": Communities.objects.get(communityHash=CommunityHash).communityHash,
+                            }
+                        }
+                        ActivityStreams.objects.create(detail = description)
                         return render(None, 'tagSearch.html', {'form' : "Data is updated!"})
     except:
         Enumeration = request.POST.get("Enum")
@@ -632,6 +723,29 @@ def SavePrimitives_view(request):
                 dtFields.relatedComm = Communities.objects.get(communityHash=CommunityHash)
                 dtFields.relatedPrimitives = typefield
                 dtFields.save()
+                activityStream = ActivityStreams()
+                description = {
+                    "@context": "https://www.w3.org/ns/activitystreams",
+                    "type": "added",
+                    "published": str(datetime.now()),
+                    "actor": {
+                        "id": "",
+                        "name": communityUsers.objects.get(nickName=request.user).nickName,
+                        "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+                    },
+                    "object": {
+                        "id": "",
+                        "type": "PosttypeField",
+                        "name": Datatypes.objects.get(datatypeHash=DatatypeHash).name
+                    },
+                    "target": {
+                        "id": "",
+                        "type": "Community",
+                        "name": Communities.objects.get(communityHash=CommunityHash).name,
+                        "hash": Communities.objects.get(communityHash=CommunityHash).communityHash,
+                    }
+                }
+                ActivityStreams.objects.create(detail = description)
                 return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
             else:
                 if Enumeration == '':
@@ -644,6 +758,29 @@ def SavePrimitives_view(request):
                     dtFields.relatedPrimitives = typefield
                     dtFields.enumerations = Enumeration
                     dtFields.save()
+                    activityStream = ActivityStreams()
+                    description = {
+                        "@context": "https://www.w3.org/ns/activitystreams",
+                        "type": "added",
+                        "published": str(datetime.now()),
+                        "actor": {
+                            "id": "",
+                            "name": communityUsers.objects.get(nickName=request.user).nickName,
+                            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+                        },
+                        "object": {
+                            "id": "",
+                            "type": "PosttypeField",
+                            "name": Datatypes.objects.get(datatypeHash=DatatypeHash).name
+                        },
+                        "target": {
+                            "id": "",
+                            "type": "Community",
+                            "name": Communities.objects.get(communityHash=CommunityHash).name,
+                            "hash": Communities.objects.get(communityHash=CommunityHash).communityHash,
+                        }
+                    }
+                    ActivityStreams.objects.create(detail = description)
                     return render(None, 'tagSearch.html', {'form' : "Data is saved!"})
 
 def DeletePosttypeFields_view(request):
@@ -651,6 +788,29 @@ def DeletePosttypeFields_view(request):
     DatatypeHash = request.POST.get("DatatypeHash")
     Dt= Datatypes.objects.filter(datatypeHash=DatatypeHash)[0]
     name = request.POST.get("name")
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "deleted",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+        },
+            "object": {
+            "id": "",
+            "type": "PosttypeField",
+            "name": Datatypes.objects.get(datatypeHash=DatatypeHash).name
+        },
+            "target": {
+            "id": "",
+            "type": "Community",
+            "name": Communities.objects.get(communityHash=CommunityHash).name,
+            "hash": Communities.objects.get(communityHash=CommunityHash).communityHash,
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
     HiddenPosts= Posts.objects.filter(propertyName=name,relatedDatatypes=Dt).delete()
     DatatypeFields.objects.filter(name=name,relatedDatatype=Dt).delete()
     return render(None, 'tagSearch.html', {'form' : "Posttyype Field is Deleted Successfully!"})
@@ -693,9 +853,7 @@ def DeletePosttypes_view(request):
     CommunityHash = request.POST.get("CommunityHash")
     PosttypeName = request.POST.get("PosttypeEntry")
     Cm = Communities.objects.filter(communityHash=CommunityHash)[0]
-    print(Cm.datatypes_set.all())
     Dt = Cm.datatypes_set.filter(name=PosttypeName)[0].delete()
-
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -703,21 +861,22 @@ def DeletePosttypes_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
-            "type": "Post Type",
+            "type": "Posttype",
             "name": PosttypeName,
         },
         "target": {
             "id": "",
             "type": "Community",
             "name": Cm.name,
+            "hash": Cm.communityHash,
         }
     }
     ActivityStreams.objects.create(detail = description)
-
     return render(None, 'tagSearch.html', {'form':"Selected posttype is deleted succesfully!"})
 
 def addPosttypeEditField_view(request):
@@ -734,7 +893,6 @@ def subscribePosttype_view(request):
     Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
     Posttype.subscribers.add(userModel)
     Posttype.save()
-
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -742,12 +900,19 @@ def subscribePosttype_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
             "type": "Posttype",
             "name": Posttype.name,
+        },
+        "target": {
+            "id": "",
+            "type": "Community",
+            "name": Posttype.relatedCommunity.name,
+            "hash": Posttype.relatedCommunity.communityHash,
         }
     }
     ActivityStreams.objects.create(detail = description)
@@ -764,9 +929,12 @@ def reportPost_view(request):
         Cm = PosttypeMeta.relatedCommunity
         user = request.user
         userModel = communityUsers.objects.filter(nickName=user)[0]
+        salt = uuid.uuid4().hex
+        reportHash = hashlib.sha256(salt.encode() + request.POST.get("Report_Reason").encode()).hexdigest() + salt
         reportEntry = ReportedPosts()
         reportEntry.relatedCommunity = Cm
         reportEntry.relatedMeta = PosttypeMeta
+        reportEntry.reportHash = reportHash
         reportEntry.reason = request.POST.get("Report_Reason")
         reportEntry.description = request.POST.get("Description")
         reportEntry.reportPostCreator = userModel
@@ -775,6 +943,17 @@ def reportPost_view(request):
         return render(None, 'tagSearch.html', {'form' : 'You successfully reported the post!' })
     except:
         return render(None, 'tagSearch.html', {'form' : 'Reporting is unsuccessfull!' })
+
+def reportPostDelete_view(request):
+    PostHash = request.POST.get("post_Hash")
+    try:
+        user = request.user
+        userModel = communityUsers.objects.filter(nickName=user)[0]
+        reportEntry = ReportedPosts.objects.get(reportHash=PostHash)
+        reportEntry.delete()
+        return render(None, 'tagSearch.html', {'form' : 'The Report is Removed!' })
+    except:
+        return render(None, 'tagSearch.html', {'form' : 'The Report cannot be Removed!' })
 
 def ReturnPostFields_view(request):
     CommunityHash = request.POST.get("community_Hash")
@@ -842,7 +1021,7 @@ def AddPostModal_view(request):
     context={}
     form=posttypeList(cHash=CommunityHash)
     return render(request, 'modal.html', {'form': form})  
-	
+
 
 def handle_uploaded_postfile(f):
     filepath = 'streampage/static/uploads/posts/'+f.name
@@ -850,7 +1029,7 @@ def handle_uploaded_postfile(f):
         for chunk in f.chunks():
             destination.write(chunk)
     return "/"+filepath.split("/")[1]+"/"+filepath.split("/")[2]+"/"+filepath.split("/")[3]+"/"+filepath.split("/")[4]+"/"
-	
+
 def CreatePost_view(request):
     CommunityHash = request.POST.get("community_Hash")
     DatatypeHash = request.POST.get("PosttypeHash")
@@ -930,7 +1109,6 @@ def CreatePost_view(request):
     tagentry.tagName = Tags["TITLE"] 
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save()
-
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -938,25 +1116,51 @@ def CreatePost_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto,
         },
         "object": {
             "id": "",
             "type": "Post",
-            "name": entry.propertyName,
+            "hash": entry.relatedMeta.postMetaHash,
+            "posttype": Dt.name
         },
         "target": {
             "id": "",
             "type": "Community",
             "name": entry.relatedCommunityforPost.name,
+            "hash": entry.relatedCommunityforPost.communityHash,
         }
     }
-
     ActivityStreams.objects.create(detail = description)
     return render(None, 'tagSearch.html', {'form' : "The Entry is Created Successfully"})
     
 def DeletePost_view(request):
     PostHash = request.POST.get("PostHash")
+    activityStream = ActivityStreams()
+    entry = Posts.objects.filter(entryHash=PostHash)[0]
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "deleted",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto,
+        },
+        "object": {
+            "id": "",
+            "type": "Post",
+            "posttype": entry.relatedDatatypes.name
+        },
+        "target": {
+            "id": "",
+            "type": "Community",
+            "name": entry.relatedCommunityforPost.name,
+            "hash": entry.relatedCommunityforPost.communityHash,
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
     Posts.objects.filter(entryHash=PostHash).delete()
     return render(None, 'tagSearch.html', {'form' : "The Entry is deleted Successfully"})
 
@@ -976,7 +1180,6 @@ def CreatePostComment_view(request):
     entryComment.postCommentCreator = communityUsers.objects.get(nickName=request.user)
     entryComment.postCommentCreationDate = commentTime
     entryComment.save()
-
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -984,17 +1187,20 @@ def CreatePostComment_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto,
         },
         "object": {
             "id": "",
             "type": "Comment",
+            "hash": entryComment.relatedMeta.postMetaHash,
             "name": entryComment.commentText,
+            "posttype": entryComment.relatedMeta.relatedDatatypes.name,
         },
         "target": {
             "id": "",
-            "type": "Post",
-            "name": entryComment.relatedMeta.relatedDatatypes.name,
+            "name": entryComment.relatedCommunityforComment.name,
+            "hash": entryComment.relatedCommunityforComment.communityHash,
         }
     }
     ActivityStreams.objects.create(detail = description)
@@ -1011,17 +1217,21 @@ def deletePostComment_view(request):
             "published": str(datetime.now()),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=request.user).nickName
+                "name": communityUsers.objects.get(nickName=request.user).nickName,
+                "photo": communityUsers.objects.get(nickName=request.user).userPhoto,
             },
             "object": {
                 "id": "",
                 "type": "Comment",
+                "hash": comment.relatedMeta.postMetaHash,
                 "name": comment.commentText,
+                "posttype": comment.relatedMeta.relatedDatatypes.name
             },
             "target": {
                 "id": "",
                 "type": "Post",
-                "name": comment.relatedMeta.relatedDatatypes.name,
+                "name": comment.relatedCommunityforComment.name,
+                "hash": comment.relatedCommunityforComment.communityHash,
             }
         }
         comment.delete()
@@ -1105,13 +1315,15 @@ def profilePage(request):
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
+        activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(username))
         return render(request, "profile.html", {
 			"Communities" : Community_List,
 			"Datatypes" : Datatype_List,
 			"Posts" : Post_List,
 			"Joined" : joined_Communities,
 			"UserInfo" : CUser,
-			"ReportList": reportList
+			"ReportList": reportList,
+			"activities":activityDetailList
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1282,17 +1494,17 @@ def uploadPhoto_view(request):
                 "published": str(datetime.now()),
                 "actor": {
                     "id": "",
-                    "name": communityUsers.objects.get(nickName=request.user).nickName
+                    "name": communityUsers.objects.get(nickName=request.user).nickName,
+                    "photo": communityUsers.objects.get(nickName=request.user).userPhoto,
                 },
                 "object": {
                     "id": "",
-                    "type": "Profile Photo",
+                    "type": "ProfilePhoto",
                     "name": image_path,
                 },
                 "target": {
                     "id": "",
                     "type": "Profile",
-                    #"name": dt.relatedCommunity.name,
                 }
             }
             ActivityStreams.objects.create(detail = description)
@@ -1322,21 +1534,22 @@ def EditUser_view(request):
             activityStream = ActivityStreams()
             description = {
                 "@context": "https://www.w3.org/ns/activitystreams",
-                "type": "edited",
+                "type": "updated",
                 "published": str(datetime.now()),
                 "actor": {
                     "id": "",
-                    "name": communityUsers.objects.get(nickName=request.user).nickName
+                    "name": communityUsers.objects.get(nickName=request.user).nickName,
+                    "photo": communityUsers.objects.get(nickName=request.user).userPhoto,
                 },
                 "object": {
                     "id": "",
-                    "type": "Profile Information",
-                    "name": email,
+                    "type": "ProfileInformation",
+                    "email": email,
+                    "bio" : bio,
                 },
                 "target": {
                     "id": "",
                     "type": "Profile Information",
-                    #"name": dt.relatedCommunity.name,
                 }
             }
             ActivityStreams.objects.create(detail = description)
