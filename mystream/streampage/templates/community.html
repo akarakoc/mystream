@@ -15,6 +15,7 @@
 </div>
   <br>
   <br>
+
   <div id="community_list" class="row">
 	{% for comm in community_resp %}
 	<div class="card shadow mb-4 col-md-12">
@@ -36,10 +37,19 @@
 						<i class="fa fa-thumbs-up small" aria-hidden="true"></i> 
 						Like
 					</button>
+					{% for members in comm.communityMembers.all %}
+						{% if user.get_username == members.nickName%}
+							<button type="button" class="btn btn-danger btn-sm small" LeaveCommunity="Yes" id="LeftCommunity" hash="{{ comm.communityHash }}">
+							<i class="fas fa-sign-out-alt small"></i> 
+								Leave
+							</button>
+						{% endif %}
+					{% endfor %}
 					<button type="button" class="btn btn-primary btn-sm small" JoinCommunity="Yes" id="JoinCommunity" hash="{{ comm.communityHash }}">
-						<i class="fas fa-sign-in-alt small"></i> 
+					<i class="fas fa-sign-in-alt small"></i> 
 						Join
 					</button>
+					
 					<button type="button" id = "deleteCommunity" hash="{{ comm.communityHash  }}" class="btn btn-sm btn-outline-danger small">
 						<i class="fa fa-trash" aria-hidden="true"></i>
 					</button>

@@ -95,7 +95,6 @@
 		   {% for items in posts.comments %}
 		   <tr hash="{{items.commentHash}}">
 			  {% if items.postCommentCreator.userPhoto  %}
-					<img src="{{ UserInfo.userPhoto }}" class="img-thumbnail">
 					<td><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></td>
 			  {% else %}
 					<td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></td>
