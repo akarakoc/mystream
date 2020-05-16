@@ -114,8 +114,12 @@
 					<b><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ activity.detail.actor.name }}">
 					{% if activity.detail.type == "login"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has logged in to the server&nbsp;
+					{% elif activity.detail.type == "logged out"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has logged out from the server&nbsp;
 					{% elif activity.detail.type == "joined"%}
-						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}} 
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}}
+					{% elif activity.detail.type == "left"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} from <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}} 						
 					{% elif activity.detail.type == "created" and activity.detail.object.type == "Community"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}} 
 					{% elif activity.detail.type == "edited" and activity.detail.object.type == "Community"%}
@@ -136,6 +140,8 @@
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "subscribed" and activity.detail.object.type == "Posttype"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "unsubscribed" and activity.detail.object.type == "Posttype"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} from <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}	
  					{% elif activity.detail.type == "created" and activity.detail.object.type == "Post"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new <b>{{ activity.detail.object.posttype }} type </b><a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ activity.detail.object.hash }}">post</a> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Post"%}

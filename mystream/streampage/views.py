@@ -298,9 +298,14 @@ def JoinCommunity_view(request):
     }
     ActivityStreams.objects.create(detail = description)
 
-    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+    return render(None, 'tagSearch.html', {'form': "You joined to Community Successfully!"})
 	
-def LeftCommunity_view(request):
+def LeaveCommunity_view(request):
+    user = request.user
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    Comm = Communities.objects.get(communityHash=request.POST.get("community_Hash"))
+    Comm.communityMembers.remove(userModel)
+    Comm.save()
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -308,16 +313,18 @@ def LeftCommunity_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
-            "type": "Community"
-            #"name": Comm.name,
+            "type": "Community",
+            "name": Comm.name,
+            "hash": Comm.communityHash
         }
     }
     ActivityStreams.objects.create(detail = description)
-    return render(request, 'tagSearch.html', {'form': form})
+    return render(None, 'tagSearch.html', {'form': "You left from Community successfully!"})
 
 def CheckMembership_view(request):
     user = request.user
@@ -916,7 +923,38 @@ def subscribePosttype_view(request):
         }
     }
     ActivityStreams.objects.create(detail = description)
-    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+    return render(None, 'tagSearch.html', {'form': "You Subscribed to the Community Successfully!"})
+
+def unsubscribePosttype_view(request):
+    user = request.user
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
+    Posttype.subscribers.remove(userModel)
+    Posttype.save()
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "unsubscribed",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+        },
+        "object": {
+            "id": "",
+            "type": "Posttype",
+            "name": Posttype.name,
+        },
+        "target": {
+            "id": "",
+            "type": "Community",
+            "name": Posttype.relatedCommunity.name,
+            "hash": Posttype.relatedCommunity.communityHash,
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
+    return render(None, 'tagSearch.html', {'form': "You Unsubscribed from the Community Successfully!"})
 
 def reportPostModal_view(request):
     form = ReportPost()
@@ -1248,7 +1286,6 @@ def login_view(request):
         password = form.cleaned_data.get("password")
         user = authenticate(username = username, password = password)
         login(request, user)
-
         activityStream = ActivityStreams()
         description = {
             "@context": "https://www.w3.org/ns/activitystreams",
@@ -1256,10 +1293,10 @@ def login_view(request):
             "published": str(datetime.now()),
             "actor": {
                 "id": "",
-                "name": communityUsers.objects.get(nickName=request.user).nickName
+                "name": communityUsers.objects.get(nickName=request.user).nickName,
+                "photo": communityUsers.objects.get(nickName=request.user).userPhoto
             }
         }
-
         ActivityStreams.objects.create(detail = description)
         return redirect("/streampage")
     return render(request, "login.html", {
@@ -1299,7 +1336,19 @@ def register_view(request):
     })
  
 def logout_view(request):
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "logged out",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+        }
+    }
     logout(request)
+    ActivityStreams.objects.create(detail = description)
     return HttpResponseRedirect("/streampage/login")
 	
 def profilePage(request):

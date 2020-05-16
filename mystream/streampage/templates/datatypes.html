@@ -66,6 +66,14 @@
 						<i class="fas fa-exclamation-triangle small" aria-hidden="true"></i> 
 						Report
 				</button>
+				{% for members in posts.posttype.0.relatedDatatype.subscribers.all %}
+					{% if user.get_username == members.nickName%}
+						<button type="button" class="btn btn-danger btn-sm small" UnsubscribePost="Yes" id="UnsubscribePost" hash="{{ posts.postList.0.entryHash }}">
+						<i class="fas fa-undo small" aria-hidden="true"></i> 
+						Unsubscribe
+						</button>
+					{% endif %}
+				{% endfor %}
 				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ posts.postList.0.entryHash }}">
 						<i class="fas fa-stream small" aria-hidden="true"></i> 
 						Subscribe
