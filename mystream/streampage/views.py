@@ -1565,13 +1565,15 @@ def UserPage_view(request):
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
+        activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(Username))
         if str(request.user) == str(Username):
             return render(request, "profile.html", {
 				"Communities" : Community_List,
 				"Datatypes" : Datatype_List,
 				"Posts" : Post_List,
 				"Joined" : joined_Communities,
-				"UserInfo" : CUser
+				"UserInfo" : CUser,
+				"activities": activityDetailList
 			})
         else:
             return render(request, "user.html", {
@@ -1579,7 +1581,8 @@ def UserPage_view(request):
 				"Datatypes" : Datatype_List,
 				"Posts" : Post_List,
 				"Joined" : joined_Communities,
-				"UserInfo" : CUser
+				"UserInfo" : CUser,
+				"activities": activityDetailList
 			})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1617,3 +1620,35 @@ def FollowUser_view(request):
     }
     ActivityStreams.objects.create(detail = description)
     return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+
+
+def communityPageSearch_view(request):
+    if request.user.is_authenticated:
+        if request.GET.get('keyword'):
+            if Communities.objects.all():
+                searchString = request.GET.get('keyword')
+                Community_List = Communities.objects.filter(description__contains=searchString).order_by('-communityCreationDate') | Communities.objects.filter(name__contains=searchString).order_by('-communityCreationDate')
+                Cuser = request.user
+                UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                User_communities = UserList.members.all()
+                paginator = Paginator(Community_List, 3)
+                page = request.GET.get('page')
+                community_resp = paginator.get_page(page)
+                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities})
+            else:
+                return render(request, 'community.html', {})
+        else:
+            if Communities.objects.all():
+                Community_List = Communities.objects.all().order_by('-communityCreationDate')
+                Cuser = request.user
+                UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                User_communities = UserList.members.all()
+                paginator = Paginator(Community_List, 3)
+                page = request.GET.get('page')
+                community_resp = paginator.get_page(page)
+                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities})
+            else:
+                return render(request, 'community.html', {})
+		
+    else:
+        return HttpResponseRedirect("/streampage/login")

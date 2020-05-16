@@ -45,66 +45,48 @@
 			</div>
 		</div>
 	</div>
-	<div class="btn-group" role="group" aria-label="Basic example">
-		<button type="button" class="btn btn-primary">Owned Communities</button>
-		<button type="button" class="btn btn-primary">Following Communities</button>
-		<button type="button" class="btn btn-primary">Posts</button>
-		<button type="button" class="btn btn-primary">Activities</button>
-		<button type="button" class="btn btn-primary">Followers</button>
-		<button type="button" class="btn btn-primary">Following</button>
-		<button type="button" class="btn btn-primary">Alerts</button>
+</div>
+	<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#Activities" role="tab">Activities</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#OwnedCommunities" role="tab">Owned Communities</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#FollowingCommunities" role="tab">Following Communities</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#Followers" role="tab">Followers</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#Following" role="tab">Following</a>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div class="tab-pane" id="OwnedCommunities" role="tabpanel">
+<!-- Card Body -->
+	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
+				<table class="table">
+					{% for c in Communities %}
+					<tr>
+						<td>{{c}}<br><td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
 	</div>
-  </div><br><br>
-	<div class="row">
-		
-		<div class="col-sm-3">
-			<div class="row">
+</div>
+<div class="tab-pane" id="FollowingCommunities" role="tabpanel">
+	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
 			<table class="table">
-				<tr>
-					<th>Owned Communities</th>
-				</tr>
-				{% for c in Communities %}
-				<tr>
-					<td>{{c}}<br><td>
-				</tr>
-				{% endfor %}
-			</table>
-			</div>
-		</div> 
-		<div class="col-sm-3">
-			<div class="row">
-			<table class="table">
-				<tr>
-					<th>Owned Datatypes</th>
-				</tr>
-				{% for d in Datatypes %}
-				<tr>					
-					<td>{{d}}<br></td>
-				</tr>
-				{% endfor %}
-			</table>
-			</div>
-		</div>
-		<div class="col-sm-3">
-			<div class="row">
-			<table class="table">
-				<tr>
-					<th>Owned Posts</th>
-				</tr>
-				{% for p in Posts %}
-				<tr>
-					<td>{{p}}<td></br>
-				</tr>
-				{% endfor %}
-			</table>
-			</div>
-		</div>
-		<div class="col-sm-3">
-			<div class="row">
-			<table class="table">
-				<tr>
-					<th>Joined Communities</th>
-				</tr>
 				{% for j in Joined %}
 				<tr>
 					<td>{{j}}<td></br>
@@ -113,5 +95,94 @@
 			</table>
 			</div>
 		</div>
+	</div>
+</div>
+  <div class="tab-pane active" id="Activities" role="tabpanel">
+   {% for activity in activities %}
+	<div class="card shadow mb-4 col-md-12">
+			<!-- Card Body -->
+        <div class="card-body">
+		  <div class="d-flex flex-row align-items-center justify-content-between">
+			<div class="modal-body row">
+				<div class="col-md-9 small">
+					{% if activity.detail.actor.photo %}
+						<a href="http://3.134.79.169:8000/streampage/UserPage?user={{ activity.detail.actor.name }}"><img class="img-profile rounded-circle" src="{{activity.detail.actor.photo}}"style="width:30px;height:30px;"></a>
+					{% else %}
+						<a href="http://3.134.79.169:8000/streampage/UserPage?user={{ activity.detail.actor.name }}">
+						<img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:30px;height:30px;"></a>
+					{% endif %}
+					<b><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ activity.detail.actor.name }}">
+					{% if activity.detail.type == "login"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has logged in to the server&nbsp;
+					{% elif activity.detail.type == "joined"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}} 
+					{% elif activity.detail.type == "created" and activity.detail.object.type == "Community"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}} 
+					{% elif activity.detail.type == "edited" and activity.detail.object.type == "Community"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.object.hash}}">{{activity.detail.object.name}}</a> {{activity.detail.object.type}} 
+					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Community"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <b>{{activity.detail.object.name}}</b> {{activity.detail.object.type}} 
+ 					{% elif activity.detail.type == "created" and activity.detail.object.type == "Posttype"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <b>{{ activity.detail.object.name }}</b> posttype at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "edited" and activity.detail.object.type == "Posttype"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <b>{{ activity.detail.object.name }}</b> posttype at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Posttype"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <b>{{ activity.detail.object.name }}</b> posttype description at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "added" and activity.detail.object.type == "PosttypeField"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "updated" and activity.detail.object.type == "PosttypeField"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "PosttypeField"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "subscribed" and activity.detail.object.type == "Posttype"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "created" and activity.detail.object.type == "Post"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new <b>{{ activity.detail.object.posttype }} type </b><a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ activity.detail.object.hash }}">post</a> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Post"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a <b>{{ activity.detail.object.posttype }} type </b> post from <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+ 					{% elif activity.detail.type == "commented" and activity.detail.object.type == "Comment"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} on the <b>{{ activity.detail.object.posttype }} type </b><a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ activity.detail.object.hash }}">post</a> on <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>"{{activity.detail.object.name}}"</i>
+ 					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Comment"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a comment from the <b>{{ activity.detail.object.posttype }} type </b><a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ activity.detail.object.hash }}">post</a> on <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>"{{activity.detail.object.name}}"</i>
+ 					{% elif activity.detail.type == "uploaded" and activity.detail.object.type == "ProfilePhoto"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new profile photo.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{ activity.detail.object.name }}" class="img-thumbnail"><br>
+ 					{% elif activity.detail.type == "updated" and activity.detail.object.type == "ProfileInformation"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} the profile information.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><b>mail: </b>{{activity.detail.object.email}}</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><b>bio: </b>"{{activity.detail.object.bio}}"</i>
+					{% endif %}
+				</div>
+				<div class="col-md-3 small">
+					{{ activity.detail.published }}
+				</div>
+			</div>
+		  </div>
+		</div>
     </div>
+    {% endfor %}
+  </div>
+  <div class="tab-pane" id="Followers" role="tabpanel">pane</div>
+  <div class="tab-pane" id="Following" role="tabpanel">pane</div>
+</div><br><br>
+<!-- Community Edit Modal -->
+	<div class="modal fade" id="UserEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal small" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<b><h8 class="modal-title" id="UserEditModalTitle"></h8></b>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" action="" id="editUser" enctype="multipart/form-data">
+					<div id="userEditModalBody" class="modal-body">
+						{% csrf_token %}
+						{{form.as_p }}		
+					</div>
+				</form>
+				<div class="modal-footer small">
+					<button type="button" class="btn btn-secondary small" data-dismiss="modal">Close</button>
+					<button type="click" id="editUserButton" class="btn btn-primary small">Edit</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
