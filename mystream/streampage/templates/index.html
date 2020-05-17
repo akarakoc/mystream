@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="row">
-	{% for activity in activities %}
+	<h2><b>MYSTREAM</b></h2><br><br><br>
+	{% for activity in index_resp %}
 	<div class="card shadow mb-4 col-md-12">
 		<!-- Card Body -->
         <div class="card-body">
@@ -72,5 +72,22 @@
 		</div>
     </div>
     {% endfor %}
+</div>
+<div class="pagination small">
+    <span class="step-links">
+        {% if index_resp.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ index.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ index_resp.number }} of {{ index_resp.paginator.num_pages }}.
+        </span>
+
+        {% if index_resp.has_next %}
+            <a href="?page={{ index_resp.next_page_number }}">next</a>
+            <a href="?page={{ index_resp.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
 </div>
 {% endblock %}
