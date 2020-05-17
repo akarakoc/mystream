@@ -1380,6 +1380,10 @@ def profilePage(request):
         joined_Communities = CUser.members.all()
         activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(username))
         subscriptionList = Datatypes.objects.filter(subscribers = CUser)
+        followingList = []
+        if len(UserCircle.objects.filter(circleOwner=CUser)) > 0:
+            for i in UserCircle.objects.get(circleOwner=CUser).circleUsers.all():
+                followingList.append(i.nickName)
         followerList = []
         for i in communityUsers.objects.get(nickName=username).Followers.all():
             followerList.append(i.circleOwner.nickName)
@@ -1392,6 +1396,7 @@ def profilePage(request):
 			"ReportList": reportList,
 			"activities":activityDetailList,
 			"followers" : followerList,
+			"following" : followingList,
 			"subscriptionList": subscriptionList,
 			"userPhoto":userphoto
 	})
@@ -1640,6 +1645,10 @@ def UserPage_view(request):
         joined_Communities = CUser.members.all()
         activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(Username))
         subscriptionList = Datatypes.objects.filter(subscribers = CUser)
+        followingList = []
+        if len(UserCircle.objects.filter(circleOwner=CUser)) > 0:
+            for i in UserCircle.objects.get(circleOwner=CUser).circleUsers.all():
+                followingList.append(i.nickName)
         followerList = []
         for i in communityUsers.objects.get(nickName=Username).Followers.all():
             followerList.append(i.circleOwner.nickName)
@@ -1652,6 +1661,7 @@ def UserPage_view(request):
 				"UserInfo" : CUser,
 				"activities": activityDetailList,
 				"followers" : followerList,
+				"following" : followingList,
 				"subscriptionList": subscriptionList,
 				"userPhoto": userphoto
 			})
@@ -1664,6 +1674,7 @@ def UserPage_view(request):
 				"UserInfo" : CUser,
 				"activities": activityDetailList,
 				"followers" : followerList,
+				"following" : followingList,
 				"subscriptionList": subscriptionList,
 				"userPhoto": userphoto
 			})
