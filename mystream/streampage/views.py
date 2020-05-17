@@ -1378,7 +1378,7 @@ def profilePage(request):
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
-        activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(username))
+        activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(username)).order_by('-id')
         subscriptionList = Datatypes.objects.filter(subscribers = CUser)
         followingList = []
         if len(UserCircle.objects.filter(circleOwner=CUser)) > 0:
@@ -1643,7 +1643,7 @@ def UserPage_view(request):
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
-        activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(Username))
+        activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(Username)).order_by('-id')
         subscriptionList = Datatypes.objects.filter(subscribers = CUser)
         followingList = []
         if len(UserCircle.objects.filter(circleOwner=CUser)) > 0:
