@@ -998,7 +998,7 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 
 	
 //SUBSCRIBE POSTTYPE
-	$( "#SubscribePost" ).click(function() {
+	$(document).on ("click", "#SubscribePost", function (event) {
 		var Phash = $(this).attr('hash');
 		var data = new FormData();
 		data.append('post_Hash', Phash);
@@ -1018,7 +1018,7 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 	});
 	
 	//UNSUBSCRIBE POSTTYPE
-	$( "#UnsubscribePost" ).click(function() {
+	$(document).on ("click", "#UnsubscribePost", function (event) {
 		var Phash = $(this).attr('hash');
 		var data = new FormData();
 		data.append('post_Hash', Phash);
