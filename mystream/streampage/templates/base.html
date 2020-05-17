@@ -26,29 +26,9 @@
 
 <script>
 
-//Annotation
-/*
-   document.addEventListener("selectionchange", function() {
-     var selection = window.getSelection();
-       var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
-       var json = JSON.stringify(ab.result, false, '  '); // exports serialized version to JSON-LD
-       var output = document.getElementById('output');
-       output.value = json;
-	   //console.log(json);
-       //var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
-       //ab2.result.target.toSelection();
-     
-   });
-*/  
-/*
-var ab = new AnnotationBuilder().highlight(); //takes current user selection and builds an Annotation
-var json = ab.toJSON(); // exports serialized version to JSON-LD 
-console.log(json); //dumps serialized version to developer console
-var ab2 = new AnnotationBuilder().fromJSON(json); //revives serialized version 
-ab2.result.target.toSelection(); //highlights the original selection 
-*/
 
-// Ajax GET data engine NON JSON //
+
+
 $.extend({
     zResponse: function(url, data) {
         var theResponse = null;
@@ -1230,7 +1210,7 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		photoDir = $('#profilePhoto').attr('redundant');
 		$('#profilePhoto').attr('src',photoDir);
 	}
-	
+
 });
 
 
