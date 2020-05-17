@@ -148,7 +148,7 @@
  					{% elif activity.detail.type == "subscribed" and activity.detail.object.type == "Posttype"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "unsubscribed" and activity.detail.object.type == "Posttype"%}
-						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} from <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}	
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} from <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
 					{% elif activity.detail.type == "followed" and activity.detail.object.type == "Username"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;is following user <a href="http://3.134.79.169:8000/streampage/UserPage/?user={{ activity.detail.object.name}}">{{activity.detail.object.name}}</a> 
 					{% elif activity.detail.type == "unfollowed" and activity.detail.object.type == "Username"%}
