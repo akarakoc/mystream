@@ -1469,7 +1469,7 @@ def ReturnFreeSearchFields_view(request):
 def ReturnEntrySearchResults_view(request):
     CommunityHash = request.POST.get('CommunityHash')
     Community_List = Communities.objects.filter(communityHash=CommunityHash)
-    User = communityUsers.objects.filter(nickName=request.user)
+    User = communityUsers.objects.filter(nickName=request.user)[0]
     userphoto = User.userPhoto
     currentCommunity = Community_List[0]
     postEntries={}
