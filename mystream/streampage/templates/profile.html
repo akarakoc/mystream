@@ -73,6 +73,9 @@
     <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#Followers" role="tab">Followers</a>
   </li>
+    <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#Following" role="tab">Following</a>
+  </li>
 </ul>
 
 <!-- Tab panes -->
@@ -247,6 +250,20 @@
 		</div>
 	</div>
   </div>
+    <div class="tab-pane" id="Following" role="tabpanel">
+	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
+				<table class="table">
+					{%for user in following%}
+						<tr><td><a href="http://3.134.79.169:8000/streampage/UserPage/?user={{ user }}">{{ user }}</td></tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+  </div>
+</div>
 </div>
 </div><br><br>
 <!-- Community Edit Modal -->
