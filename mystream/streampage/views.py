@@ -29,6 +29,7 @@ import hashlib
 from datetime import datetime
 from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts,UserCircle
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q
 
 
 
@@ -74,9 +75,30 @@ def index(request):
     if request.user.is_authenticated:
         user = request.user    
         userModel = communityUsers.objects.filter(nickName=user)[0]
+        userphoto = userModel.userPhoto
         PosttypeList = Datatypes.objects.filter(subscribers=userModel)
-        activityDetailList = ActivityStreams.objects.filter()
-        return render(request, 'index.html', {'activities': activityDetailList})
+        followingList = []
+        subscriptionList  = []
+        for i in PosttypeList:
+            subscriptionList.append(i.name)
+        if len(UserCircle.objects.filter(circleOwner=userModel)) > 0:
+            for i in UserCircle.objects.get(circleOwner=userModel).circleUsers.all():
+                followingList.append(i.nickName)
+            queriesUser = [Q(detail__actor__name=following) for following in followingList]
+            queries = queriesUser + [Q(detail__object__name=posttypename) for posttypename in subscriptionList]
+        else:
+            queries = [Q(detail__object__name=posttypename) for posttypename in subscriptionList]
+        if len(queries) > 0:
+            query = queries.pop()
+            for item in queries:
+                query |= item
+            activityDetailList = ActivityStreams.objects.filter(query).order_by('-id')
+            paginator = Paginator(activityDetailList, 10)
+            page = request.GET.get('page')
+            index_resp = paginator.get_page(page)
+            return render(request, 'index.html', {'activities': activityDetailList, 'index_resp': index_resp, 'userPhoto':userphoto})
+        else:
+            return render(request, 'index.html', {})
     else:
         return HttpResponseRedirect("/streampage/login")
 
@@ -106,7 +128,7 @@ def PosttypePageBrowse(request):
             postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes[0])[0]
             currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
             currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
-            currentObject['comments']=postInfo.postcomments_set.all()
+            currentObject['comments']=postInfo.postcomments_set.all().order_by('-id')
             postInstance.append(currentObject)
         postEntries['postInstances']=postInstance
         print(postEntries)
@@ -131,7 +153,7 @@ def showPostDetailsBrowse_view(request):
         postInfo = PostsMetaHash.objects.filter(postMetaHash=EntryHash)[0]
         currentObject['postList']=Posts.objects.filter(entryHash=EntryHash)
         currentObject['posttype']=Posts.objects.filter(entryHash=EntryHash)[0].relatedDatatypes.datatypefields_set.all()
-        currentObject['comments']=postInfo.postcomments_set.all()
+        currentObject['comments']=postInfo.postcomments_set.all().order_by('-id')
         postInstance.append(currentObject)
         postEntries['postInstances']=postInstance
         comment=textComment()
@@ -145,11 +167,12 @@ def communityPage(request):
             Community_List = Communities.objects.all().order_by('-communityCreationDate')
             Cuser = request.user
             UserList = communityUsers.objects.filter(nickName=Cuser)[0]
-            User_communities = UserList.members.all()
+            userphoto = UserList.userPhoto
+            User_communities = UserList.members.all().order_by('-id')
             paginator = Paginator(Community_List, 3)
             page = request.GET.get('page')
             community_resp = paginator.get_page(page)
-            return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities})
+            return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities, 'userPhoto':userphoto})
         else:
             return render(request, 'community.html', {})
     else:
@@ -271,7 +294,6 @@ def EditCommunity_view(request):
         return render(None, 'tagSearch.html', {'form' : "Community cannot be Edited Successfully!"})
 
 
-	
 def JoinCommunity_view(request):
     user = request.user
     userModel = communityUsers.objects.filter(nickName=user)[0]
@@ -414,6 +436,8 @@ def PosttypePage(request):
     if request.user.is_authenticated:
         CommunityHash = request.GET.get('showDataTypes')
         Community_List = Communities.objects.filter(communityHash=CommunityHash)
+        User = communityUsers.objects.filter(nickName=request.user)[0]
+        userphoto = User.userPhoto
         currentCommunity = Community_List[0]
         postEntries={}
         c = connection.cursor()
@@ -424,9 +448,9 @@ def PosttypePage(request):
         for hashes in posts:
             currentObject={}
             postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes[0])[0]
-            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0])
-            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all()
-            currentObject['comments']=postInfo.postcomments_set.all()
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0]).order_by('-id')
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all().order_by('-id')
+            currentObject['comments']=postInfo.postcomments_set.all().order_by('-id')
             postInstance.append(currentObject)
         postEntries['postInstances']=postInstance
         print(postEntries)
@@ -434,13 +458,15 @@ def PosttypePage(request):
         page = request.GET.get('page')
         post_resp = paginator.get_page(page)
         comment=textComment()
-        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0], 'userPhoto':userphoto})
     else:
         return HttpResponseRedirect("/streampage/login")
 
 def showPostDetails_view(request):
     if request.user.is_authenticated:
         EntryHash = request.GET.get('postHash')
+        User = communityUsers.objects.filter(nickName=request.user)[0]
+        userphoto = User.userPhoto
         queryPost = Posts.objects.filter(entryHash=EntryHash)
         currentPost = queryPost[0]
         relatedCommunity = currentPost.relatedCommunityforPost
@@ -451,11 +477,11 @@ def showPostDetails_view(request):
         postInfo = PostsMetaHash.objects.filter(postMetaHash=EntryHash)[0]
         currentObject['postList']=Posts.objects.filter(entryHash=EntryHash)
         currentObject['posttype']=Posts.objects.filter(entryHash=EntryHash)[0].relatedDatatypes.datatypefields_set.all()
-        currentObject['comments']=postInfo.postcomments_set.all()
+        currentObject['comments']=postInfo.postcomments_set.all().order_by('-id')
         postInstance.append(currentObject)
         postEntries['postInstances']=postInstance
         comment=textComment()
-        return render(request, 'postDetails.html', {'postEntries':postEntries, 'comment': comment, 'community':relatedCommunity, 'posttype': relatedPosttype })
+        return render(request, 'postDetails.html', {'postEntries':postEntries, 'comment': comment, 'community':relatedCommunity, 'posttype': relatedPosttype, 'userPhoto':userphoto })
     else:
         return HttpResponseRedirect("/streampage/login")
     
@@ -531,7 +557,7 @@ def CreatePosttype_view(request):
     }
     ActivityStreams.objects.create(detail = description)
     return JsonResponse({'form' : "Posttype is created Successfully!",'communityHash' : communityHash, 'posttypeHash':DtHash}) 
-	
+
 def EditPosttypeMeta_view(request):
     dt_hash = request.POST.get("Posttype_Hash")
     dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
@@ -1209,7 +1235,6 @@ def CreatePostComment_view(request):
     commentHash = hashlib.sha256(salt.encode() + request.POST.get("Comment").encode()).hexdigest() + salt
     commentTime = datetime.now()
     test = Posts.objects.filter(entryHash = postHash)[0]
-    print(test)
     entryComment = PostComments()
     entryComment.relatedCommunityforComment = Communities.objects.get(communityHash=CommunityHash)
     entryComment.relatedMeta = PostsMetaHash.objects.get(postMetaHash = postHash)
@@ -1317,18 +1342,6 @@ def register_view(request):
         comUsers.save()
         new_user = authenticate(username = user.username, password = password)
         login(request, new_user)
-
-        activityStream = ActivityStreams()
-        description = {
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "type": "register",
-            "published": str(datetime.now()),
-            "actor": {
-                "id": "",
-                "name": communityUsers.objects.get(nickName=comUsers.nickName).nickName
-            }
-        }
-        ActivityStreams.objects.create(detail = description)
         return redirect("/streampage/login")
     return render(request, "login.html", {
 	    "title" : "Register",
@@ -1355,6 +1368,7 @@ def profilePage(request):
     if request.user.is_authenticated:
         username=request.user
         CUser = communityUsers.objects.filter(nickName=username)[0]
+        userphoto = CUser.userPhoto
         Community_List = CUser.creator.all()
         reportList = []
         for comm in Community_List:
@@ -1365,6 +1379,10 @@ def profilePage(request):
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
         activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(username))
+        subscriptionList = Datatypes.objects.filter(subscribers = CUser)
+        followerList = []
+        for i in communityUsers.objects.get(nickName=username).Followers.all():
+            followerList.append(i.circleOwner.nickName)
         return render(request, "profile.html", {
 			"Communities" : Community_List,
 			"Datatypes" : Datatype_List,
@@ -1372,7 +1390,10 @@ def profilePage(request):
 			"Joined" : joined_Communities,
 			"UserInfo" : CUser,
 			"ReportList": reportList,
-			"activities":activityDetailList
+			"activities":activityDetailList,
+			"followers" : followerList,
+			"subscriptionList": subscriptionList,
+			"userPhoto":userphoto
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1448,6 +1469,8 @@ def ReturnFreeSearchFields_view(request):
 def ReturnEntrySearchResults_view(request):
     CommunityHash = request.POST.get('CommunityHash')
     Community_List = Communities.objects.filter(communityHash=CommunityHash)
+    User = communityUsers.objects.filter(nickName=request.user)
+    userphoto = User.userPhoto
     currentCommunity = Community_List[0]
     postEntries={}
     Dtfields = currentCommunity.datatypefields_set.all()
@@ -1512,7 +1535,7 @@ def ReturnEntrySearchResults_view(request):
         page = request.GET.get('page')
         post_resp = paginator.get_page(page) 
         comment=textComment()
-        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0]})
+        return render(request, 'datatypes.html', {'postEntries':postEntries, 'comment': comment, 'post_resp': post_resp, 'community_Hash':CommunityHash, 'community':Community_List[0], 'userPhoto': userphoto})
     else:
         return HttpResponseRedirect("/streampage/login")
 
@@ -1610,11 +1633,16 @@ def UserPage_view(request):
     if request.user.is_authenticated:
         Username = request.GET.get('user')
         CUser = communityUsers.objects.filter(nickName=Username)[0]
+        userphoto = communityUsers.objects.filter(nickName=request.user)[0].userPhoto
         Community_List = CUser.creator.all()
         Datatype_List = CUser.datatypecreator.all()
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
         activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(Username))
+        subscriptionList = Datatypes.objects.filter(subscribers = CUser)
+        followerList = []
+        for i in communityUsers.objects.get(nickName=Username).Followers.all():
+            followerList.append(i.circleOwner.nickName)
         if str(request.user) == str(Username):
             return render(request, "profile.html", {
 				"Communities" : Community_List,
@@ -1622,7 +1650,10 @@ def UserPage_view(request):
 				"Posts" : Post_List,
 				"Joined" : joined_Communities,
 				"UserInfo" : CUser,
-				"activities": activityDetailList
+				"activities": activityDetailList,
+				"followers" : followerList,
+				"subscriptionList": subscriptionList,
+				"userPhoto": userphoto
 			})
         else:
             return render(request, "user.html", {
@@ -1631,7 +1662,10 @@ def UserPage_view(request):
 				"Posts" : Post_List,
 				"Joined" : joined_Communities,
 				"UserInfo" : CUser,
-				"activities": activityDetailList
+				"activities": activityDetailList,
+				"followers" : followerList,
+				"subscriptionList": subscriptionList,
+				"userPhoto": userphoto
 			})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1659,17 +1693,44 @@ def FollowUser_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
             "type": "Username",
-            "name": user,
+            "name": str(followingUser.nickName),
         }
     }
     ActivityStreams.objects.create(detail = description)
-    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+    return render(None, 'tagSearch.html', {'form': "You are following the user!"})
 
+def UnFollowUser_view(request):
+    user = request.user
+    Username = request.POST.get('user')
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    followingUser = communityUsers.objects.filter(nickName=Username)[0]
+    circUser = UserCircle.objects.get(circleOwner=userModel)
+    circUser.circleUsers.remove(followingUser)
+    circUser.save()
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "unfollowed",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+        },
+        "object": {
+            "id": "",
+            "type": "Username",
+            "name": str(followingUser.nickName),
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
+    return render(None, 'tagSearch.html', {'form': "You are unfollowing the user!"})
 
 def communityPageSearch_view(request):
     if request.user.is_authenticated:
@@ -1679,11 +1740,12 @@ def communityPageSearch_view(request):
                 Community_List = Communities.objects.filter(description__contains=searchString).order_by('-communityCreationDate') | Communities.objects.filter(name__contains=searchString).order_by('-communityCreationDate')
                 Cuser = request.user
                 UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                userphoto = UserList.userPhoto
                 User_communities = UserList.members.all()
                 paginator = Paginator(Community_List, 3)
                 page = request.GET.get('page')
                 community_resp = paginator.get_page(page)
-                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities})
+                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities, 'userPhoto': userphoto })
             else:
                 return render(request, 'community.html', {})
         else:
@@ -1691,11 +1753,12 @@ def communityPageSearch_view(request):
                 Community_List = Communities.objects.all().order_by('-communityCreationDate')
                 Cuser = request.user
                 UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                userphoto = UserList.userPhoto
                 User_communities = UserList.members.all()
                 paginator = Paginator(Community_List, 3)
                 page = request.GET.get('page')
                 community_resp = paginator.get_page(page)
-                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities})
+                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities, 'userPhoto': userphoto })
             else:
                 return render(request, 'community.html', {})
 		

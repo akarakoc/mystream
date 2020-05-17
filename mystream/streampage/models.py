@@ -137,8 +137,6 @@ class UserTags(models.Model):
 class UserCircle(models.Model):
     circleOwner = models.OneToOneField(communityUsers, on_delete=models.SET_NULL, null=True)
     circleUsers = models.ManyToManyField(communityUsers, related_name='Followers', help_text='Select Members')
-    def __str__(self):
-        return self.circleOwner
 
 		
 class ActivityStreams(models.Model):

@@ -58,5 +58,6 @@ path('', views.index, name='index'),
 	path('EditUser/', views.EditUser_view, name = "EditUser"),
 	path('UserPage/', views.UserPage_view, name = "UserPage"),
 	path('FollowUser/', views.FollowUser_view, name = "FollowUser"),
+	path('UnFollowUser/', views.UnFollowUser_view, name = "UnFollowUser"),
 	path('communityPageSearch/', views.communityPageSearch_view, name = "FollowUser"),
 ]
