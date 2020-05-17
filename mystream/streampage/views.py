@@ -441,15 +441,19 @@ def PosttypePage(request):
         currentCommunity = Community_List[0]
         postEntries={}
         c = connection.cursor()
-        postHashQuery='select "entryHash" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash"'
+        postHashQuery='select "entryHash", "postCreationDate" from streampage_posts where "relatedCommunityforPost_id" ='+str(currentCommunity.id)+' group by "entryHash","postCreationDate" order by "postCreationDate" desc '
         c.execute(postHashQuery)
         posts=c.fetchall()
+        hashList=[]
+        for tuples in posts:
+            hashList.append(tuples[0])
+        cleanPosts = list(dict.fromkeys(hashList))
         postInstance=[]
-        for hashes in posts:
+        for hashes in cleanPosts:
             currentObject={}
-            postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes[0])[0]
-            currentObject['postList']=Posts.objects.filter(entryHash=hashes[0]).order_by('-id')
-            currentObject['posttype']=Posts.objects.filter(entryHash=hashes[0])[0].relatedDatatypes.datatypefields_set.all().order_by('-id')
+            postInfo = PostsMetaHash.objects.filter(postMetaHash=hashes)[0]
+            currentObject['postList']=Posts.objects.filter(entryHash=hashes).order_by('-id')
+            currentObject['posttype']=Posts.objects.filter(entryHash=hashes)[0].relatedDatatypes.datatypefields_set.all().order_by('-id')
             currentObject['comments']=postInfo.postcomments_set.all().order_by('-id')
             postInstance.append(currentObject)
         postEntries['postInstances']=postInstance
