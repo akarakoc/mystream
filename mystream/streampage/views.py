@@ -29,6 +29,7 @@ import hashlib
 from datetime import datetime
 from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts,UserCircle
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q
 
 
 
@@ -75,8 +76,22 @@ def index(request):
         user = request.user    
         userModel = communityUsers.objects.filter(nickName=user)[0]
         PosttypeList = Datatypes.objects.filter(subscribers=userModel)
-        activityDetailList = ActivityStreams.objects.filter()
-        return render(request, 'index.html', {'activities': activityDetailList})
+        followingList = []
+        subscriptionList  = []
+        for i in PosttypeList:
+            subscriptionList.append(i.name)
+        for i in UserCircle.objects.get(circleOwner=userModel).circleUsers.all():
+            followingList.append(i.nickName)
+        queriesUser = [Q(detail__actor__name=following) for following in followingList]
+        queries = queriesUser + [Q(detail__object__name=posttypename) for posttypename in subscriptionList]
+        if len(queries) > 0:
+            query = queries.pop()
+            for item in queries:
+                query |= item
+            activityDetailList = ActivityStreams.objects.filter(query)
+            return render(request, 'index.html', {'activities': activityDetailList})
+        else:
+            return render(request, 'index.html', {})
     else:
         return HttpResponseRedirect("/streampage/login")
 
@@ -1317,18 +1332,6 @@ def register_view(request):
         comUsers.save()
         new_user = authenticate(username = user.username, password = password)
         login(request, new_user)
-
-        activityStream = ActivityStreams()
-        description = {
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "type": "register",
-            "published": str(datetime.now()),
-            "actor": {
-                "id": "",
-                "name": communityUsers.objects.get(nickName=comUsers.nickName).nickName
-            }
-        }
-        ActivityStreams.objects.create(detail = description)
         return redirect("/streampage/login")
     return render(request, "login.html", {
 	    "title" : "Register",
@@ -1365,6 +1368,10 @@ def profilePage(request):
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
         activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(username))
+        subscriptionList = Datatypes.objects.filter(subscribers = CUser)
+        followerList = []
+        for i in communityUsers.objects.get(nickName=username).Followers.all():
+            followerList.append(i.circleOwner.nickName)
         return render(request, "profile.html", {
 			"Communities" : Community_List,
 			"Datatypes" : Datatype_List,
@@ -1372,7 +1379,9 @@ def profilePage(request):
 			"Joined" : joined_Communities,
 			"UserInfo" : CUser,
 			"ReportList": reportList,
-			"activities":activityDetailList
+			"activities":activityDetailList,
+			"followers" : followerList,
+			"subscriptionList": subscriptionList
 	})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1615,6 +1624,10 @@ def UserPage_view(request):
         Post_List = CUser.postcreator.all()
         joined_Communities = CUser.members.all()
         activityDetailList = ActivityStreams.objects.filter(detail__actor__name = str(Username))
+        subscriptionList = Datatypes.objects.filter(subscribers = CUser)
+        followerList = []
+        for i in communityUsers.objects.get(nickName=Username).Followers.all():
+            followerList.append(i.circleOwner.nickName)
         if str(request.user) == str(Username):
             return render(request, "profile.html", {
 				"Communities" : Community_List,
@@ -1622,7 +1635,9 @@ def UserPage_view(request):
 				"Posts" : Post_List,
 				"Joined" : joined_Communities,
 				"UserInfo" : CUser,
-				"activities": activityDetailList
+				"activities": activityDetailList,
+				"followers" : followerList,
+				"subscriptionList": subscriptionList
 			})
         else:
             return render(request, "user.html", {
@@ -1631,7 +1646,9 @@ def UserPage_view(request):
 				"Posts" : Post_List,
 				"Joined" : joined_Communities,
 				"UserInfo" : CUser,
-				"activities": activityDetailList
+				"activities": activityDetailList,
+				"followers" : followerList,
+				"subscriptionList": subscriptionList
 			})
     else:
         return HttpResponseRedirect("/streampage/login")
@@ -1659,17 +1676,44 @@ def FollowUser_view(request):
         "published": str(datetime.now()),
         "actor": {
             "id": "",
-            "name": communityUsers.objects.get(nickName=request.user).nickName
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
         },
         "object": {
             "id": "",
             "type": "Username",
-            "name": user,
+            "name": str(followingUser.nickName),
         }
     }
     ActivityStreams.objects.create(detail = description)
-    return render(request, 'tagSearch.html', {'form': "You joined successfully!"})
+    return render(None, 'tagSearch.html', {'form': "You are following the user!"})
 
+def UnFollowUser_view(request):
+    user = request.user
+    Username = request.POST.get('user')
+    userModel = communityUsers.objects.filter(nickName=user)[0]
+    followingUser = communityUsers.objects.filter(nickName=Username)[0]
+    circUser = UserCircle.objects.get(circleOwner=userModel)
+    circUser.circleUsers.remove(followingUser)
+    circUser.save()
+    activityStream = ActivityStreams()
+    description = {
+        "@context": "https://www.w3.org/ns/activitystreams",
+        "type": "unfollowed",
+        "published": str(datetime.now()),
+        "actor": {
+            "id": "",
+            "name": communityUsers.objects.get(nickName=request.user).nickName,
+            "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+        },
+        "object": {
+            "id": "",
+            "type": "Username",
+            "name": str(followingUser.nickName),
+        }
+    }
+    ActivityStreams.objects.create(detail = description)
+    return render(None, 'tagSearch.html', {'form': "You are unfollowing the user!"})
 
 def communityPageSearch_view(request):
     if request.user.is_authenticated:

@@ -1192,7 +1192,27 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 			}		
 		});
 	});
-	
+
+//UNFOLLOW USER
+	$(document).on ("click", "#unfollowUser", function (event) {
+		event.preventDefault();
+		var uNAme = $(this).attr('userName');
+		var data = new FormData();
+		data.append('user', uNAme);
+		data.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/UnFollowUser/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: function(data, textStatus, jqXHR){
+				alert(data)
+				window.location.reload();
+			}		
+		});
+	});
 	$('button[LeaveCommunity="Yes"]').each(function() {
 		console.log("Yes");
 		myHash = $(this).attr('hash')
@@ -1204,6 +1224,11 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		myHash = $(this).attr('hash')
 		$('[hash='+myHash+'][SubscribePost="Yes"]').hide();
 	});
+	
+	if ($('#profilePhoto').attr('src') != '/static/uploads/profiles/default.jpg'){
+		//$('#profilePhoto').attr('src') = 
+	};
+	
 });
 
 
@@ -1230,9 +1255,9 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 					<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<span class="mr-2 d-none d-lg-inline text-white-600 small">{{user}}</span>
 						{% if User_communities.userPhoto  %}
-							<img class="img-profile rounded-circle" src="{{ User_communities.userPhoto }}">
+							<img id="profilePhoto" class="img-profile rounded-circle" src="{{ User_communities.userPhoto }}">
 						{% else %}
-							<img class="img-profile rounded-circle" src="{% static 'uploads/profiles/default.jpg' %}">
+							<img id="profilePhoto" class="img-profile rounded-circle" src="{% static 'uploads/profiles/default.jpg' %}">
 						{% endif %}
 					</a>
 					<!-- Dropdown - User Information -->

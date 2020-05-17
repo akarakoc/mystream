@@ -26,7 +26,11 @@
 					{% endif %}
 				</div>
 				<div id="followStatus">
-					<button type="button" id = "followUser" class="btn btn-sm btn-danger align-self-end p-2" style="width:100%" userName="{{ UserInfo.nickName }}"<i class="fa fa-users " style="font-size:16px" aria-hidden="true"> Follow </i><br>
+					{% if user.get_username in followers%}
+						<button type="button" id = "unfollowUser" class="btn btn-sm btn-danger" style="width:100%" userName="{{ UserInfo.nickName }}"><i class="fas fa-minus-circle" aria-hidden="true"></i>       Unfollow </button><br>
+					{% else %}
+						<button type="button" id = "followUser" class="btn btn-sm btn-primary " style="width:100%" userName="{{ UserInfo.nickName }}"><i class="fas fa-plus-circle"  aria-hidden="true"></i>   Follow</button><br>
+					{% endif %}
 				</div>
 			</div>
 			<div>
@@ -46,7 +50,7 @@
 		</div>
 	</div>
 </div>
-	<ul class="nav nav-tabs" role="tablist">
+	<ul class="nav nav-tabs small" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" data-toggle="tab" href="#Activities" role="tab">Activities</a>
   </li>
@@ -57,10 +61,10 @@
     <a class="nav-link" data-toggle="tab" href="#FollowingCommunities" role="tab">Following Communities</a>
   </li>
     <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#Followers" role="tab">Followers</a>
+    <a class="nav-link" data-toggle="tab" href="#SubscribedPosttypes" role="tab">Subscribed Posttypes</a>
   </li>
     <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#Following" role="tab">Following</a>
+    <a class="nav-link" data-toggle="tab" href="#Followers" role="tab">Followers</a>
   </li>
 </ul>
 
@@ -74,7 +78,7 @@
 				<table class="table">
 					{% for c in Communities %}
 					<tr>
-						<td>{{c}}<br><td>
+						<td><a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ c.communityHash }}"><b>{{c}}</b></a><br><td>
 					</tr>
 					{% endfor %}
 				</table>
@@ -89,7 +93,7 @@
 			<table class="table">
 				{% for j in Joined %}
 				<tr>
-					<td>{{j}}<td></br>
+					<td><a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ j.communityHash }}"><b>{{j}}</b></a><td></br>
 				</tr>
 				{% endfor %}
 			</table>
@@ -133,15 +137,19 @@
  					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Posttype"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} <b>{{ activity.detail.object.name }}</b> posttype description at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "added" and activity.detail.object.type == "PosttypeField"%}
-						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new posttype field  to <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "updated" and activity.detail.object.type == "PosttypeField"%}
-						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "PosttypeField"%}
-						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field  on <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a posttype field from <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "subscribed" and activity.detail.object.type == "Posttype"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} to <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "unsubscribed" and activity.detail.object.type == "Posttype"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} from <b>{{ activity.detail.object.name }} posttype</b> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}	
+					{% elif activity.detail.type == "followed" and activity.detail.object.type == "Username"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;is following user <a href="http://3.134.79.169:8000/streampage/UserPage/?user={{ activity.detail.object.name}}">{{activity.detail.object.name}}</a> 
+					{% elif activity.detail.type == "unfollowed" and activity.detail.object.type == "Username"%}
+						{{ activity.detail.actor.name }}</a></b>&nbsp;is unfollowing user <a href="http://3.134.79.169:8000/streampage/UserPage/?user={{ activity.detail.object.name}}">{{activity.detail.object.name}}</a>
  					{% elif activity.detail.type == "created" and activity.detail.object.type == "Post"%}
 						{{ activity.detail.actor.name }}</a></b>&nbsp;has {{activity.detail.type}} a new <b>{{ activity.detail.object.posttype }} type </b><a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ activity.detail.object.hash }}">post</a> at <a href="http://3.134.79.169:8000/streampage/sendPosttypePage/?showDataTypes={{ activity.detail.target.hash}}">{{activity.detail.target.name}}</a> {{activity.detail.target.type}}
  					{% elif activity.detail.type == "deleted" and activity.detail.object.type == "Post"%}
@@ -165,8 +173,32 @@
     </div>
     {% endfor %}
   </div>
-  <div class="tab-pane" id="Followers" role="tabpanel">pane</div>
-  <div class="tab-pane" id="Following" role="tabpanel">pane</div>
+<div class="tab-pane" id="SubscribedPosttypes" role="tabpanel">
+  	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
+				<table class="table">
+					{%for pty in subscriptionList%}
+						<tr><td><b>{{ pty }}</b></td></tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="tab-pane" id="Followers" role="tabpanel">
+	<div class="card mb-2">
+		<div class="card-body small">
+			<div class="d-flex flex-row align-items-center justify-content-between">
+				<table class="table">
+					{%for user in followers%}
+						<tr><td><a href="http://3.134.79.169:8000/streampage/UserPage/?user={{ user }}"><b>{{ user }}</b></td></tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
 </div><br><br>
 <!-- Community Edit Modal -->
 	<div class="modal fade" id="UserEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
