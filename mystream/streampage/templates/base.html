@@ -1206,7 +1206,7 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 	});
 	
 	$('#profilePhoto').attr('redundant','{{userPhoto}}')
-	if($('#profilePhoto').attr('redundant')){
+	if($('#profilePhoto').attr('redundant') != "None"){
 		photoDir = $('#profilePhoto').attr('redundant');
 		$('#profilePhoto').attr('src',photoDir);
 	}
