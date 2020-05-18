@@ -13,7 +13,7 @@ public interface TextAnnotationRepository extends MongoRepository<TextAnnotation
 
 	public List<TextAnnotation> findAll();
 
-	public List<TextAnnotation> findByTarget_Source(String source);
+	public List<TextAnnotation> findByTarget_SourceLike(String source);
 
 
 
