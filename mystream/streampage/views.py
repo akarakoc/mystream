@@ -38,7 +38,7 @@ def saveTagSearch_view(src):
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
-		"limit": "10",
+		"limit": "50",
         "language":"en",
 		"search": SEARCHPAGE
     }
@@ -50,7 +50,7 @@ def saveTagSearch_view(src):
     items = ""
     for tt in DATA:
         titles = titles + tt['label']+","
-        items = items + tt['id']+","		
+        items = items + tt['id']+","
     return {'TITLE' : titles, "ITEM" : items}
 
 def saveTag_view(returneditems):
@@ -60,7 +60,7 @@ def saveTag_view(returneditems):
     for iter in looping:
         if iter != '':
             resp=saveTagSearch_view(iter)
-            try:				
+            try:
                 titles = titles + resp["TITLE"]
                 items = items + resp["ITEM"]
             except:
@@ -401,7 +401,7 @@ def searchTag_view(request):
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
-		"limit": "10",
+		"limit": "50",
         "language":"en",
 		"search": SEARCHPAGE
     }
@@ -411,7 +411,8 @@ def searchTag_view(request):
     DATA = Res.json()['search']
     titles=""
     for tt in DATA:
-        titles+="#"+tt['label']
+        if tt['label'] not in titles:
+            titles+="#"+tt['label']
     return render(None, 'tagSearch.html', {'form' : titles})
 
 
