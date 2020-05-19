@@ -205,6 +205,8 @@ def CreateCommunity_view(request):
     else:
         comm.communityPrv = False
     comm.communityPhoto = image_path
+    comm.communityCountry = request.POST.get("Community_Country")
+    comm.communityLocation = request.POST.get("Community_Location")
     comm.communityTags = request.POST.get("Community_Tags")
     comm.communityCreationDate = datetime.now()
     comm.communityCreator = communityUsers.objects.get(nickName=request.user)
