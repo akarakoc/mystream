@@ -15,19 +15,43 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 .annoContainer {
     width: 425px;
     background-color: #ffd969;
-    position: fixed;
+    position: absolute;
     top: 0px;
     right: 0px;
+    overflow-x: auto;
+    height: 200px;
 }
-.slideButton {
+#slideButton {
+    z-index: 999;
     position: fixed;
     top: 0px;
-    right: 0px;
+    right: 1.1em;
+    height: 2em;
+    width: 2em;
 }
-.openHighlightButton, .closeHighlightButton{
+#openHighlightButton, #closeHighlightButton{
+    z-index: 999;
     position: fixed;
     top: 0px;
     right: 3.5em;
+    height: 2em;
+    width: 2em;
+}
+
+#createAnnotationButton {
+    position: fixed;
+    top: 0px;
+    right: 6em;
+    height: 2em;
+    width: 2em;
+}
+
+
+svg {
+    position:absolute;
+    top:5%; left:5%;
+    height:90%; width:90%;
+
 }
 
 .highlightedAnnotation{
@@ -40,6 +64,13 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 .annoContainer span { background-color: #f9bb00; border-color: #f9bb00;}
 .annoContainer input { border-color: #f9bb00;}
 .annoTitle label { margin:1%; font-weight: 500 !important;}
+.annoContainer .footer label { margin:1%; font-weight: 500 !important; text-align: center;}
 .annoContainer div label { margin:1%; font-weight: 200; }
 .annoContainer .annoDiv { padding: 2%;}
 .annoContainer .search { padding-right: 3%; padding-left: 3%; padding-top: 10%;}
+.pointedAnnotation {
+    z-index: 999;
+    position: absolute;
+}
+
+
