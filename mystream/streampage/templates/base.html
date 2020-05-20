@@ -66,6 +66,7 @@ $( document ).ready(function() {
 		}
 		$('#CommunityModal').modal('show');
 	});
+
 	
 //REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
 	var tagSearch = function() {
@@ -116,6 +117,32 @@ $( document ).ready(function() {
 		alert(data);
 		window.location.reload();
 	}
+
+
+	$(document).on ("change", "#id_Community_Country", function () {
+		console.log($('#id_Community_Country').innerHTML);
+		$.ajax({
+			url: "/streampage/populateProvince/",
+			data: {
+				'country' : $('#id_Community_Country').find(":selected").text()
+			},
+			type: "GET",
+			dataType: "json",
+			success: function(result){
+				var provinces = $('select[name="Community_Location"]');
+				console.log(provinces);
+				provinceData = "";
+				$('#id_community_location').empty();
+				for(var i = 0; i<result.provinceList.length; i++){
+					var dropdown = document.getElementById('id_community_location');
+					var option = document.createElement('option');
+					option.appendChild( document.createTextNode(result.provinceList[i]));
+					option.value = 'option value';
+					dropdown.appendChild(option);
+				}
+			}
+		});
+	})
 	
 //CHECK COMMUNITY MEMBERSHIP
 	$( '.classC' ).click(function() {

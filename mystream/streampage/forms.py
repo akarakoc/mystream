@@ -5,8 +5,6 @@ from streampage.models import Primitives, communityUsers, Communities, Datatypes
 import geonamescache
 from django_countries.fields import CountryField
 import json
-from countryinfo import CountryInfo
-
 
 class UsersLoginForm(forms.Form):
     username = forms.CharField()
@@ -88,25 +86,12 @@ class UsersRegisterForm(forms.ModelForm):
 
 
 class AddCommunity(forms.Form):
-    # gc = geonamescache.GeonamesCache()
-    # cities = gc.get_cities()
-    provinceList = []
-    provinceId = []
-
-    i = 1
-    for province in CountryInfo('Turkey').provinces():
-        provinceList.append((i , province))
-        i = i + 1
-
-    provinceTuple = tuple(provinceList)
-    print(provinceTuple)
-
     Community_Name = forms.CharField()
     Community_Description = forms.CharField(widget=forms.Textarea(attrs={'width': "50%", 'cols': "50", 'rows': "2", }))
     Community_Image = forms.ImageField()
     Private_Community = forms.BooleanField(initial=False, required=False)
     Community_Country = CountryField().formfield()
-    Community_Location = forms.ChoiceField(label='', choices=provinceTuple, widget=forms.Select(attrs={'class':'form-control'}))
+    Community_Location = forms.ChoiceField(label='', widget=forms.Select(attrs={'class':'form-control', 'name':'community_location',  'id':'id_community_location'}))
     Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width': "50%", 'cols': "50", 'rows': "2", }))
 
     def __init__(self, *args, **kwargs):

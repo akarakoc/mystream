@@ -30,8 +30,7 @@ from datetime import datetime
 from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts,UserCircle
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
-
-
+from countryinfo import CountryInfo
 
 def saveTagSearch_view(src):
     SEARCHPAGE = src	
@@ -182,7 +181,16 @@ def communityPage(request):
 def communityForm(request):
     form = AddCommunity()
     return render(request, 'modal.html', {'form': form})
-	
+
+def populateProvince(request):
+    country = request.GET.__getitem__("country")
+    provinceList = []
+
+    for province in CountryInfo(str(country)).provinces():
+        provinceList.append(province)
+
+    return JsonResponse({'provinceList': provinceList})
+
 def handle_uploaded_file(f):
     filepath = 'streampage/static/uploads/communities/'+f.name
     with open(filepath, 'wb+') as destination:
