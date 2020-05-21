@@ -189,6 +189,7 @@ def populateProvince(request):
     for province in CountryInfo(str(country)).provinces():
         provinceList.append(province)
 
+    print(provinceList)
     return JsonResponse({'provinceList': provinceList})
 
 def handle_uploaded_file(f):
@@ -405,9 +406,10 @@ def posttypeForm(request):
     form = AddPosttype()
     return render(request, 'modal.html', {'form': form})
 
+
 def searchTag_view(request):
     txtSRC = request.GET.get('search_text')
-    SEARCHPAGE = txtSRC	
+    SEARCHPAGE = txtSRC
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",

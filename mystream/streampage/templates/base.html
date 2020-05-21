@@ -118,9 +118,7 @@ $( document ).ready(function() {
 		window.location.reload();
 	}
 
-
 	$(document).on ("change", "#id_Community_Country", function () {
-		console.log($('#id_Community_Country').innerHTML);
 		$.ajax({
 			url: "/streampage/populateProvince/",
 			data: {
@@ -130,14 +128,12 @@ $( document ).ready(function() {
 			dataType: "json",
 			success: function(result){
 				var provinces = $('select[name="Community_Location"]');
-				console.log(provinces);
-				provinceData = "";
 				$('#id_community_location').empty();
 				for(var i = 0; i<result.provinceList.length; i++){
 					var dropdown = document.getElementById('id_community_location');
 					var option = document.createElement('option');
 					option.appendChild( document.createTextNode(result.provinceList[i]));
-					option.value = 'option value';
+					option.value = result.provinceList[i];
 					dropdown.appendChild(option);
 				}
 			}
@@ -260,6 +256,9 @@ $( document ).ready(function() {
 		if(!tagSelector){
 			$('#addCommunityTagDivision').append('<label for="communityTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="communityTag"></select><button type="click" id="addTagforEditCommunity" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
 		}
+		/*var dropdown = $('#id_Community_Country');
+		console.log(dropdown);
+		dropdown.addClass("form-control edit");*/
 		$('#CommunityEditModal').modal('show');
 	});
 	

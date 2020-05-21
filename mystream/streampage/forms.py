@@ -104,10 +104,14 @@ class AddCommunity(forms.Form):
         self.fields['Community_Description'].widget.attrs.update({
             'class': 'form-control small',
             "name": "Community Description"})
-        self.fields['Community_Country'].label = "Community_Country"
+        self.fields['Community_Country'].label = "Community Country"
         self.fields['Community_Country'].widget.attrs.update({
             'class': 'form-control small',
             "name": "Community Country"})
+        self.fields['Community_Location'].label = "Community Location"
+        self.fields['Community_Location'].widget.attrs.update({
+            'class': 'form-control small',
+            "name": "Community Location"})
         self.fields['Community_Tags'].widget.attrs.update({
             'class': 'form-control small',
             "name": "Community Tags"})
@@ -117,6 +121,7 @@ class AddCommunity(forms.Form):
         Community_Name = self.cleaned_data.get("Community Name")
         Community_Description = self.cleaned_data.get("Community Description")
         Community_Image = self.cleaned_data.get("Community Image")
+        Community_Country = self.cleaned_data.get("Community Country")
         Community_Location = self.cleaned_data.get("Community Location")
         Community_Tags = self.cleaned_data.get("Community Tags")
         return super(AddCommunity, self).clean(*args, **keyargs)
@@ -125,6 +130,8 @@ class AddCommunity(forms.Form):
 class EditCommunity(forms.Form):
     Community_Description = forms.CharField(widget=forms.Textarea(attrs={'width': "50%", 'cols': "50", 'rows': "2", }))
     Community_Image = forms.ImageField()
+    # Community_Country = CountryField().formfield()
+    # Community_Location = forms.ChoiceField(label='', widget=forms.Select(attrs={'class': 'form-control'}))
     Private_Community = forms.BooleanField(initial=False, required=False)
     Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width': "50%", 'cols': "50", 'rows': "2", }))
 
@@ -142,6 +149,8 @@ class EditCommunity(forms.Form):
     def clean(self, *args, **keyargs):
         Community_Description = self.cleaned_data.get("Community Description")
         Community_Image = self.cleaned_data.get("Community Image")
+        Community_Country = self.cleaned_data.get("Community Country")
+        Community_Location = self.cleaned_data.get("Community Location")
         Community_Tags = self.cleaned_data.get("Community Tags")
         return super(EditCommunity, self).clean(*args, **keyargs)
 
