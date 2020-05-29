@@ -30,15 +30,14 @@ from datetime import datetime
 from streampage.models import Primitives,communityUsers,Communities,Datatypes,DatatypeFields,PostsMetaHash,Posts,PostComments,CommunityTags,DatatTypeTags,PostTags,UserTags,ActivityStreams,ReportedPosts,UserCircle
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
-
-
+from countryinfo import CountryInfo
 
 def saveTagSearch_view(src):
     SEARCHPAGE = src	
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
-		"limit": "10",
+		"limit": "50",
         "language":"en",
 		"search": SEARCHPAGE
     }
@@ -50,7 +49,7 @@ def saveTagSearch_view(src):
     items = ""
     for tt in DATA:
         titles = titles + tt['label']+","
-        items = items + tt['id']+","		
+        items = items + tt['id']+","
     return {'TITLE' : titles, "ITEM" : items}
 
 def saveTag_view(returneditems):
@@ -60,7 +59,7 @@ def saveTag_view(returneditems):
     for iter in looping:
         if iter != '':
             resp=saveTagSearch_view(iter)
-            try:				
+            try:
                 titles = titles + resp["TITLE"]
                 items = items + resp["ITEM"]
             except:
@@ -182,7 +181,20 @@ def communityPage(request):
 def communityForm(request):
     form = AddCommunity()
     return render(request, 'modal.html', {'form': form})
-	
+
+def populateProvince(request):
+    country = request.GET.__getitem__("country")
+    provinceList = []
+
+    try:
+        if CountryInfo(str(country)).provinces() != None:
+            for province in CountryInfo(str(country)).provinces():
+                provinceList.append(province)
+    except:
+        print("exception")
+
+    return JsonResponse({'provinceList': provinceList})
+
 def handle_uploaded_file(f):
     filepath = 'streampage/static/uploads/communities/'+f.name
     with open(filepath, 'wb+') as destination:
@@ -205,6 +217,8 @@ def CreateCommunity_view(request):
     else:
         comm.communityPrv = False
     comm.communityPhoto = image_path
+    comm.communityCountry = request.POST.get("Community_Country")
+    comm.communityLocation = request.POST.get("Community_Location")
     comm.communityTags = request.POST.get("Community_Tags")
     comm.communityCreationDate = datetime.now()
     comm.communityCreator = communityUsers.objects.get(nickName=request.user)
@@ -395,13 +409,14 @@ def posttypeForm(request):
     form = AddPosttype()
     return render(request, 'modal.html', {'form': form})
 
+
 def searchTag_view(request):
     txtSRC = request.GET.get('search_text')
-    SEARCHPAGE = txtSRC	
+    SEARCHPAGE = txtSRC
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
-		"limit": "10",
+		"limit": "50",
         "language":"en",
 		"search": SEARCHPAGE
     }
@@ -411,7 +426,8 @@ def searchTag_view(request):
     DATA = Res.json()['search']
     titles=""
     for tt in DATA:
-        titles+="#"+tt['label']
+        if tt['label'] not in titles:
+            titles+="#"+tt['label']
     return render(None, 'tagSearch.html', {'form' : titles})
 
 
@@ -1777,5 +1793,45 @@ def communityPageSearch_view(request):
             else:
                 return render(request, 'community.html', {})
 		
+    else:
+        return HttpResponseRedirect("/streampage/login")
+
+
+def communityLocationPageSearch_view(request):
+    if request.user.is_authenticated:
+        if request.GET.get('keyword'):
+            if Communities.objects.all():
+                searchString = request.GET.get('keyword')
+                Community_List = Communities.objects.filter(communityCountry__contains=searchString).order_by(
+                    '-communityCreationDate') | Communities.objects.filter(communityLocation__contains=searchString).order_by(
+                    '-communityCreationDate')
+                Cuser = request.user
+                UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                userphoto = UserList.userPhoto
+                User_communities = UserList.members.all()
+                paginator = Paginator(Community_List, 3)
+                page = request.GET.get('page')
+                community_resp = paginator.get_page(page)
+                return render(request, 'community.html',
+                              {'community_resp': community_resp, 'User_communities': User_communities,
+                               'userPhoto': userphoto})
+            else:
+                return render(request, 'community.html', {})
+        else:
+            if Communities.objects.all():
+                Community_List = Communities.objects.all().order_by('-communityCreationDate')
+                Cuser = request.user
+                UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                userphoto = UserList.userPhoto
+                User_communities = UserList.members.all()
+                paginator = Paginator(Community_List, 3)
+                page = request.GET.get('page')
+                community_resp = paginator.get_page(page)
+                return render(request, 'community.html',
+                              {'community_resp': community_resp, 'User_communities': User_communities,
+                               'userPhoto': userphoto})
+            else:
+                return render(request, 'community.html', {})
+
     else:
         return HttpResponseRedirect("/streampage/login")

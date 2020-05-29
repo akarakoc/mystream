@@ -65,7 +65,13 @@ $( document ).ready(function() {
 			$('#addCommunityTagDivision').append('<label for="communityTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="communityTag"></select><button type="click" id="addTagforCommunity" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
 		}
 		$('#CommunityModal').modal('show');
+		var length = $('select[name="Community_Country"]')[0].options.length;
+
+		for(var i = 1; i<length; i++){
+			$('select[name="Community_Country"]')[0].options[i].value = $('select[name="Community_Country"]')[0].options[i].text;
+		}
 	});
+
 	
 //REAL TIME COMMUNITY WIKIDATA TAG  SEARCH
 	var tagSearch = function() {
@@ -98,24 +104,54 @@ $( document ).ready(function() {
 
 //CREATE COMMUNITY (MODAL)
 	$(document).on ("click", "#createCommunityButton", function (event) {
-			event.preventDefault();
-			var data = new FormData($('#createCommunity').get(0));
-			console.log($("input[name=csrfmiddlewaretoken]").val());
-			$.ajax({
-				type:'POST',
-				url: '/streampage/CreateCommunity/',
-				data: data,
-				processData: false,
-				contentType: false,
-				dataType: "html",
-				success: CommunityCreateResult			
-			});
+		event.preventDefault();
+		var data = new FormData($('#createCommunity').get(0));
+		console.log($("input[name=csrfmiddlewaretoken]").val());
+		$.ajax({
+			type:'POST',
+			url: '/streampage/CreateCommunity/',
+			data: data,
+			processData: false,
+			contentType: false,
+			dataType: "html",
+			success: CommunityCreateResult
+		});
 	});
 	
 	function CommunityCreateResult(data, textStatus, jqXHR){
 		alert(data);
 		window.location.reload();
 	}
+
+
+
+	$(document).on ("change", "#id_Community_Country", function () {
+		$.ajax({
+			url: "/streampage/populateProvince/",
+			data: {
+				'country' : $('#id_Community_Country').find(":selected").text()
+			},
+			type: "GET",
+			dataType: "json",
+			success: function(result){
+				var provinces = $('select[name="Community_Location"]');
+				$('#id_community_location').empty();
+				var dropdown = document.getElementById('id_community_location');
+				if(result.provinceList.length != 0){
+					$("#id_community_location").removeAttr("disabled");
+					for(var i = 0; i<result.provinceList.length; i++){
+						var option = document.createElement('option');
+						option.appendChild( document.createTextNode(result.provinceList[i]));
+						option.value = result.provinceList[i];
+						dropdown.appendChild(option);
+					}
+				}
+				else{
+					$("#id_community_location").attr('disabled', 'disabled');
+				}
+			}
+		});
+	})
 	
 //CHECK COMMUNITY MEMBERSHIP
 	$( '.classC' ).click(function() {
@@ -233,6 +269,9 @@ $( document ).ready(function() {
 		if(!tagSelector){
 			$('#addCommunityTagDivision').append('<label for="communityTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="communityTag"></select><button type="click" id="addTagforEditCommunity" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
 		}
+		/*var dropdown = $('#id_Community_Country');
+		console.log(dropdown);
+		dropdown.addClass("form-control edit");*/
 		$('#CommunityEditModal').modal('show');
 	});
 	
