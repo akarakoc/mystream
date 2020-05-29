@@ -2,7 +2,6 @@ from django.contrib.auth import authenticate, get_user_model
 from django import forms
 from streampage.models import Primitives, communityUsers, Communities, Datatypes, DatatypeFields, Posts, CommunityTags, \
     DatatTypeTags, PostTags, UserTags
-import geonamescache
 from django_countries.fields import CountryField
 import json
 
@@ -108,7 +107,7 @@ class AddCommunity(forms.Form):
         self.fields['Community_Country'].widget.attrs.update({
             'class': 'form-control small',
             "name": "Community Country"})
-        self.fields['Community_Location'].label = "Community Location"
+        self.fields['Community_Location'].label = "Community Province"
         self.fields['Community_Location'].widget.attrs.update({
             'class': 'form-control small',
             "name": "Community Location"})
@@ -122,7 +121,7 @@ class AddCommunity(forms.Form):
         Community_Description = self.cleaned_data.get("Community Description")
         Community_Image = self.cleaned_data.get("Community Image")
         Community_Country = self.cleaned_data.get("Community Country")
-        Community_Location = self.cleaned_data.get("Community Location")
+        Community_Location = self.cleaned_data.get("Community Province")
         Community_Tags = self.cleaned_data.get("Community Tags")
         return super(AddCommunity, self).clean(*args, **keyargs)
 

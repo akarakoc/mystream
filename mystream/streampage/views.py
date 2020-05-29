@@ -186,10 +186,13 @@ def populateProvince(request):
     country = request.GET.__getitem__("country")
     provinceList = []
 
-    for province in CountryInfo(str(country)).provinces():
-        provinceList.append(province)
+    try:
+        if CountryInfo(str(country)).provinces() != None:
+            for province in CountryInfo(str(country)).provinces():
+                provinceList.append(province)
+    except:
+        print("exception")
 
-    print(provinceList)
     return JsonResponse({'provinceList': provinceList})
 
 def handle_uploaded_file(f):
@@ -1790,5 +1793,45 @@ def communityPageSearch_view(request):
             else:
                 return render(request, 'community.html', {})
 		
+    else:
+        return HttpResponseRedirect("/streampage/login")
+
+
+def communityLocationPageSearch_view(request):
+    if request.user.is_authenticated:
+        if request.GET.get('keyword'):
+            if Communities.objects.all():
+                searchString = request.GET.get('keyword')
+                Community_List = Communities.objects.filter(communityCountry__contains=searchString).order_by(
+                    '-communityCreationDate') | Communities.objects.filter(communityLocation__contains=searchString).order_by(
+                    '-communityCreationDate')
+                Cuser = request.user
+                UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                userphoto = UserList.userPhoto
+                User_communities = UserList.members.all()
+                paginator = Paginator(Community_List, 3)
+                page = request.GET.get('page')
+                community_resp = paginator.get_page(page)
+                return render(request, 'community.html',
+                              {'community_resp': community_resp, 'User_communities': User_communities,
+                               'userPhoto': userphoto})
+            else:
+                return render(request, 'community.html', {})
+        else:
+            if Communities.objects.all():
+                Community_List = Communities.objects.all().order_by('-communityCreationDate')
+                Cuser = request.user
+                UserList = communityUsers.objects.filter(nickName=Cuser)[0]
+                userphoto = UserList.userPhoto
+                User_communities = UserList.members.all()
+                paginator = Paginator(Community_List, 3)
+                page = request.GET.get('page')
+                community_resp = paginator.get_page(page)
+                return render(request, 'community.html',
+                              {'community_resp': community_resp, 'User_communities': User_communities,
+                               'userPhoto': userphoto})
+            else:
+                return render(request, 'community.html', {})
+
     else:
         return HttpResponseRedirect("/streampage/login")

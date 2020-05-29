@@ -31,7 +31,7 @@ class Communities(models.Model):
     communityCreator = models.ForeignKey(communityUsers, related_name='creator',on_delete=models.SET_NULL, null=True)
     communityMembers = models.ManyToManyField(communityUsers, related_name='members', help_text='Select members')
     communityCountry = models.CharField(max_length=2000, null=True, help_text="Select country")
-    communityLocation = models.CharField(max_length=2000, null=True, help_text="Select location")
+    communityLocation = models.CharField(max_length=2000, null=True, help_text="Select province")
     communityTags = models.CharField(max_length=2000, null=True, help_text='Enter community Tags')
     communityCreationDate= models.DateTimeField(null=True)	
     def __str__(self):
