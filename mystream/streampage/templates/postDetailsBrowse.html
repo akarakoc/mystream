@@ -66,33 +66,19 @@
 		<table class="table">
 			<tr>
 				<td>
-					<form id="{{ postEntries.postInstances.0.postList.0.entryHash }}">
-						  <div class="row p-2 ">
-							  <div class="col-sm-10">
-								{% csrf_token %}
-								{{comment.as_p }}
-							   </div>
-							   <div class="col-sm-2 d-flex flex-row p-3">
-									<button type="button" id = "createCommentPage" hash="{{ postEntries.postInstances.0.postList.0.entryHash }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
-							   </div>	
-						  </div>
-					   </form>
-					   <table class="small">
-					   {% for items in postEntries.postInstances.0.comments %}
-					   <tr hash="{{items.commentHash}}">
-					   
-					    {% if items.postCommentCreator.userPhoto  %}
-							<td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></a></td>
+					<table class="small">
+					{% for items in postEntries.postInstances.0.comments %}
+					<tr hash="{{items.commentHash}}">
+						{% if items.postCommentCreator.userPhoto  %}
+							<td><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></td>
 						{% else %}
-							<td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></a></td>
+							<td><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></td>
 						{% endif %}
-						  
-						  <td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><b>{{ items.postCommentCreator }}:</b></a></td>
-						  <td width="550px">{{ items.commentText }}</td>
-						  <td width="95px">{{ items.postCommentCreationDate }}</td>
-						  <td width="20px"><button type="button" id = "deleteComment" hash="{{items.commentHash}}" class="btn btn-sm btn-outline-secondary align-self-end p-2"><i class="fas fa-minus-circle" style="font-size:16px" aria-hidden="true"></i></td>
-					   </tr>
-					   {% endfor %}
+						<td><b>{{ items.postCommentCreator }}:</b></td>
+						<td width="550px">{{ items.commentText }}</td>
+						<td width="115px">{{ items.postCommentCreationDate }}</td>
+					</tr>
+						{% endfor %}
 					</table>
 				</td>
 			</tr>

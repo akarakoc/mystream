@@ -79,9 +79,9 @@ class UsersRegisterForm(forms.ModelForm):
 class AddCommunity(forms.Form):
     Community_Name = forms.CharField()
     Community_Description = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
-    Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
     Community_Image = forms.ImageField()
     Private_Community = forms.BooleanField(initial=False, required=False)
+    Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
     def __init__(self, *args, **kwargs):
         super(AddCommunity, self).__init__(*args, **kwargs)
         self.fields['Community_Name'].label = "Community Name"
@@ -92,22 +92,41 @@ class AddCommunity(forms.Form):
         self.fields['Community_Description'].widget.attrs.update({
             'class': 'form-control small',
             "name":"Community Description"})
-        self.fields['Community_Tags'].label = "Community Tags"
         self.fields['Community_Tags'].widget.attrs.update({
             'class': 'form-control small',
             "name":"Community Tags"})
+        self.fields['Community_Tags'].label = "Community Tags"
     def clean(self, *args, **keyargs):
         Community_Name = self.cleaned_data.get("Community Name")
         Community_Description = self.cleaned_data.get("Community Description")
-        Community_Tags = self.cleaned_data.get("Community Tags")
         Community_Image = self.cleaned_data.get("Community Image")
+        Community_Tags = self.cleaned_data.get("Community Tags")
         return super(AddCommunity, self).clean(*args, **keyargs) 
-		
+
+class EditCommunity(forms.Form):
+    Community_Description = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    Community_Image = forms.ImageField()
+    Private_Community = forms.BooleanField(initial=False, required=False)
+    Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(EditCommunity, self).__init__(*args, **kwargs)
+        self.fields['Community_Description'].label = "Community Description"
+        self.fields['Community_Description'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Community Description"})
+        self.fields['Community_Tags'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Community Tags"})
+        self.fields['Community_Tags'].label = "Community Tags"
+    def clean(self, *args, **keyargs):
+        Community_Description = self.cleaned_data.get("Community Description")
+        Community_Image = self.cleaned_data.get("Community Image")
+        Community_Tags = self.cleaned_data.get("Community Tags")
+        return super(EditCommunity, self).clean(*args, **keyargs) 
 
 class AddPosttype(forms.Form):
     Posttype_Name = forms.CharField()
     Posttype_Tags = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
-    Posttype_Image = forms.ImageField()
     def __init__(self, *args, **kwargs):
         super(AddPosttype, self).__init__(*args, **kwargs)
         self.fields['Posttype_Name'].label = "Posttype Name"
@@ -121,7 +140,6 @@ class AddPosttype(forms.Form):
     def clean(self, *args, **keyargs):
         Posttype_Name = self.cleaned_data.get("Posttype Name")
         Posttype_Tags = self.cleaned_data.get("Posttype Tags")
-        Posttype_Image = self.cleaned_data.get("Posttype Image")
         return super(AddPosttype, self).clean(*args, **keyargs)
 
 
@@ -258,9 +276,10 @@ class AddLocationPost(forms.Form):
     def __init__(self, *args, **kwargs):
         super(AddLocationPost, self).__init__(*args, **kwargs)
         self.fields['LocationEntry'].widget.attrs.update({'class': 'form-control'})
+        self.fields['LocationEntry'].initial = 'Choose from the map!'
 
 class AddTagPost(forms.Form):
-    TagEntry = forms.CharField(widget=forms.TextInput(attrs={'class': 'special'}),label='')
+    TagEntry = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}),label='')
     def __init__(self, *args, **kwargs):
         super(AddTagPost, self).__init__(*args, **kwargs)
         self.fields['TagEntry'].widget.attrs.update({'class': 'form-control'})
@@ -320,7 +339,7 @@ class AddVideoSearch(forms.Form):
 		
 class AddBooleanSearch(forms.Form):
     Operand = ["","AND", "OR"]
-    ChoiceList = ["equals", "contains","not equal","not contain"]
+    ChoiceList = ["equals", "not equal"]
     Condition = forms.ChoiceField(choices=tuple(enumerate(ChoiceList)),label='')
     BooleanEntry = forms.BooleanField(initial=False, required=False,label='')
     def __init__(self, *args, **kwargs):
@@ -496,4 +515,44 @@ class textComment(forms.Form):
     def __init__(self, *args, **kwargs):
         super(textComment, self).__init__(*args, **kwargs)
         self.fields['Comment'].widget.attrs.update({'class': 'form-control'})
+
+class ReportPost(forms.Form):
+    ChoiceList = ["Sensitive Data Disclosure", "Inappropriate Content","Other"]
+    Report_Reason = forms.ChoiceField(choices=tuple(enumerate(ChoiceList)),label='')
+    Description = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(ReportPost, self).__init__(*args, **kwargs)
+        self.fields['Report_Reason'].label = "Report Reason"
+        self.fields['Report_Reason'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Report Reason"})
+        self.fields['Description'].label = "Description"
+        self.fields['Description'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"Descriptions"})
+    def clean(self, *args, **keyargs):
+        Posttype_Name = self.cleaned_data.get("Report Reason")
+        Posttype_Tags = self.cleaned_data.get("Description")
+        return super(ReportPost, self).clean(*args, **keyargs)
+
+class EditUser(forms.Form):
+    name = forms.CharField()
+    surname = forms.CharField()
+    birth = forms.CharField()
+    email = forms.CharField()
+    bio = forms.CharField(widget=forms.Textarea(attrs={'width':"50%", 'cols' : "50", 'rows': "2",}))
+    def __init__(self, *args, **kwargs):
+        super(EditUser, self).__init__(*args, **kwargs)
+        self.fields['email'].label = "email"
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"e-mail"})
+        self.fields['bio'].label = "bio"
+        self.fields['bio'].widget.attrs.update({
+            'class': 'form-control',
+            "name":"bio"})
+    def clean(self, *args, **keyargs):
+        Posttype_Name = self.cleaned_data.get("email")
+        Posttype_Tags = self.cleaned_data.get("bio")
+        return super(EditUser, self).clean(*args, **keyargs)
         
