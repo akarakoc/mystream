@@ -18,23 +18,6 @@ function getImageTarget(c){
 
 $( document ).ready(function() {
 
-// $( "*", document.body ).click(function( event ) {
-//     console.log("this : " + this );
-//   var offset = $( this ).offset();
-//   event.stopPropagation();
-//   console.log( "deneme : " + " coords ( " + offset.left + ", " + offset.top + " )" );
-// });
-
-
-    // jQuery(function($){
-    //
-    //   $('img').Jcrop({
-    //     onChange:   getImageXYWH,
-    //     onSelect:   getImageTarget
-    //   });
-    //
-    // });
-
     $('img').Jcrop({
         onChange:   getImageXYWH,
         onSelect:   getImageTarget
@@ -197,7 +180,8 @@ $(document).on('click', "#openHighlightButton", function() {
         $(a).addClass("highlightedAnnotation");
     });
 
-    var imageAnnoList = $(".pointedAnnotation");
+    var imageAnnoList  = $("div").find("[data-purpose='pointedAnnotation']");
+
 
     $.each(imageAnnoList, function(index, a) {
         $(a).css("display", "block");
@@ -216,7 +200,7 @@ $(document).on('click', "#closeHighlightButton", function() {
     });
 
 
-    var imageAnnoList = $(".pointedAnnotation");
+    var imageAnnoList  = $("div").find("[data-purpose='pointedAnnotation']");
 
     $.each(imageAnnoList, function(index, a) {
         $(a).css("display", "none");
@@ -239,10 +223,6 @@ $(document).on('click', ".annotationSelector", function() {
         $(this).popover('hide');
     }
 });
-
-
-
-
 
 
 function showMessage(title, message){
@@ -389,10 +369,10 @@ function pointImage(anno, index){
 
     var left = parseInt(xywh[0]);
     var top = parseInt(xywh[1]);
+    var width =  parseInt(xywh[2]);
+    var height =  parseInt(xywh[3]);
 
-
-    //var imagePointButton = "<div class='pointedAnnotation' >" +
-    var imagePointButton = "<button id='" + annoUpdateId +
+    var imagePointButton = "<button data-purpose='pointedAnnotation'  id='" + annoUpdateId +
         "' data-body='" + buttonBody +
         "' data-selected='" + imageSrc + " " + anno.target.selector[0].value +
         "' data-type='" + body.type +
@@ -401,7 +381,7 @@ function pointImage(anno, index){
         "' type='button' class='btn btn-warning updateImageAnnotation' style=' " +
         " display: block; " +
         " position: absolute; " +
-        " z-index : 601;" +
+        " z-index : 700;" +
         " height: 1.5em; " +
         " width: 1.5em; " +
         " top : " + top + "px; left :" + left + "px;" +
@@ -410,13 +390,27 @@ function pointImage(anno, index){
               "<path fill-rule='evenodd' d='M0 2a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-2.5a1 1 0 00-.8.4l-1.9 2.533a1 1 0 01-1.6 0L5.3 12.4a1 1 0 00-.8-.4H2a2 2 0 01-2-2V2zm5 4a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2z' clip-rule='evenodd'/>" +
             "</svg>" +
         "</button>";
-    // "</div>";
 
-    //$('.image').append( imagePointButton );
+        var annotationBorderDiv = "<div data-purpose='pointedAnnotation' " +
+        " name='borderDiv' " +
+        " style=' " +
+        " display: block; " +
+        " border: #ffc107; " +
+        " border-width : 3px; " +
+        " border-style : dashed; " +
+        " position: absolute; " +
+        " opacity: 50%; " +
+        " z-index : 650;" +
+        " height: " + height + "px; " +
+        " width: " + width + "px; " +
+        " top : " + top + "px; left :" + left + "px;" +
+        "' >" +
+        "</div>";
+
+
+
+    $('.jcrop-holder').append( annotationBorderDiv );
     $('.jcrop-holder').append( imagePointButton );
-
-
-
 
 }
 

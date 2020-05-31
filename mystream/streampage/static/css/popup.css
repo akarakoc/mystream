@@ -68,9 +68,6 @@ svg {
 .annoContainer div label { margin:1%; font-weight: 200; }
 .annoContainer .annoDiv { padding: 2%;}
 .annoContainer .search { padding-right: 3%; padding-left: 3%; padding-top: 10%;}
-.pointedAnnotation {
-    z-index: 999;
-    position: absolute;
-}
+
 
 
