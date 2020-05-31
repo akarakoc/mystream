@@ -384,11 +384,15 @@ function pointImage(anno, index){
     var imageTarget = anno.target.source.split("/");
     var imageSrc = imageTarget[imageTarget.length-1 ];
     var position = $("div img[src$='" + imageSrc + "']").parent().offset();
-    var top = parseInt(position.top) + parseInt(xywh[0]);
-    var left = parseInt(position.left) + parseInt(xywh[1]);
+    //var left = parseInt(position.left) + parseInt(xywh[1]);
+    //var top = parseInt(position.top) + parseInt(xywh[2]);
 
-    var imagePointButton = "<div class='pointedAnnotation' >" +
-        "<button id='" + annoUpdateId +
+    var left = parseInt(xywh[0]);
+    var top = parseInt(xywh[1]);
+
+
+    //var imagePointButton = "<div class='pointedAnnotation' >" +
+    var imagePointButton = "<button id='" + annoUpdateId +
         "' data-body='" + buttonBody +
         "' data-selected='" + imageSrc + " " + anno.target.selector[0].value +
         "' data-type='" + body.type +
@@ -396,7 +400,8 @@ function pointImage(anno, index){
         "' data-json='" + JSON.stringify(anno) +
         "' type='button' class='btn btn-warning updateImageAnnotation' style=' " +
         " display: block; " +
-        " position: fixed; " +
+        " position: absolute; " +
+        " z-index : 601;" +
         " height: 1.5em; " +
         " width: 1.5em; " +
         " top : " + top + "px; left :" + left + "px;" +
@@ -404,10 +409,12 @@ function pointImage(anno, index){
             "<svg class='bi bi-chat-square-dots-fill' width='1em' height='1em' viewBox='0.5 0 15 15' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>" +
               "<path fill-rule='evenodd' d='M0 2a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-2.5a1 1 0 00-.8.4l-1.9 2.533a1 1 0 01-1.6 0L5.3 12.4a1 1 0 00-.8-.4H2a2 2 0 01-2-2V2zm5 4a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2z' clip-rule='evenodd'/>" +
             "</svg>" +
-        "</button>" +
-     "</div>";
+        "</button>";
+    // "</div>";
 
-    $('.image').append( imagePointButton );
+    //$('.image').append( imagePointButton );
+    $('.jcrop-holder').append( imagePointButton );
+
 
 
 
