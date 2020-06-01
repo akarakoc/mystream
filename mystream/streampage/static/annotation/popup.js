@@ -566,6 +566,8 @@ function createAnnotation() {
 
         var post_data = { textAnno };
         sendPostRequest(post_data, textAnno, annoType);
+    }else{
+        showMessage("Error", " Body must be URI to create Image or Video annotation.");
     }
 }
 
