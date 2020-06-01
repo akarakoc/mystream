@@ -1,6 +1,6 @@
-{% extends "base.html" %} 
-
+{% extends "base.html" %}
 {% block content %}
+
 <div id="Datatypes_list" class="">
   <div class="card mb-2">
 	<!-- Card Body -->
@@ -122,7 +122,7 @@
 					{% endfor %}
 				{% endfor %}
 				<div class="row">
-					<a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ posts.postList.0.entryHash }}">more >></a>	
+					<a href="/streampage/showPostDetails/?postHash={{ posts.postList.0.entryHash }}">more >></a>
 				</div>
 				<div class="row">
 					{{ fields.postTag }}
@@ -146,12 +146,12 @@
 		   {% for items in posts.comments %}
 		   <tr hash="{{items.commentHash}}">
 			  {% if items.postCommentCreator.userPhoto  %}
-					<td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></a></td>
+					<td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></a></td>
 			  {% else %}
-					<td><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></a></td>
+					<td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></a></td>
 			  {% endif %}
 			  
-			  <td width="30px"><b><a href="http://3.134.79.169:8000/streampage/UserPage?user={{ items.postCommentCreator }}">{{ items.postCommentCreator }}:</a></b></td>
+			  <td width="30px"><b><a href="/streampage/UserPage?user={{ items.postCommentCreator }}">{{ items.postCommentCreator }}:</a></b></td>
 			  <td width="290px">{{ items.commentText }}</td>
 			  <td width="95px">{{ items.postCommentCreationDate }}</td>
 			  <td width="20px"><button type="button" id = "deleteComment" hash="{{items.commentHash}}" class="btn btn-sm btn-outline-secondary align-self-end p-2"><i class="fas fa-minus-circle" style="font-size:16px" aria-hidden="true"></i></button></td>
@@ -161,7 +161,7 @@
 	  </div>
    </div>
    {% endfor %}
-	 
+
 	
 <!-- Modal Add Posttype-->
 	<div class="modal fade small" id="PosttypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -349,13 +349,13 @@
 	</div>
 
 
-	 
-	
+</div>
+
 <div class="pagination">
     <span class="step-links">
         {% if post_resp.has_previous %}
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -363,9 +363,10 @@
         </span>
 
         {% if post_resp.has_next %}
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
 </div>
+
 {% endblock %}
