@@ -682,7 +682,7 @@ class AnnotationBuilder{
         return this;
     }
 
-    tagging(source, xywh){
+    tagging(source, xywh, xpath){
         this.result.motivation = 'tagging';
         this.result.canonical = "urn:uuid:" + this.uuid;
         //might include fragment?
@@ -690,8 +690,14 @@ class AnnotationBuilder{
         var newTarget = new SpecificResource();
         newTarget.source = source;
         newTarget.selector = [];
+
         var fragmentSelector = new MediaFragmentSelector(xywh);
         newTarget.selector.push(fragmentSelector);
+
+        var xPathSelector = new XPathSelector();
+        xPathSelector.value = xpath;
+        newTarget.selector.push(xPathSelector);
+
         this.result.target = newTarget;
         return this;
     }

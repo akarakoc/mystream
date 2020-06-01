@@ -6,22 +6,24 @@ $(function () {
 
 function getImageXYWH(c)
 {
-    console.log('x='+ c.x +' y='+ c.y +' x2='+ c.x2 +' y2='+ c.y2)
-    console.log('w='+c.w +' h='+ c.h)
     imageXYWH = "xywh=pixel:" + c.x + "," + c.y + "," + c.w + "," + c.h;
 };
 
-function getImageTarget(c){
+function getSelected(c){
     imageAnnotationSelected = true;
-    imageTarget = $('.jcrop-holder img').prop("currentSrc");
 }
 
 $( document ).ready(function() {
 
     $('img').Jcrop({
         onChange:   getImageXYWH,
-        onSelect:   getImageTarget
+        onSelect:   getSelected
       });
+
+    $('.image').click(function(e) {
+         imageXPath = getXpath($(this).find("img")[0]);
+    });
+
 /*******************************************/
 /*  Define Variables
 /*******************************************/
@@ -36,7 +38,7 @@ $( document ).ready(function() {
 
     imageAnnotationSelected = false;
     imageXYWH = "";
-    imageTarget = "";
+    imageXPath = "";
 
 /*******************************************/
 /*  Rest API Endpoints
@@ -63,12 +65,14 @@ $( document ).on( "click", "#createAnnotationButton", function(e) {
     }else if(imageAnnotationSelected){
             var annoType = "Image";
 
-            var ab = new AnnotationBuilder().tagging(imageTarget, imageXYWH);
-            // ab.result.target.toSelection();
+            var ab = new AnnotationBuilder().tagging(window.location.href, imageXYWH, imageXPath);
+
             var json = ab.toJSON();
             console.log(json);
 
-            openAnnotationModal( imageTarget + " " + imageXYWH , json, annoType);
+            var imageName = getImageName(imageXPath);
+
+            openAnnotationModal(imageName + " " + imageXYWH , json, annoType);
 
     }else if ( window.getSelection() != "" ){
         var annoType = "Text";
@@ -312,7 +316,8 @@ function addAnnotationToSidebar(json, index, annoType){
     if( annoType == "Text" ){
         annoLabel = window.getSelection();
     }else{
-        annoLabel = "Image on the page";
+        var xpath = json.target.selector[1].value;
+        annoLabel = getImageName(xpath);
     }
 
     $('.annoContainer #content').append(
@@ -359,13 +364,11 @@ function pointImage(anno, index){
     /* ---------------------------------------- */
     var xywh = anno.target.selector[0].value;
     xywh = xywh.replace("xywh=pixel:","");
-    xywh = xywh.split(",");
+    xywh = xywh.split(",")
 
-    var imageTarget = anno.target.source.split("/");
-    var imageSrc = imageTarget[imageTarget.length-1 ];
-    var position = $("div img[src$='" + imageSrc + "']").parent().offset();
-    //var left = parseInt(position.left) + parseInt(xywh[1]);
-    //var top = parseInt(position.top) + parseInt(xywh[2]);
+    var xpath = anno.target.selector[1].value;
+
+    var imageName = getImageName(xpath);
 
     var left = parseInt(xywh[0]);
     var top = parseInt(xywh[1]);
@@ -374,7 +377,7 @@ function pointImage(anno, index){
 
     var imagePointButton = "<button data-purpose='pointedAnnotation'  id='" + annoUpdateId +
         "' data-body='" + buttonBody +
-        "' data-selected='" + imageSrc + " " + anno.target.selector[0].value +
+        "' data-selected='" + imageName + " " + anno.target.selector[0].value +
         "' data-type='" + body.type +
         "' data-currentSrc='" + anno.id +
         "' data-json='" + JSON.stringify(anno) +
@@ -408,9 +411,8 @@ function pointImage(anno, index){
         "</div>";
 
 
-
-    $('.jcrop-holder').append( annotationBorderDiv );
-    $('.jcrop-holder').append( imagePointButton );
+    $(getComponentByXpath(xpath).parentElement).find(".jcrop-holder").append( annotationBorderDiv );
+    $(getComponentByXpath(xpath).parentElement).find(".jcrop-holder").append( imagePointButton );
 
 }
 
@@ -607,4 +609,59 @@ function checkRegexp( o, regexp, n ) {
   } else {
     return true;
   }
+}
+
+function findXpath(element)
+{
+    if (element && element.id)
+        return '//*[@id="' + element.id + '"]';
+    else
+        return Xpath.getElementTreeXPath(element);
+};
+
+function getComponentByXpath(xpath) {
+    return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+}
+
+function getXpath(element)
+{
+    var paths = [];  // Use nodeName (instead of localName)
+    // so namespace prefix is included (if any).
+    for (; element && element.nodeType == Node.ELEMENT_NODE;
+           element = element.parentNode)
+    {
+        var index = 0;
+        var hasFollowingSiblings = false;
+        for (var sibling = element.previousSibling; sibling;
+              sibling = sibling.previousSibling)
+        {
+            // Ignore document type declaration.
+            if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
+                continue;
+
+            if (sibling.nodeName == element.nodeName)
+                ++index;
+        }
+
+        for (var sibling = element.nextSibling;
+            sibling && !hasFollowingSiblings;
+            sibling = sibling.nextSibling)
+        {
+            if (sibling.nodeName == element.nodeName)
+                hasFollowingSiblings = true;
+        }
+
+        var tagName = (element.prefix ? element.prefix + ":" : "")
+                          + element.localName;
+        var pathIndex = (index || hasFollowingSiblings ? "["
+                   + (index + 1) + "]" : "");
+        paths.splice(0, 0, tagName + pathIndex);
+    }
+
+    return paths.length ? "/" + paths.join("/") : null;
+};
+
+function getImageName(xpath){
+    var imageSrc = $(getComponentByXpath(xpath)).prop("currentSrc").split('/');
+    return imageSrc[imageSrc.length-1 ];
 }
