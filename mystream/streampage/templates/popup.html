@@ -74,7 +74,7 @@
 </body>
 
 <div class="annoContainer" id="annoContainer" style="display: none;">
-    <div id="header">
+    <div id="header" style="width: 425px; background-color: #ffffff; position: fixed;">
         <div class="input-group mb-3 search" >
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon3">Search Annotation</span>
@@ -82,7 +82,7 @@
           <input type="text" class="form-control" id="searchAnnotation" aria-describedby="basic-addon3">
         </div>
     </div>
-    <div id="content"></div>
+    <div id="content" style="overflow: scroll; margin-top: 100px;"></div>
     <div id="footer">
         <br>
         <label id ="annotationCount">
@@ -141,7 +141,7 @@
 </div>
 
 <div aria-live="polite" aria-atomic="true" style="top: 10px; left: 10px; min-height: 200px; min-width: 500px;">
-  <div class="toast" style="position: absolute; top: 0; left: 0;">
+  <div class="toast" style="position: fixed; top: 0; left: 0;">
     <div class="toast-header" style="background-color: #f9bb00;">
       <strong class="mr-auto toast-title "> Header </strong>
       <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">

@@ -283,7 +283,7 @@ function addAnnotationToSidebar(json, index, annoType){
     // Update Size Firstly
     var count = index + 1;
 
-    // if($(".annoContainer").height() < 1000 )
+    if($(".annoContainer").height() < 1000 )
         $(".annoContainer").css("height" , $(".annoContainer").height() + 200 );
 
     if(count == 1)
