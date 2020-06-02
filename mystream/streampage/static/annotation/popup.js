@@ -87,6 +87,23 @@ $( document ).on( "click", "#createAnnotationButton", function(e) {
     }
 });
 
+$( document ).on( "click", "div", function(e) {
+
+    if($(this).attr("data-purpose") == "pointedAnnotation"){
+
+        var scrollId = $(this).attr("id").replace("annoBorder","");
+
+        if($("#annoContainer").css("display") == "none")
+            $("#annoContainer").toggle('blind',1000);
+
+        $(".annoTitle").removeClass("scrolledBorder");
+        document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100
+        $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
+
+
+    }
+});
+
 
 $( document ).contextmenu(function(e) {
 
@@ -212,21 +229,21 @@ $(document).on('click', "#closeHighlightButton", function() {
 });
 
 $(document).on('click', ".annotationSelector", function() {
-
     $(".popover").hide();
-
     var popId = $(this).attr("id");
-
-
-    if($(this).hasClass("highlightedAnnotation")) {
-        $(this).popover('show');
-         setTimeout(function() {
-            $("#" + popId).popover('hide');
-        }, 3000);
-    }else{
-        $(this).popover('hide');
-    }
+    openPopover(popId);
 });
+
+function openPopover(popId){
+    if($("#" + popId).hasClass("highlightedAnnotation")) {
+        $("#" + popId).popover('show');
+         setTimeout(closePopover(popId), 3000);
+    }
+}
+
+function closePopover(popId){
+    $("#" + popId).popover('hide');
+}
 
 
 function showMessage(title, message){
@@ -394,7 +411,7 @@ function pointImage(anno, index){
             "</svg>" +
         "</button>";
 
-        var annotationBorderDiv = "<div data-purpose='pointedAnnotation' " +
+        var annotationBorderDiv = "<div data-purpose='pointedAnnotation'  id='annoBorder" + index + "' " +
         " name='borderDiv' " +
         " style=' " +
         " display: block; " +
