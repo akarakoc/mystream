@@ -7,16 +7,33 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}">
-  <link rel="stylesheet" href="{% static 'css/annotator.min.css' %}">
+	<!--  <link rel="stylesheet" href="{% static 'css/annotator.min.css' %}">-->
   <link rel="stylesheet" href="{% static 'css/popup.css' %}">
   <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
- 
-  
-  
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/jquery.Jcrop.css' %}">
+
+
   <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/sb-admin-2.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/tagsinput.js' %}"></script>
+
+
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+
+    <script src="{% static 'js/jquery.Jcrop.min.js' %}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="{% static 'annotation/annotation-model.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+	<script src="{% static 'annotation/popup.js' %}"></script>
 
  
   <style>
@@ -176,6 +193,7 @@ $( document ).ready(function() {
 				}
 			}
 		});
+
 	});
 	
 //JOIN COMMUNITY
@@ -1265,7 +1283,7 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
     <div id="content">
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-primary topbar mb-4 static-top">
-		<a class="navbar-brand" href="http://3.134.79.169:8000/streampage/">
+		<a class="navbar-brand" href="/streampage/">
 			<img src="{% static 'uploads/logo/Logo.png' %}" width="55" height="55" class="d-inline-block align-top">
 			<img src="{% static 'uploads/logo/LogoText.png' %}" width="55" height="55" class="d-inline-block align-top">
 		</a>
