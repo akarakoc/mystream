@@ -1,14 +1,14 @@
 package com.mystream.service;
 
-import com.mystream.dom.TextAnnotation;
+import com.mystream.dom.Annotation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface AnnotationService {
 
-	public TextAnnotation saveTextAnnotation(TextAnnotation anno);
-	public List<TextAnnotation> searchAnnotation();
-	public List<TextAnnotation> searchAnnotationWithSource( String source);
+	public Annotation saveAnnotation(Annotation anno);
+	public List<Annotation> searchAnnotation();
+	public List<Annotation> searchAnnotationWithSource( String source);
 
 	}

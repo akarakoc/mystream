@@ -7,7 +7,7 @@ import com.mystream.dom.selector.SelectorEnum;
 import com.mystream.dom.Target;
 import com.mystream.param.AnnotationRequest;
 import com.mystream.param.AnnotationResponse;
-import com.mystream.dom.TextAnnotation;
+import com.mystream.dom.Annotation;
 import com.mystream.service.AnnotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,7 +37,7 @@ public class AnnotationRestController {
 	@ResponseBody
 	public AnnotationResponse annotateText(@RequestBody AnnotationRequest request) throws Exception {
 
-		TextAnnotation annotation = request.getTextAnno();
+		Annotation annotation = request.getAnno();
 		annotation.setContext(Constants.ANNOTATION_CONTEXT_URI);
 
 		Target target = annotation.getTarget();
@@ -48,7 +48,7 @@ public class AnnotationRestController {
 		}
 
 
-		TextAnnotation anno = annotationService.saveTextAnnotation(request.getTextAnno());
+		Annotation anno = annotationService.saveAnnotation(request.getAnno());
 		AnnotationResponse response = new AnnotationResponse();
 		response.getResponse().put("annoList", anno );
 		return response;
@@ -59,7 +59,7 @@ public class AnnotationRestController {
 	@ResponseBody
 	public AnnotationResponse searchAnnotation(@RequestParam(name = "source") String source){
 
-		List<TextAnnotation> annoList = annotationService.searchAnnotationWithSource(source);
+		List<Annotation> annoList = annotationService.searchAnnotationWithSource(source);
 		AnnotationResponse response = new AnnotationResponse();
 		response.getResponse().put("annoList", annoList );
 		return response;
