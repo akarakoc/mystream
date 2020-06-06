@@ -1,0 +1,36 @@
+{
+  "canonical": "urn:uuid:9aed77a2-36cf-be6e-cc3c-6a7a6840661c",
+  "motivation": "tagging",
+  "annotatedBy": null,
+  "serializedBy": null,
+  "body": [
+    {
+      "type": "TextualBody",
+      "format": "text/plain",
+      "value": "Sample text body"
+    }
+  ],
+  "target": {
+    "id": null,
+    "type": "SpecificResource",
+    "source": "http://127.0.0.1:8000/",
+    "selector": [
+      {
+        "type": "FragmentSelector",
+        "id": null,
+        "refinedBy": null,
+        "value": "xywh=pixel:31,44,87,136",
+        "conformsTo": "http://www.w3.org/TR/media-frags/"
+      },
+      {
+        "type": "XPathSelector",
+        "id": null,
+        "refinedBy": null,
+        "value": "/html/body/div[1]/img"
+      }
+    ]
+  },
+  "@id": null,
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "@type": null
+}

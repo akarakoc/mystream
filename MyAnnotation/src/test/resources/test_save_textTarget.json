@@ -1,0 +1,40 @@
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "type": "Annotation",
+    "id": null,
+    "target": {
+      "type": "SpecificResource",
+      "source": "http://127.0.0.1:8000/",
+      "selector": [
+        {
+          "type": "XPathSelector",
+          "value": "//body/p[1]/text()",
+          "refinedBy": {
+            "type": "DataPositionSelector",
+            "start": 349,
+            "end": 365
+          }
+        },
+        {
+          "type": "TextQuoteSelector",
+          "exact": "hand\n    washing",
+          "suffix": ".\n\n\n\n        \n\n\n\n    Kenya faces",
+          "prefix": "first line of defence, which is "
+        },
+        {
+          "type": "TextPositionSelector",
+          "start": 541,
+          "end": 557
+        }
+      ]
+    },
+    "motivation": "highlighting",
+    "canonical": "urn:uuid:a7eea71c-1ae5-cd4f-a555-3868e36c4c87",
+    "body": [
+      {
+        "type": "TextualBody",
+        "format": "text/plain",
+        "value": "Sample text body"
+      }
+    ]
+  }
