@@ -663,6 +663,7 @@ class AnnotationBuilder{
                     case "DataPositionSelector": return new DataPositionSelector(value);
                     case "TextQuoteSelector": return new TextQuoteSelector(value);
                     case "TextPositionSelector": return new TextPositionSelector(value);
+                    case "TextualBody" : return null;
                     default: console.warn('mismatched type attribute in JSON reviver function')
             }
         } else {

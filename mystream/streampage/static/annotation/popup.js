@@ -97,24 +97,38 @@ $( document ).on( "click", "div", function(e) {
             $("#annoContainer").toggle('blind',1000);
 
         $(".annoTitle").removeClass("scrolledBorder");
-        document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100
+        document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100;
         $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
-
 
     }
 });
 
+$( document ).on( "click", ".highlightedAnnotation", function(e) {
 
-$( document ).contextmenu(function(e) {
+    var scrollId = $(this).data("dataAnnoIndex");
 
-    var ab = new AnnotationBuilder().highlight();
-    ab.result.target.toSelection();
-    var json = ab.toJSON();
+    if($("#annoContainer").css("display") == "none")
+        $("#annoContainer").toggle('blind',1000);
 
-    openAnnotationModal( ab.result.target.selector[1].exact, json );
+    $(".annoTitle").removeClass("scrolledBorder");
+    document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100;
+    $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
 
-    e.preventDefault();
 });
+
+
+
+//
+// $( document ).contextmenu(function(e) {
+//
+//     var ab = new AnnotationBuilder().highlight();
+//     ab.result.target.toSelection();
+//     var json = ab.toJSON();
+//
+//     openAnnotationModal( ab.result.target.selector[1].exact, json );
+//
+//     e.preventDefault();
+// });
 
 function openAnnotationModal( targetVal, json, annoType ){
     $( "#target" ).val(targetVal);
@@ -228,16 +242,16 @@ $(document).on('click', "#closeHighlightButton", function() {
     });
 });
 
-$(document).on('click', ".annotationSelector", function() {
-    $(".popover").hide();
-    var popId = $(this).attr("id");
-    openPopover(popId);
-});
+// $(document).on('click', ".annotationSelector", function() {
+//     //$(".popover").hide();
+//     var popId = $(this).attr("id");
+//     openPopover(popId);
+// });
 
 function openPopover(popId){
     if($("#" + popId).hasClass("highlightedAnnotation")) {
         $("#" + popId).popover('show');
-         setTimeout(closePopover(popId), 3000);
+         //setTimeout(closePopover(popId), 3000);
     }
 }
 
@@ -262,9 +276,10 @@ function visualizeAnnotations(){
       data: { source : window.location.href },
       contentType: 'application/json',
       success: function(data, status){
-          console.log("okk");
-          var jsonList = data.response.annoList;
 
+          var jsonList = data.response.annoList;
+          console.log("Annotations is received successfully ! ");
+          console.log(jsonList.length + " annotations are found for this page !");
           $.each(jsonList, function(index, json) {
                                 try {
                                      var annoType = "Text";
@@ -275,9 +290,9 @@ function visualizeAnnotations(){
                                          }
                                      });
                                      if( annoType == "Text"){
-                                         var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(json));
-                                         ab2.result.target.toSelection();
-                                         surroundSelection(json) ;
+                                         var annotation = new AnnotationBuilder().fromJSON(JSON.stringify(json));
+                                         annotation.result.target.toSelection();
+                                         surroundSelection(json, index) ;
                                      }else if( annoType == "Image"){
                                          pointImage(json, index);
                                      }
@@ -414,6 +429,8 @@ function pointImage(anno, index){
         var annotationBorderDiv = "<div data-purpose='pointedAnnotation'  id='annoBorder" + index + "' " +
         " name='borderDiv' " +
         " style=' " +
+        " cursor : context-menu; " +
+        " border-radius : 10%;" +
         " display: block; " +
         " border: #ffc107; " +
         " border-width : 3px; " +
@@ -456,6 +473,8 @@ function surroundSelection(json, index) {
         $(a).addClass("annotationSelector");
         $(a).attr("id", id);
 
+        console.log(index);
+        $(a).data("dataAnnoIndex", index);
 
         $(a).data("title", "Annotation");
         $(a).data("html", true);
@@ -510,7 +529,8 @@ function surroundSelection(json, index) {
                                 "'>Update Annotation</button>\n"
                             "</div>";
 
-    $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'click', sanitize:false, content: contentHTMLText});
+    // TODO :  popover is closed
+    // $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'click', sanitize:false, content: contentHTMLText});
 
 
 }
@@ -529,12 +549,12 @@ function sendPostRequest(post_data, anno, annoType){
         success: function (data, status) {
             console.log("Annotation is saved successfully");
 
-            var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(anno));
-
             if( annoType == "Image"){
                 pointImage(anno, "none")
             }else if ( annoType == "Text"){
-                ab2.result.target.toSelection();
+                var annotation = new AnnotationBuilder().fromJSON(JSON.stringify(anno));
+
+                annotation.result.target.toSelection();
                 surroundSelection(anno);
             }
 

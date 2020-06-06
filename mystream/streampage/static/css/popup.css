@@ -58,6 +58,13 @@ svg {
 
 .highlightedAnnotation{
     background-color: #ffd969;
+    cursor: context-menu !important;
+    font-weight: bolder;
+    font-size: large;
+    border-radius: 20%;
+    background-position-x: 5px;
+    background-position-y: 5px;
+    display: inline-block;
 }
 
 .toast-header, #annotation-modal .modal-header{
@@ -73,5 +80,9 @@ svg {
 .scrolledBorder {
     border-style : solid; border-color:white; border-radius:10%; background: navajowhite;
 }
-
+.scrolledBorder label {
+    font-weight: bolder !important;
+    font-size: larger;
+    line-height: 2.2em;
+}
 
