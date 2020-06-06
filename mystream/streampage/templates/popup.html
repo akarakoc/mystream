@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Annotation Demo Project</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="{% static "css/popup.css" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -39,19 +38,26 @@
 </h2>
 
 <h2 style="text-align: left;">
-    Let’s Save a Little Water for Everyone
+    Text and Image Annotation
 </h2>
 
 <div class="image" style="position: relative;">
-        <img id="water" src="{% static 'images/water.jpg' %}" >
+        <img src="{% static 'images/animals.jpg' %}" >
 </div>
-
 
 <p>
     Experts say keeping good hygiene would reduce the risk of transmitting and contracting the COVID-19. Indeed clean
     water is our first line of defence during this time of turbulence. Access to clean water is a basic human right and
     no one should fear losing their life because they couldn’t practice the first line of defence, which is hand
-    washing. Kenya faces difficulty in water supply. Majority of Kenyans do not have access to clean water. However,
+    washing.
+</p>
+
+<div class="image" style="position: relative;">
+        <img src="{% static 'images/colors.jpg' %}" >
+</div>
+
+<p>
+    Kenya faces difficulty in water supply. Majority of Kenyans do not have access to clean water. However,
     this is not the time to live everything as deprivation. This is the time to promote solidarity through sharing the
     little resources we have. This crisis needs community more than ever and we need to do what is reasonable to keep
     everyone safe.
@@ -67,7 +73,7 @@
 </body>
 
 <div class="annoContainer" id="annoContainer" style="display: none;">
-    <div id="header">
+    <div id="header" style="width: 425px; background-color: #ffffff; position: fixed;">
         <div class="input-group mb-3 search" >
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon3">Search Annotation</span>
@@ -75,7 +81,7 @@
           <input type="text" class="form-control" id="searchAnnotation" aria-describedby="basic-addon3">
         </div>
     </div>
-    <div id="content"></div>
+    <div id="content" style="overflow: scroll; margin-top: 100px;"></div>
     <div id="footer">
         <br>
         <label id ="annotationCount">
@@ -134,7 +140,7 @@
 </div>
 
 <div aria-live="polite" aria-atomic="true" style="top: 10px; left: 10px; min-height: 200px; min-width: 500px;">
-  <div class="toast" style="position: absolute; top: 0; left: 0;">
+  <div class="toast" style="position: fixed; top: 0; left: 0;">
     <div class="toast-header" style="background-color: #f9bb00;">
       <strong class="mr-auto toast-title "> Header </strong>
       <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">

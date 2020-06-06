@@ -20,6 +20,7 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
     right: 0px;
     overflow-x: auto;
     height: 200px;
+    z-index: 900;
 }
 #slideButton {
     z-index: 999;
@@ -39,6 +40,7 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 }
 
 #createAnnotationButton {
+    z-index: 999;
     position: fixed;
     top: 0px;
     right: 6em;
@@ -56,6 +58,13 @@ svg {
 
 .highlightedAnnotation{
     background-color: #ffd969;
+    cursor: context-menu !important;
+    font-weight: bolder;
+    font-size: large;
+    border-radius: 20%;
+    background-position-x: 5px;
+    background-position-y: 5px;
+    display: inline-block;
 }
 
 .toast-header, #annotation-modal .modal-header{
@@ -68,6 +77,12 @@ svg {
 .annoContainer div label { margin:1%; font-weight: 200; }
 .annoContainer .annoDiv { padding: 2%;}
 .annoContainer .search { padding-right: 3%; padding-left: 3%; padding-top: 10%;}
-
-
+.scrolledBorder {
+    border-style : solid; border-color:white; border-radius:10%; background: navajowhite;
+}
+.scrolledBorder label {
+    font-weight: bolder !important;
+    font-size: larger;
+    line-height: 2.2em;
+}
 
