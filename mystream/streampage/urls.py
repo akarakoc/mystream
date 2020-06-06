@@ -60,4 +60,6 @@ path('', views.index, name='index'),
 	path('FollowUser/', views.FollowUser_view, name = "FollowUser"),
 	path('UnFollowUser/', views.UnFollowUser_view, name = "UnFollowUser"),
 	path('communityPageSearch/', views.communityPageSearch_view, name = "FollowUser"),
+	path('populateProvince/', views.populateProvince, name = "PopulateProvince"),
+	path('communityLocationPageSearch/', views.communityLocationPageSearch_view, name = "PopulateProvince"),
 ]
