@@ -186,12 +186,20 @@ def populateProvince(request):
     country = request.GET.__getitem__("country")
     provinceList = []
 
-    try:
-        if CountryInfo(str(country)).provinces() != None:
-            for province in CountryInfo(str(country)).provinces():
-                provinceList.append(province)
-    except:
-        print("exception")
+    if(str(country) == "Turkey"):
+        provinceList = ['Adana', 'Adıyaman', 'Afyon', 'Ağrı', 'Aksaray', 'Amasya', 'Ankara', 'Antalya', 'Ardahan', 'Artvin', 'Aydın', 'Balıkesir', 'Bartın', 'Batman',
+                        'Bayburt', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Düzce', 'Edirne',
+                        'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir', 'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Içel', 'Iğdır', 'Isparta', 'İstanbul',
+                        'İzmir', 'Kahramanmaraş', 'Karabük', 'Karaman', 'Kars', 'Kastamonu', 'Kayseri', 'Kilis', 'Kırıkkale', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya',
+                        'Kütahya', 'Malatya', 'Manisa', 'Mardin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Osmaniye', 'Rize', 'Sakarya', 'Samsun', 'Şanlıurfa', 'Siirt',
+                        'Sinop', 'Şırnak', 'Sivas', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Uşak', 'Van', 'Yalova', 'Yozgat', 'Zonguldak']
+    else:
+        try:
+            if CountryInfo(str(country)).provinces() != None:
+                for province in CountryInfo(str(country)).provinces():
+                    provinceList.append(province)
+        except:
+            print("exception")
 
     return JsonResponse({'provinceList': provinceList})
 
