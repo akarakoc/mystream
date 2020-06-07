@@ -39,6 +39,8 @@ $( document ).ready(function() {
     imageAnnotationSelected = false;
     imageXYWH = "";
     imageXPath = "";
+    numberOfAnno = 0;
+
 
 /*******************************************/
 /*  Rest API Endpoints
@@ -313,15 +315,15 @@ function visualizeAnnotations(){
 function addAnnotationToSidebar(json, index, annoType){
 
     // Update Size Firstly
-    var count = index + 1;
+    var numberOfAnno = index + 1;
 
     if($(".annoContainer").height() < 1000 )
         $(".annoContainer").css("height" , $(".annoContainer").height() + 200 );
 
-    if(count == 1)
-        $("#annotationCount").html("There is " + count + " annotation on this page");
+    if(numberOfAnno == 1)
+        $("#annotationCount").html("There is " + numberOfAnno + " annotation on this page");
     else
-        $("#annotationCount").html("There are " + count + " annotations on this page");
+        $("#annotationCount").html("There are " + numberOfAnno + " annotations on this page");
     var body = json.body[0];
     var buttonBody;
 
@@ -605,6 +607,8 @@ function createAnnotation() {
 
         var post_data = { textAnno };
         sendPostRequest(post_data, textAnno, annoType);
+        numberOfAnno += 1;
+        addAnnotationToSidebar(textAnno, numberOfAnno , annoType);
     }else{
         showMessage("Error", " Body must be URI to create Image or Video annotation.");
     }
