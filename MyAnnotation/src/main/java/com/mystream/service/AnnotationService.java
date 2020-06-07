@@ -10,5 +10,7 @@ public interface AnnotationService {
 	public Annotation saveAnnotation(Annotation anno);
 	public List<Annotation> searchAnnotation();
 	public List<Annotation> searchAnnotationWithSource( String source);
+	public Annotation searchAnnotationWithCanonical( String canonical);
+	public void deleteAnnotation( Annotation anno);
 
 	}

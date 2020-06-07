@@ -1,28 +1,25 @@
-package com.mystream.test.repo;
+package com.mystream.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mystream.dom.Annotation;
-import com.mystream.repo.AnnotationRepository;
+import com.mystream.service.AnnotationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AnnotationRepositoryTest {
+public class AnnotationServiceTest {
 
 	@Autowired
-	private AnnotationRepository annoRepository;
+	private AnnotationService annotationService;
 
 	@Autowired
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -35,16 +32,16 @@ public class AnnotationRepositoryTest {
 			File file = new File(classLoader.getResource(testDataFile).getFile());
 
 			Annotation anno = objectMapper.readValue(file, Annotation.class);
-			annoRepository.save(anno);
+			annotationService.saveAnnotation(anno);
 
-			Annotation foundAnno = annoRepository.findByCanonical(anno.getCanonical());
+			Annotation foundAnno = annotationService.searchAnnotationWithCanonical(anno.getCanonical());
 
 			assertThat(foundAnno != null );
 			assertThat(foundAnno.getCanonical() == anno.getCanonical() );
 			assertThat(foundAnno.getBody() != null );
 			assertThat(foundAnno.getTarget() != null );
 
-			annoRepository.delete(foundAnno);
+			annotationService.deleteAnnotation(foundAnno);
 
 		}catch (Exception ex){
 			System.out.println(ex.getMessage());
@@ -52,45 +49,45 @@ public class AnnotationRepositoryTest {
 	}
 
 	@Test
-	public void test_save_imageTarget() {
+	public void test_saveAnnotation_imageTarget() {
 
 		test_save("test_save_imageTarget.json");
 
 	}
 
 	@Test
-	public void test_save_textTarget() {
+	public void test_saveAnnotation_textTarget() {
 
 		test_save("test_save_textTarget.json");
 
 	}
 
 	@Test
-	public void test_save_bodyWithVideo() {
+	public void test_saveAnnotation_bodyWithVideo() {
 
 		test_save("test_save_bodyWithVideo.json");
 
 	}
 
 	@Test
-	public void test_save_bodyWithImage() {
+	public void test_saveAnnotation_bodyWithImage() {
 
 		test_save("test_save_bodyWithImage.json");
 
 	}
 
 	@Test
-	public void test_save_bodyWithText() {
+	public void test_saveAnnotation_bodyWithText() {
 
 		test_save("test_save_bodyWithText.json");
 
 	}
 
 	@Test
-	public void test_findByTarget_SourceLike() {
+	public void test_searchAnnotationWithSource() {
 
 		String test_source = "localhost:8080";
-		List<Annotation> annoList = annoRepository.findByTarget_SourceLike(test_source);
+		List<Annotation> annoList = annotationService.searchAnnotationWithSource(test_source);
 
 		assertThat(annoList != null );
 		assertThat(annoList.size() > 0);
@@ -99,9 +96,9 @@ public class AnnotationRepositoryTest {
 			assertThat(anno.getBody() != null );
 			assertThat( anno.getTarget() != null );
 		}
-
-
 	}
+
+
 
 
 

@@ -35,4 +35,13 @@ public class AnnotationServiceImpl implements AnnotationService {
 		return annoRepository.findByTarget_SourceLike(source);
 	}
 
+	@Override
+	public Annotation searchAnnotationWithCanonical( String canonical){
+		return annoRepository.findByCanonical(canonical);
+	}
+
+	@Override
+	public void deleteAnnotation( Annotation anno){
+		 annoRepository.delete(anno);
+	}
 }
