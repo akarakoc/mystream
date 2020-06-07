@@ -56,7 +56,7 @@ def saveTag_view(returneditems):
     titles=""
     items=""		
     for iter in looping:
-        if iter is not '':
+        if iter != '':
             resp=saveTagSearch_view(iter)
             try:				
                 titles = titles + resp["TITLE"]
