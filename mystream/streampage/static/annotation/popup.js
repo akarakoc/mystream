@@ -15,12 +15,12 @@ function getSelected(c){
 
 $( document ).ready(function() {
 
-    $('img').Jcrop({
+    $('.annotatedImage img').Jcrop({
         onChange:   getImageXYWH,
         onSelect:   getSelected
       });
 
-    $('.image').click(function(e) {
+    $('.annotatedImage').click(function(e) {
          imageXPath = getXpath($(this).find("img")[0]);
     });
 
@@ -700,5 +700,8 @@ function getXpath(element)
 
 function getImageName(xpath){
     var imageSrc = $(getComponentByXpath(xpath)).prop("currentSrc").split('/');
+    if(imageSrc[imageSrc.length-1 ] == ""){
+        return imageSrc[imageSrc.length-2 ];
+    }
     return imageSrc[imageSrc.length-1 ];
 }
