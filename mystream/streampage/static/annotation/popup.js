@@ -6,22 +6,24 @@ $(function () {
 
 function getImageXYWH(c)
 {
-    console.log('x='+ c.x +' y='+ c.y +' x2='+ c.x2 +' y2='+ c.y2)
-    console.log('w='+c.w +' h='+ c.h)
     imageXYWH = "xywh=pixel:" + c.x + "," + c.y + "," + c.w + "," + c.h;
 };
 
-function getImageTarget(c){
+function getSelected(c){
     imageAnnotationSelected = true;
-    imageTarget = $('.jcrop-holder img').prop("currentSrc");
 }
 
 $( document ).ready(function() {
 
-    $('img').Jcrop({
+    $('.annotatedImage img').Jcrop({
         onChange:   getImageXYWH,
-        onSelect:   getImageTarget
+        onSelect:   getSelected
       });
+
+    $('.annotatedImage').click(function(e) {
+         imageXPath = getXpath($(this).find("img")[0]);
+    });
+
 /*******************************************/
 /*  Define Variables
 /*******************************************/
@@ -36,7 +38,9 @@ $( document ).ready(function() {
 
     imageAnnotationSelected = false;
     imageXYWH = "";
-    imageTarget = "";
+    imageXPath = "";
+    numberOfAnno = 0;
+
 
 /*******************************************/
 /*  Rest API Endpoints
@@ -63,12 +67,14 @@ $( document ).on( "click", "#createAnnotationButton", function(e) {
     }else if(imageAnnotationSelected){
             var annoType = "Image";
 
-            var ab = new AnnotationBuilder().tagging(imageTarget, imageXYWH);
-            // ab.result.target.toSelection();
+            var ab = new AnnotationBuilder().tagging(window.location.href, imageXYWH, imageXPath);
+
             var json = ab.toJSON();
             console.log(json);
 
-            openAnnotationModal( imageTarget + " " + imageXYWH , json, annoType);
+            var imageName = getImageName(imageXPath);
+
+            openAnnotationModal(imageName + " " + imageXYWH , json, annoType);
 
     }else if ( window.getSelection() != "" ){
         var annoType = "Text";
@@ -83,17 +89,48 @@ $( document ).on( "click", "#createAnnotationButton", function(e) {
     }
 });
 
+$( document ).on( "click", "div", function(e) {
 
-$( document ).contextmenu(function(e) {
+    if($(this).attr("data-purpose") == "pointedAnnotation"){
 
-    var ab = new AnnotationBuilder().highlight();
-    ab.result.target.toSelection();
-    var json = ab.toJSON();
+        var scrollId = $(this).attr("id").replace("annoBorder","");
 
-    openAnnotationModal( ab.result.target.selector[1].exact, json );
+        if($("#annoContainer").css("display") == "none")
+            $("#annoContainer").toggle('blind',1000);
 
-    e.preventDefault();
+        $(".annoTitle").removeClass("scrolledBorder");
+        document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100;
+        $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
+
+    }
 });
+
+$( document ).on( "click", ".highlightedAnnotation", function(e) {
+
+    var scrollId = $(this).data("dataAnnoIndex");
+
+    if($("#annoContainer").css("display") == "none")
+        $("#annoContainer").toggle('blind',1000);
+
+    $(".annoTitle").removeClass("scrolledBorder");
+    document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100;
+    $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
+
+});
+
+
+
+//
+// $( document ).contextmenu(function(e) {
+//
+//     var ab = new AnnotationBuilder().highlight();
+//     ab.result.target.toSelection();
+//     var json = ab.toJSON();
+//
+//     openAnnotationModal( ab.result.target.selector[1].exact, json );
+//
+//     e.preventDefault();
+// });
 
 function openAnnotationModal( targetVal, json, annoType ){
     $( "#target" ).val(targetVal);
@@ -207,22 +244,22 @@ $(document).on('click', "#closeHighlightButton", function() {
     });
 });
 
-$(document).on('click', ".annotationSelector", function() {
+// $(document).on('click', ".annotationSelector", function() {
+//     //$(".popover").hide();
+//     var popId = $(this).attr("id");
+//     openPopover(popId);
+// });
 
-    $(".popover").hide();
-
-    var popId = $(this).attr("id");
-
-
-    if($(this).hasClass("highlightedAnnotation")) {
-        $(this).popover('show');
-         setTimeout(function() {
-            $("#" + popId).popover('hide');
-        }, 3000);
-    }else{
-        $(this).popover('hide');
+function openPopover(popId){
+    if($("#" + popId).hasClass("highlightedAnnotation")) {
+        $("#" + popId).popover('show');
+         //setTimeout(closePopover(popId), 3000);
     }
-});
+}
+
+function closePopover(popId){
+    $("#" + popId).popover('hide');
+}
 
 
 function showMessage(title, message){
@@ -241,9 +278,11 @@ function visualizeAnnotations(){
       data: { source : window.location.href },
       contentType: 'application/json',
       success: function(data, status){
-          console.log("okk");
-          var jsonList = data.response.annoList;
 
+          var jsonList = data.response.annoList;
+          numberOfAnno = jsonList.length;
+          console.log("Annotations is received successfully ! ");
+          console.log(jsonList.length + " annotations are found for this page !");
           $.each(jsonList, function(index, json) {
                                 try {
                                      var annoType = "Text";
@@ -254,9 +293,9 @@ function visualizeAnnotations(){
                                          }
                                      });
                                      if( annoType == "Text"){
-                                         var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(json));
-                                         ab2.result.target.toSelection();
-                                         surroundSelection(json) ;
+                                         var annotation = new AnnotationBuilder().fromJSON(JSON.stringify(json));
+                                         annotation.result.target.toSelection();
+                                         surroundSelection(json, index) ;
                                      }else if( annoType == "Image"){
                                          pointImage(json, index);
                                      }
@@ -277,15 +316,15 @@ function visualizeAnnotations(){
 function addAnnotationToSidebar(json, index, annoType){
 
     // Update Size Firstly
-    var count = index + 1;
+    index = index + 1;
 
-    // if($(".annoContainer").height() < 1000 )
+    if($(".annoContainer").height() < 1000 )
         $(".annoContainer").css("height" , $(".annoContainer").height() + 200 );
 
-    if(count == 1)
-        $("#annotationCount").html("There is " + count + " annotation on this page");
+    if(index == 1)
+        $("#annotationCount").html("There is " + index + " annotation on this page");
     else
-        $("#annotationCount").html("There are " + count + " annotations on this page");
+        $("#annotationCount").html("There are " + index + " annotations on this page");
     var body = json.body[0];
     var buttonBody;
 
@@ -312,7 +351,8 @@ function addAnnotationToSidebar(json, index, annoType){
     if( annoType == "Text" ){
         annoLabel = window.getSelection();
     }else{
-        annoLabel = "Image on the page";
+        var xpath = json.target.selector[1].value;
+        annoLabel = getImageName(xpath);
     }
 
     $('.annoContainer #content').append(
@@ -359,13 +399,11 @@ function pointImage(anno, index){
     /* ---------------------------------------- */
     var xywh = anno.target.selector[0].value;
     xywh = xywh.replace("xywh=pixel:","");
-    xywh = xywh.split(",");
+    xywh = xywh.split(",")
 
-    var imageTarget = anno.target.source.split("/");
-    var imageSrc = imageTarget[imageTarget.length-1 ];
-    var position = $("div img[src$='" + imageSrc + "']").parent().offset();
-    //var left = parseInt(position.left) + parseInt(xywh[1]);
-    //var top = parseInt(position.top) + parseInt(xywh[2]);
+    var xpath = anno.target.selector[1].value;
+
+    var imageName = getImageName(xpath);
 
     var left = parseInt(xywh[0]);
     var top = parseInt(xywh[1]);
@@ -374,7 +412,7 @@ function pointImage(anno, index){
 
     var imagePointButton = "<button data-purpose='pointedAnnotation'  id='" + annoUpdateId +
         "' data-body='" + buttonBody +
-        "' data-selected='" + imageSrc + " " + anno.target.selector[0].value +
+        "' data-selected='" + imageName + " " + anno.target.selector[0].value +
         "' data-type='" + body.type +
         "' data-currentSrc='" + anno.id +
         "' data-json='" + JSON.stringify(anno) +
@@ -391,9 +429,11 @@ function pointImage(anno, index){
             "</svg>" +
         "</button>";
 
-        var annotationBorderDiv = "<div data-purpose='pointedAnnotation' " +
+        var annotationBorderDiv = "<div data-purpose='pointedAnnotation'  id='annoBorder" + index + "' " +
         " name='borderDiv' " +
         " style=' " +
+        " cursor : context-menu; " +
+        " border-radius : 10%;" +
         " display: block; " +
         " border: #ffc107; " +
         " border-width : 3px; " +
@@ -408,9 +448,8 @@ function pointImage(anno, index){
         "</div>";
 
 
-
-    $('.jcrop-holder').append( annotationBorderDiv );
-    $('.jcrop-holder').append( imagePointButton );
+    $(getComponentByXpath(xpath).parentElement).find(".jcrop-holder").append( annotationBorderDiv );
+    $(getComponentByXpath(xpath).parentElement).find(".jcrop-holder").append( imagePointButton );
 
 }
 
@@ -437,6 +476,8 @@ function surroundSelection(json, index) {
         $(a).addClass("annotationSelector");
         $(a).attr("id", id);
 
+        console.log(index);
+        $(a).data("dataAnnoIndex", index);
 
         $(a).data("title", "Annotation");
         $(a).data("html", true);
@@ -491,7 +532,8 @@ function surroundSelection(json, index) {
                                 "'>Update Annotation</button>\n"
                             "</div>";
 
-    $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'click', sanitize:false, content: contentHTMLText});
+    // TODO :  popover is closed
+    // $(a).popover({delay: { "show": 100, "hide": 1000 }, trigger: 'click', sanitize:false, content: contentHTMLText});
 
 
 }
@@ -510,12 +552,12 @@ function sendPostRequest(post_data, anno, annoType){
         success: function (data, status) {
             console.log("Annotation is saved successfully");
 
-            var ab2 = new AnnotationBuilder().fromJSON(JSON.stringify(anno));
-
             if( annoType == "Image"){
                 pointImage(anno, "none")
             }else if ( annoType == "Text"){
-                ab2.result.target.toSelection();
+                var annotation = new AnnotationBuilder().fromJSON(JSON.stringify(anno));
+
+                annotation.result.target.toSelection();
                 surroundSelection(anno);
             }
 
@@ -566,6 +608,9 @@ function createAnnotation() {
 
         var post_data = { textAnno };
         sendPostRequest(post_data, textAnno, annoType);
+        addAnnotationToSidebar(textAnno, numberOfAnno , annoType);
+    }else{
+        showMessage("Error", " Body must be URI to create Image or Video annotation.");
     }
 }
 
@@ -605,4 +650,62 @@ function checkRegexp( o, regexp, n ) {
   } else {
     return true;
   }
+}
+
+function findXpath(element)
+{
+    if (element && element.id)
+        return '//*[@id="' + element.id + '"]';
+    else
+        return Xpath.getElementTreeXPath(element);
+};
+
+function getComponentByXpath(xpath) {
+    return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+}
+
+function getXpath(element)
+{
+    var paths = [];  // Use nodeName (instead of localName)
+    // so namespace prefix is included (if any).
+    for (; element && element.nodeType == Node.ELEMENT_NODE;
+           element = element.parentNode)
+    {
+        var index = 0;
+        var hasFollowingSiblings = false;
+        for (var sibling = element.previousSibling; sibling;
+              sibling = sibling.previousSibling)
+        {
+            // Ignore document type declaration.
+            if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
+                continue;
+
+            if (sibling.nodeName == element.nodeName)
+                ++index;
+        }
+
+        for (var sibling = element.nextSibling;
+            sibling && !hasFollowingSiblings;
+            sibling = sibling.nextSibling)
+        {
+            if (sibling.nodeName == element.nodeName)
+                hasFollowingSiblings = true;
+        }
+
+        var tagName = (element.prefix ? element.prefix + ":" : "")
+                          + element.localName;
+        var pathIndex = (index || hasFollowingSiblings ? "["
+                   + (index + 1) + "]" : "");
+        paths.splice(0, 0, tagName + pathIndex);
+    }
+
+    return paths.length ? "/" + paths.join("/") : null;
+};
+
+function getImageName(xpath){
+    var imageSrc = $(getComponentByXpath(xpath)).prop("currentSrc").split('/');
+    if(imageSrc[imageSrc.length-1 ] == ""){
+        return imageSrc[imageSrc.length-2 ];
+    }
+    return imageSrc[imageSrc.length-1 ];
 }
