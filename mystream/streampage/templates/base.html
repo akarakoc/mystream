@@ -108,6 +108,7 @@ $( document ).ready(function() {
 	$(document).on ("click", "#createCommunityButton", function (event) {
 		event.preventDefault();
 		var data = new FormData($('#createCommunity').get(0));
+		console.log(data);
 		console.log($("input[name=csrfmiddlewaretoken]").val());
 		$.ajax({
 			type:'POST',
@@ -116,16 +117,18 @@ $( document ).ready(function() {
 			processData: false,
 			contentType: false,
 			dataType: "html",
-			success: CommunityCreateResult
+			success: CommunityCreateResult,
+			error: CommunityCreateResultError
 		});
 	});
-	
+
 	function CommunityCreateResult(data, textStatus, jqXHR){
 		alert(data);
 		window.location.reload();
 	}
-
-
+	function CommunityCreateResultError(){
+		alert("You should give name to the community!");
+	}
 
 	$(document).on ("change", "#id_Community_Country", function () {
 		$.ajax({

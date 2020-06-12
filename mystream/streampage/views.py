@@ -31,6 +31,7 @@ from streampage.models import Primitives,communityUsers,Communities,Datatypes,Da
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 from countryinfo import CountryInfo
+from unicode_tr import unicode_tr
 
 def saveTagSearch_view(src):
     SEARCHPAGE = src	
@@ -214,6 +215,7 @@ def CreateCommunity_view(request):
     form = AddCommunity(request.POST, request.FILES)
     c_image=request.FILES.get("Community_Image")
     image_path=handle_uploaded_file(c_image)
+
     comm = Communities()
     comm.name = request.POST.get("Community_Name")
     comm.description = request.POST.get("Community_Description")
@@ -235,9 +237,9 @@ def CreateCommunity_view(request):
     comm.save()
     Tags = saveTag_view(request.POST.get("Community_Tags"))
     tagentry = CommunityTags()
-    relatedComm = Communities.objects.filter(communityHash=commhash)[0] 
+    relatedComm = Communities.objects.filter(communityHash=commhash)[0]
     tagentry.communityTag = relatedComm
-    tagentry.tagName = Tags["TITLE"] 
+    tagentry.tagName = Tags["TITLE"]
     tagentry.tagItem = Tags["ITEM"]
     tagentry.save()
 
@@ -258,7 +260,6 @@ def CreateCommunity_view(request):
             "hash": comm.communityHash
         }
     }
-
     ActivityStreams.objects.create(detail = description)
     return render(None, 'tagSearch.html', {'form' : "Community is created Successfully!"})
 
@@ -628,7 +629,7 @@ def EditPosttypeMeta_view(request):
 
 def DeletePosttypeMeta_view(request):
     dt_hash = request.POST.get("Posttype_Hash")
-    dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
+    dt = Datatypes.objects.filter(datatypeHash = dt_hash).first()
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -950,7 +951,7 @@ def addPosttypeEditField_view(request):
 
 def subscribePosttype_view(request):
     user = request.user
-    userModel = communityUsers.objects.filter(nickName=user)[0]
+    userModel = communityUsers.objects.filter(nickName=user).first()
     Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
     Posttype.subscribers.add(userModel)
     Posttype.save()
@@ -1810,8 +1811,10 @@ def communityLocationPageSearch_view(request):
         if request.GET.get('keyword'):
             if Communities.objects.all():
                 searchString = request.GET.get('keyword')
-                Community_List = Communities.objects.filter(communityCountry__contains=searchString).order_by(
-                    '-communityCreationDate') | Communities.objects.filter(communityLocation__contains=searchString).order_by(
+                text_true = unicode_tr(searchString)
+                print(text_true.capitalize())
+                Community_List = Communities.objects.filter(communityCountry__icontains = text_true.capitalize()).order_by(
+                    '-communityCreationDate') | Communities.objects.filter(communityLocation__icontains=text_true.capitalize()).order_by(
                     '-communityCreationDate')
                 Cuser = request.user
                 UserList = communityUsers.objects.filter(nickName=Cuser)[0]
