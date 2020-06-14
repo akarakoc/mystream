@@ -117,17 +117,13 @@ $( document ).ready(function() {
 			processData: false,
 			contentType: false,
 			dataType: "html",
-			success: CommunityCreateResult,
-			error: CommunityCreateResultError
+			success: CommunityCreateResult
 		});
 	});
 
 	function CommunityCreateResult(data, textStatus, jqXHR){
 		alert(data);
 		window.location.reload();
-	}
-	function CommunityCreateResultError(){
-		alert("You should give name to the community!");
 	}
 
 	$(document).on ("change", "#id_Community_Country", function () {

@@ -631,7 +631,7 @@ def EditPosttypeMeta_view(request):
 
 def DeletePosttypeMeta_view(request):
     dt_hash = request.POST.get("Posttype_Hash")
-    dt = Datatypes.objects.filter(datatypeHash = dt_hash).first()
+    dt = Datatypes.objects.filter(datatypeHash = dt_hash)[0]
     activityStream = ActivityStreams()
     description = {
         "@context": "https://www.w3.org/ns/activitystreams",
@@ -953,7 +953,7 @@ def addPosttypeEditField_view(request):
 
 def subscribePosttype_view(request):
     user = request.user
-    userModel = communityUsers.objects.filter(nickName=user).first()
+    userModel = communityUsers.objects.filter(nickName=user)[0]
     Posttype = Posts.objects.filter(entryHash=request.POST.get("post_Hash"))[0].relatedDatatypes
     Posttype.subscribers.add(userModel)
     Posttype.save()
