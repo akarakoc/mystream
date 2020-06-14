@@ -38,7 +38,7 @@ def saveTagSearch_view(src):
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
-		"limit": "50",
+		"limit": "10",
         "language":"en",
 		"search": SEARCHPAGE
     }
@@ -427,7 +427,7 @@ def searchTag_view(request):
     PARAMS = {
 		"action":"wbsearchentities",
 		"format": "json",
-		"limit": "50",
+		"limit": "10",
         "language":"en",
 		"search": SEARCHPAGE
     }
