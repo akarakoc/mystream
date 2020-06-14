@@ -390,28 +390,30 @@ def DeleteCommunity_view(request):
     userModel = communityUsers.objects.filter(nickName=user)[0]
     Comm = Communities.objects.get(communityHash=request.POST.get("community_Hash"))
     name = Comm.name
-    try:
-        Comm.delete()
-        activityStream = ActivityStreams()
-        description = {
-            "@context": "https://www.w3.org/ns/activitystreams",
-            "type": "deleted",
-            "published": str(datetime.now()),
-            "actor": {
-                "id": "",
-                "name": communityUsers.objects.get(nickName=request.user).nickName,
-                "photo": communityUsers.objects.get(nickName=request.user).userPhoto
-            },
-            "object": {
-                "id": "",
-                "type": "Community",
-                "name": name,
+    comCreator = Comm.communityCreator
+    if str(user) == str(comCreator):
+        try:
+            Comm.delete()
+            activityStream = ActivityStreams()
+            description = {
+                "@context": "https://www.w3.org/ns/activitystreams",
+                "type": "deleted",
+                "published": str(datetime.now()),
+                "actor": {
+                    "id": "",
+                    "name": communityUsers.objects.get(nickName=request.user).nickName,
+                    "photo": communityUsers.objects.get(nickName=request.user).userPhoto
+                },
+                "object": {
+                    "id": "",
+                    "type": "Community",
+                    "name": name,
+                }
             }
-        }
-        ActivityStreams.objects.create(detail = description)
-        return render(None, 'tagSearch.html', {'form': name+" Community has been Deleted Successfully !"})
-    except:
-        return render(None, 'tagSearch.html', {'form': name+" Community cannot be Deleted!"})        
+            ActivityStreams.objects.create(detail = description)
+            return render(None, 'tagSearch.html', {'form': name+" Community has been Deleted Successfully !"})
+        except:
+            return render(None, 'tagSearch.html', {'form': name+" Community cannot be Deleted!"})        
 
 def posttypeForm(request):
     form = AddPosttype()
