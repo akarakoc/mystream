@@ -1,0 +1,1013 @@
+Watching for file changes with StatReloader
+[12/Jun/2020 10:42:19] "GET /streampage/communities/ HTTP/1.1" 200 57022
+[12/Jun/2020 10:42:23] "GET /streampage/ HTTP/1.1" 200 56885
+[12/Jun/2020 11:13:29] "GET /streampage/ HTTP/1.1" 200 56885
+[12/Jun/2020 11:15:20] "GET /streampage/ HTTP/1.1" 200 56879
+[12/Jun/2020 14:27:17] "GET /streampage/communities/ HTTP/1.1" 200 57016
+/usr/local/lib/python3.6/dist-packages/django/template/defaulttags.py:63: UserWarning: A {% csrf_token %} was used in a template, but the context did not provide the value.  This is usually caused by not using RequestContext.
+  "A {% csrf_token %} was used in a template, but the context "
+[12/Jun/2020 14:27:19] "POST /streampage/CheckMembership/ HTTP/1.1" 200 7
+[12/Jun/2020 14:27:20] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74420
+Performing system checks...
+
+System check identified no issues (0 silenced).
+June 12, 2020 - 10:42:11
+Django version 3.0.3, using settings 'mystream.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}[12/Jun/2020 14:27:20] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74420
+[12/Jun/2020 14:27:22] "GET /streampage/sendPosttypeForm/?Form=Yes HTTP/1.1" 200 546
+[12/Jun/2020 14:27:26] "GET /streampage/searchTag?search_text=t&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 301 0
+[12/Jun/2020 14:27:27] "GET /streampage/searchTag?search_text=te&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 301 0
+[12/Jun/2020 14:27:27] "GET /streampage/searchTag?search_text=tes&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 301 0
+[12/Jun/2020 14:27:27] "GET /streampage/searchTag?search_text=test&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 301 0
+[12/Jun/2020 14:27:27] "GET /streampage/searchTag/?search_text=te&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 933
+[12/Jun/2020 14:27:27] "GET /streampage/searchTag/?search_text=t&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 823
+[12/Jun/2020 14:27:27] "GET /streampage/searchTag/?search_text=tes&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 594
+[12/Jun/2020 14:27:28] "GET /streampage/searchTag/?search_text=test&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 1039
+[12/Jun/2020 14:27:47] "GET /streampage/EditPosttypes?community_Hash=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 301 0
+[12/Jun/2020 14:27:47] "GET /streampage/EditPosttypes/?community_Hash=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 446
+[12/Jun/2020 14:27:51] "POST /streampage/ShowPosttypeFields/ HTTP/1.1" 200 18257
+[12/Jun/2020 14:28:07] "POST /streampage/AddPostModal/ HTTP/1.1" 200 446
+[12/Jun/2020 14:28:10] "POST /streampage/ReturnPostFields/ HTTP/1.1" 200 3655
+[12/Jun/2020 14:29:18] "GET /streampage/searchTag/?search_text=te&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 1117
+[12/Jun/2020 14:29:18] "GET /streampage/searchTag/?search_text=tes&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 594
+[12/Jun/2020 14:29:18] "GET /streampage/searchTag/?search_text=t&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 823
+[12/Jun/2020 14:29:19] "GET /streampage/searchTag/?search_text=test&csrfmiddlewaretoken=x4QShRvyX3f1VgqERIkmCzkQvn2gg6lRgurpH5yXq68HoPF1nEswXDnUReVvwSVe HTTP/1.1" 200 1039
+[12/Jun/2020 14:29:31] "POST /streampage/ReturnPostFields/ HTTP/1.1" 200 2415
+[12/Jun/2020 14:29:37] "POST /streampage/ReturnPostFields/ HTTP/1.1" 200 3655
+[12/Jun/2020 14:29:44] "POST /streampage/chooseSearch/ HTTP/1.1" 200 1348
+[12/Jun/2020 14:29:56] "POST /streampage/ReturnSearchFields/ HTTP/1.1" 200 722
+[12/Jun/2020 14:30:07] "POST /streampage/ReturnSearchFields/ HTTP/1.1" 200 670
+[12/Jun/2020 14:30:18] "POST /streampage/ReturnSearchFields/ HTTP/1.1" 200 755
+[12/Jun/2020 14:30:24] "POST /streampage/ReturnFreeSearchFields/ HTTP/1.1" 200 391
+[12/Jun/2020 14:30:33] "GET /streampage/EditCommunityModal?Form=Yes HTTP/1.1" 301 0
+[12/Jun/2020 14:30:33] "GET /streampage/EditCommunityModal/?Form=Yes HTTP/1.1" 200 925
+[12/Jun/2020 14:30:40] "POST /streampage/subscribePosttype/ HTTP/1.1" 200 49
+[12/Jun/2020 14:30:42] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[12/Jun/2020 14:30:46] "GET /streampage/reportPostModal?FlagPost=True HTTP/1.1" 301 0
+[12/Jun/2020 14:30:46] "GET /streampage/reportPostModal/?FlagPost=True HTTP/1.1" 200 548
+/usr/local/lib/python3.6/dist-packages/django/db/models/fields/__init__.py:1368: RuntimeWarning: DateTimeField ReportedPosts.reportPostCreationDate received a naive datetime (2020-06-12 14:30:49.842269) while time zone support is active.
+  RuntimeWarning)
+[12/Jun/2020 14:30:49] "POST /streampage/reportPost/ HTTP/1.1" 200 39
+
+79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa
+79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa
+Text
+Text
+Text Area
+Location
+Date
+Boolean
+Image
+Text
+Integer
+{'Name': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Family': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Shape': <AddEnumaratedPost bound=False, valid=Unknown, fields=(EnumaratedEntry)>, 'Description': <AddTextAreaPost bound=False, valid=Unknown, fields=(TextAreaEntry)>, 'Origin': <AddLocationPost bound=False, valid=Unknown, fields=(LocationEntry)>, 'First Seen': <AddDatePost bound=False, valid=Unknown, fields=(DateEntry)>, 'Vaccinated': <AddBooleanPost bound=False, valid=Unknown, fields=(BooleanEntry)>, 'Image': <AddImagePost bound=True, valid=Unknown, fields=(ImageEntry)>, 'County': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Number of Infected People': <AddIntegerPost bound=False, valid=Unknown, fields=(IntegerEntry)>}
+Text
+Text Area
+Integer
+Image
+Text Area
+{'Name': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Type': <AddEnumaratedPost bound=False, valid=Unknown, fields=(EnumaratedEntry)>, 'Description': <AddTextAreaPost bound=False, valid=Unknown, fields=(TextAreaEntry)>, 'Frequency': <AddIntegerPost bound=False, valid=Unknown, fields=(IntegerEntry)>, 'Image': <AddImagePost bound=True, valid=Unknown, fields=(ImageEntry)>, 'Prevention': <AddTextAreaPost bound=False, valid=Unknown, fields=(TextAreaEntry)>}
+Text
+Text
+Text Area
+Location
+Date
+Boolean
+Image
+Text
+Integer
+{'Name': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Family': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Shape': <AddEnumaratedPost bound=False, valid=Unknown, fields=(EnumaratedEntry)>, 'Description': <AddTextAreaPost bound=False, valid=Unknown, fields=(TextAreaEntry)>, 'Origin': <AddLocationPost bound=False, valid=Unknown, fields=(LocationEntry)>, 'First Seen': <AddDatePost bound=False, valid=Unknown, fields=(DateEntry)>, 'Vaccinated': <AddBooleanPost bound=False, valid=Unknown, fields=(BooleanEntry)>, 'Image': <AddImagePost bound=True, valid=Unknown, fields=(ImageEntry)>, 'County': <AddTextPost bound=False, valid=Unknown, fields=(TextEntry)>, 'Number of Infected People': <AddIntegerPost bound=False, valid=Unknown, fields=(IntegerEntry)>}
+79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}[12/Jun/2020 14:30:51] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[12/Jun/2020 14:30:57] "GET /streampage/profile/ HTTP/1.1" 200 199348
+[12/Jun/2020 14:31:07] "GET /streampage/showPostDetails/?postHash=1e325f65fd694c17ba20a96173e99f48514d7ea309fdc169bc9975ec0992d68fff3390a3d13b4413a87670ae2cbf4cbd HTTP/1.1" 200 60965
+[12/Jun/2020 14:31:07] "GET /static/css/popup.css HTTP/1.1" 304 0
+[12/Jun/2020 14:31:07] "GET /static/css/jquery.Jcrop.css HTTP/1.1" 304 0
+[12/Jun/2020 14:31:07] "GET /static/js/jquery.Jcrop.min.js HTTP/1.1" 304 0
+[12/Jun/2020 14:31:07] "GET /static/annotation/annotation-model.js HTTP/1.1" 304 0
+[12/Jun/2020 14:31:07] "GET /static/annotation/popup.js HTTP/1.1" 304 0
+[12/Jun/2020 14:31:08] "GET /static/css/Jcrop.gif HTTP/1.1" 304 0
+[12/Jun/2020 14:31:20] "POST /streampage/reportPostDelete/ HTTP/1.1" 200 26
+[12/Jun/2020 14:31:26] "GET /streampage/profile/ HTTP/1.1" 200 198300
+[12/Jun/2020 14:32:41] "POST /streampage/uploadPhotoForm/ HTTP/1.1" 200 234
+[12/Jun/2020 14:32:44] "GET /streampage/EditUserModal/?Form=Yes HTTP/1.1" 200 761
+[12/Jun/2020 14:33:10] "GET /streampage/ HTTP/1.1" 200 56869
+[12/Jun/2020 14:33:11] "GET /streampage/ HTTP/1.1" 200 56869
+[12/Jun/2020 14:33:15] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[12/Jun/2020 14:33:22] "GET /streampage/UserPage?user=ali HTTP/1.1" 301 0
+[12/Jun/2020 14:33:22] "GET /streampage/UserPage/?user=ali HTTP/1.1" 200 198300
+[12/Jun/2020 14:33:55] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[12/Jun/2020 14:33:57] "POST /streampage/CheckMembership/ HTTP/1.1" 200 7
+
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}[12/Jun/2020 14:33:58] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[12/Jun/2020 14:33:58] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[12/Jun/2020 14:34:17] "GET /streampage/showPostDetails/?postHash=f29cbc0f35d9826de9fb936dbfd105fb0b33caded6e4a9ca424d02cfd0d3a0b1e43a8c052dde4e1bb1f8f619ea2faaa8 HTTP/1.1" 200 64764
+/usr/local/lib/python3.6/dist-packages/django/db/models/fields/__init__.py:1368: RuntimeWarning: DateTimeField PostComments.postCommentCreationDate received a naive datetime (2020-06-12 14:35:21.995297) while time zone support is active.
+  RuntimeWarning)
+[12/Jun/2020 14:35:22] "POST /streampage/CreatePostComment/ HTTP/1.1" 200 39
+[12/Jun/2020 14:35:23] "GET /streampage/showPostDetails/?postHash=f29cbc0f35d9826de9fb936dbfd105fb0b33caded6e4a9ca424d02cfd0d3a0b1e43a8c052dde4e1bb1f8f619ea2faaa8 HTTP/1.1" 200 65595
+[12/Jun/2020 14:35:27] "POST /streampage/deletePostComment/ HTTP/1.1" 200 40
+[12/Jun/2020 14:35:28] "GET /streampage/showPostDetails/?postHash=f29cbc0f35d9826de9fb936dbfd105fb0b33caded6e4a9ca424d02cfd0d3a0b1e43a8c052dde4e1bb1f8f619ea2faaa8 HTTP/1.1" 200 64764
+[12/Jun/2020 14:35:35] "GET /streampage/ HTTP/1.1" 200 56869
+[12/Jun/2020 14:35:43] "GET /streampage/profile/ HTTP/1.1" 200 200689
+[12/Jun/2020 14:36:00] "GET /streampage/ HTTP/1.1" 200 56869
+[12/Jun/2020 14:36:08] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[12/Jun/2020 14:36:11] "GET /streampage/profile/ HTTP/1.1" 200 200689
+[12/Jun/2020 14:36:50] "GET /streampage/ HTTP/1.1" 200 56869
+[12/Jun/2020 16:50:21] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[12/Jun/2020 16:50:21] "  /*à     Cookie: mstshash=Administr" 400 -
+[12/Jun/2020 17:48:11] code 400, message Bad HTTP/0.9 request type ('Z¥\x01')
+[12/Jun/2020 17:48:11] "Z¥     " 400 -
+[12/Jun/2020 18:35:00] code 400, message Bad HTTP/0.9 request type ('Z¥\x01')
+[12/Jun/2020 18:35:00] "Z¥     " 400 -
+Not Found: /
+[12/Jun/2020 19:42:27] "GET / HTTP/1.1" 404 2037
+[12/Jun/2020 23:02:23] code 400, message Bad HTTP/0.9 request type ('Z¥\x01')
+[12/Jun/2020 23:02:23] "Z¥     " 400 -
+[13/Jun/2020 02:48:09] code 400, message Bad HTTP/0.9 request type ('Z¥\x01')
+[13/Jun/2020 02:48:09] "Z¥     " 400 -
+[13/Jun/2020 05:40:51] code 400, message Bad request version ('À\x14À')
+[13/Jun/2020 05:40:51] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+[13/Jun/2020 05:53:30] code 400, message Bad HTTP/0.9 request type ('Z¥\x01')
+[13/Jun/2020 05:53:30] "Z¥     " 400 -
+Not Found: /ip.ws.126.net:443
+[13/Jun/2020 06:29:28] "CONNECT ip.ws.126.net:443 HTTP/1.1" 404 1670
+[13/Jun/2020 07:45:36] "GET /streampage/ HTTP/1.1" 200 56869
+[13/Jun/2020 07:45:39] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[13/Jun/2020 07:45:40] "GET /static/uploads/communities/corona.jpg/ HTTP/1.1" 304 0
+[13/Jun/2020 07:45:41] "GET /static/uploads/communities/botanic.jpg/ HTTP/1.1" 200 339968
+----------------------------------------
+Exception happened during processing of request from ('185.151.243.89', 41692)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/usr/local/lib/python3.6/dist-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python3.6/dist-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[13/Jun/2020 09:09:14] "GET /streampage/ HTTP/1.1" 200 56869
+[13/Jun/2020 09:09:16] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[13/Jun/2020 09:09:16] "GET /static/uploads/communities/botanic.jpg/ HTTP/1.1" 200 352729
+[13/Jun/2020 09:09:19] "POST /streampage/CheckMembership/ HTTP/1.1" 200 7
+
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}[13/Jun/2020 09:09:20] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[13/Jun/2020 09:09:20] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[13/Jun/2020 09:09:23] "GET /streampage/sendPosttypeForm/?Form=Yes HTTP/1.1" 200 546
+[13/Jun/2020 09:09:29] "GET /streampage/EditPosttypes/?community_Hash=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 446
+[13/Jun/2020 09:09:37] "POST /streampage/ShowPosttypeFields/ HTTP/1.1" 200 18257
+[13/Jun/2020 09:09:43] "POST /streampage/addPosttypeEditField/ HTTP/1.1" 200 1377
+[13/Jun/2020 09:09:51] "GET /streampage/EditCommunityModal/?Form=Yes HTTP/1.1" 200 925
+[13/Jun/2020 09:10:05] "GET /streampage/showPostDetails/?postHash=f29cbc0f35d9826de9fb936dbfd105fb0b33caded6e4a9ca424d02cfd0d3a0b1e43a8c052dde4e1bb1f8f619ea2faaa8 HTTP/1.1" 200 64764
+[13/Jun/2020 09:10:05] "GET /static/css/popup.css HTTP/1.1" 304 0
+[13/Jun/2020 09:10:05] "GET /static/css/jquery.Jcrop.css HTTP/1.1" 304 0
+[13/Jun/2020 09:10:05] "GET /static/js/jquery.Jcrop.min.js HTTP/1.1" 304 0
+[13/Jun/2020 09:10:05] "GET /static/annotation/annotation-model.js HTTP/1.1" 304 0
+[13/Jun/2020 09:10:05] "GET /static/annotation/popup.js HTTP/1.1" 304 0
+[13/Jun/2020 09:10:06] "GET /static/css/Jcrop.gif HTTP/1.1" 304 0
+[13/Jun/2020 09:10:18] "GET /streampage/showPostDetails/?postHash=1e325f65fd694c17ba20a96173e99f48514d7ea309fdc169bc9975ec0992d68fff3390a3d13b4413a87670ae2cbf4cbd HTTP/1.1" 200 60965
+[13/Jun/2020 09:10:33] "GET /streampage/showPostDetails/?postHash=1e325f65fd694c17ba20a96173e99f48514d7ea309fdc169bc9975ec0992d68fff3390a3d13b4413a87670ae2cbf4cbd HTTP/1.1" 200 60965
+[13/Jun/2020 09:10:36] "GET /streampage/showPostDetails/?postHash=1e325f65fd694c17ba20a96173e99f48514d7ea309fdc169bc9975ec0992d68fff3390a3d13b4413a87670ae2cbf4cbd HTTP/1.1" 200 60965
+[13/Jun/2020 09:10:43] "GET /streampage/showPostDetails/?postHash=f29cbc0f35d9826de9fb936dbfd105fb0b33caded6e4a9ca424d02cfd0d3a0b1e43a8c052dde4e1bb1f8f619ea2faaa8 HTTP/1.1" 200 64764
+[13/Jun/2020 11:21:01] "GET /streampage/ HTTP/1.1" 200 56869
+[13/Jun/2020 11:21:04] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[13/Jun/2020 11:21:10] "POST /streampage/LeaveCommunity/ HTTP/1.1" 200 41
+[13/Jun/2020 11:21:11] "GET /streampage/communities/ HTTP/1.1" 200 56705
+[13/Jun/2020 11:21:13] "POST /streampage/JoinCommunity/ HTTP/1.1" 200 41
+[13/Jun/2020 11:21:13] "POST /streampage/JoinCommunity/ HTTP/1.1" 200 41
+[13/Jun/2020 11:21:15] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[13/Jun/2020 11:21:15] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[13/Jun/2020 11:21:19] "POST /streampage/CheckMembership/ HTTP/1.1" 200 7
+[13/Jun/2020 11:21:19] "POST /streampage/CheckMembership/ HTTP/1.1" 200 7
+
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}[13/Jun/2020 11:21:20] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[13/Jun/2020 11:21:20] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}[13/Jun/2020 11:21:21] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[13/Jun/2020 11:21:21] "GET /streampage/sendPosttypePage/?showDataTypes=79d696ea1f9e8255e19d979cb6bf487b9b3c732ee08a69dbac39e91dc9a18b6d0609c6c835214e25b92b44ec86db5baa HTTP/1.1" 200 74743
+[13/Jun/2020 11:45:02] "GET /streampage/communities/ HTTP/1.1" 200 57016
+[13/Jun/2020 11:52:55] "GET /streampage/communities/ HTTP/1.1" 200 57016
+Not Found: /
+[13/Jun/2020 16:45:18] "GET / HTTP/1.0" 404 2068
+----------------------------------------
+Exception happened during processing of request from ('188.226.149.92', 60000)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/usr/local/lib/python3.6/dist-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python3.6/dist-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception happened during processing of request from ('104.152.52.38', 51524)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/usr/local/lib/python3.6/dist-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python3.6/dist-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[13/Jun/2020 18:45:13] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[13/Jun/2020 18:45:13] "  /*à     Cookie: mstshash=Administr" 400 -
+[13/Jun/2020 21:44:17] code 400, message Bad request version ('\x07\x01\x00\x00!5/////./..//////./..//////./../flash/rw/store/user.dat\x02\x00ÿ\x88\x02\x00\x00\x00\x00\x00\x08\x00\x00\x00\x01\x00ÿ\x88\x02\x00\x02\x00\x00\x00\x02\x00\x00\x00')
+[13/Jun/2020 21:44:17] "h fM2 ÿ ÿ	 ÿ	  !5/////./..//////./..//////./../flash/rw/store/user.dat ÿ         ÿ       " 400 -
+Not Found: /
+[14/Jun/2020 03:47:58] "GET / HTTP/1.1" 404 2037
+[14/Jun/2020 03:51:28] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[14/Jun/2020 03:51:28] "  /*à     Cookie: mstshash=Administr" 400 -
+Not Found: /
+[14/Jun/2020 07:44:56] "GET / HTTP/1.1" 404 2037
+Not Found: /favicon.ico
+[14/Jun/2020 07:44:57] "GET /favicon.ico HTTP/1.1" 404 2088
+[14/Jun/2020 07:45:06] "GET /streampage HTTP/1.1" 301 0
+[14/Jun/2020 07:45:06] "GET /streampage/ HTTP/1.1" 302 0
+[14/Jun/2020 07:45:06] "GET /streampage/login HTTP/1.1" 301 0
+[14/Jun/2020 07:45:07] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 07:45:07] "GET /static/css/tagsinput.css HTTP/1.1" 200 2337
+[14/Jun/2020 07:45:07] "GET /static/fontawesome-free/css/all.min.css HTTP/1.1" 200 56517
+[14/Jun/2020 07:45:07] "GET /static/js/bootstrap.min.js HTTP/1.1" 200 58072
+[14/Jun/2020 07:45:07] "GET /static/js/sb-admin-2.min.js HTTP/1.1" 200 1106
+[14/Jun/2020 07:45:07] "GET /static/css/sb-admin-2.min.css HTTP/1.1" 200 164930
+[14/Jun/2020 07:45:07] "GET /static/js/tagsinput.js HTTP/1.1" 200 23345
+[14/Jun/2020 07:45:07] "GET /static/jquery/jquery.min.js HTTP/1.1" 200 88145
+[14/Jun/2020 07:45:08] "GET /static/uploads/logo/Logo.png HTTP/1.1" 200 9035
+[14/Jun/2020 07:45:08] "GET /static/uploads/logo/LogoText.png HTTP/1.1" 200 4148
+[14/Jun/2020 07:45:08] "GET /static/uploads/logo/LogoDark.png HTTP/1.1" 200 8394
+[14/Jun/2020 07:45:08] "GET /static/uploads/profiles/default.jpg HTTP/1.1" 200 91703
+[14/Jun/2020 07:45:13] "GET /streampage/ HTTP/1.1" 302 0
+[14/Jun/2020 07:45:14] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 07:45:22] "GET /streampage/ HTTP/1.1" 302 0
+[14/Jun/2020 07:45:23] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 07:45:26] "GET /streampage/communities HTTP/1.1" 301 0
+[14/Jun/2020 07:45:26] "GET /streampage/communities/ HTTP/1.1" 302 0
+[14/Jun/2020 07:45:27] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 07:45:28] "GET /streampage/ HTTP/1.1" 302 0
+[14/Jun/2020 07:45:29] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 07:48:08] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 09:08:25] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 09:08:31] "POST /streampage/login/ HTTP/1.1" 200 48795
+[14/Jun/2020 09:08:33] "GET /streampage/register HTTP/1.1" 301 0
+[14/Jun/2020 09:08:33] "GET /streampage/register/ HTTP/1.1" 200 48985
+[14/Jun/2020 09:09:08] "POST /streampage/register/ HTTP/1.1" 200 49182
+[14/Jun/2020 09:09:21] "POST /streampage/register/ HTTP/1.1" 200 49175
+[14/Jun/2020 09:09:36] "POST /streampage/register/ HTTP/1.1" 302 0
+[14/Jun/2020 09:09:37] "GET /streampage/login HTTP/1.1" 301 0
+[14/Jun/2020 09:09:37] "GET /streampage/login/ HTTP/1.1" 200 48670
+[14/Jun/2020 09:09:49] "POST /streampage/login/ HTTP/1.1" 302 0
+[14/Jun/2020 09:09:50] "GET /streampage HTTP/1.1" 301 0
+[14/Jun/2020 09:09:50] "GET /streampage/ HTTP/1.1" 200 47181
+[14/Jun/2020 09:09:55] "GET /streampage/communities/ HTTP/1.1" 200 56097
+[14/Jun/2020 09:09:55] "GET /static/uploads/communities/corona.jpg/ HTTP/1.1" 200 61254
+[14/Jun/2020 09:09:55] "GET /static/fontawesome-free/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 75408
+[14/Jun/2020 09:09:55] "GET /static/uploads/communities/cosmology.jpg/ HTTP/1.1" 200 23823
+[14/Jun/2020 09:09:56] "GET /static/uploads/communities/botanic.jpg/ HTTP/1.1" 200 352729
+[14/Jun/2020 09:12:34] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 09:12:34] "GET /static/css/tagsinput.css HTTP/1.1" 200 2337
+[14/Jun/2020 09:12:34] "GET /static/js/sb-admin-2.min.js HTTP/1.1" 200 1106
+[14/Jun/2020 09:12:34] "GET /static/fontawesome-free/css/all.min.css HTTP/1.1" 200 56517
+[14/Jun/2020 09:12:34] "GET /static/js/bootstrap.min.js HTTP/1.1" 200 58072
+[14/Jun/2020 09:12:35] "GET /static/css/sb-admin-2.min.css HTTP/1.1" 200 164930
+[14/Jun/2020 09:12:35] "GET /static/jquery/jquery.min.js HTTP/1.1" 200 88145
+[14/Jun/2020 09:12:35] "GET /static/js/tagsinput.js HTTP/1.1" 200 23345
+[14/Jun/2020 09:12:35] "GET /static/uploads/logo/Logo.png HTTP/1.1" 200 9035
+[14/Jun/2020 09:12:35] "GET /static/uploads/logo/LogoText.png HTTP/1.1" 200 4148
+[14/Jun/2020 09:12:35] "GET /static/uploads/profiles/default.jpg HTTP/1.1" 200 91703
+[14/Jun/2020 09:12:35] "GET /static/uploads/logo/LogoDark.png HTTP/1.1" 200 8394
+[14/Jun/2020 09:38:26] "POST /streampage/DeleteCommunity/ HTTP/1.1" 200 64
+[14/Jun/2020 09:38:31] "GET /streampage/communities/ HTTP/1.1" 200 53798
+[14/Jun/2020 09:39:28] "GET /streampage/communities/ HTTP/1.1" 200 53798
+[14/Jun/2020 09:45:13] "GET /streampage/sendCommunityForm?Form=Yes HTTP/1.1" 301 0
+[14/Jun/2020 09:45:13] "GET /streampage/sendCommunityForm/?Form=Yes HTTP/1.1" 200 12106
+[14/Jun/2020 09:45:27] "GET /streampage/sendCommunityForm/?Form=Yes HTTP/1.1" 200 12106
+[14/Jun/2020 09:45:37] "GET /streampage/searchTag?search_text=K&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+[14/Jun/2020 09:45:38] "GET /streampage/searchTag?search_text=Ko&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+[14/Jun/2020 09:45:38] "GET /streampage/searchTag?search_text=Kor&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+[14/Jun/2020 09:45:38] "GET /streampage/searchTag?search_text=Koro&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+[14/Jun/2020 09:45:38] "GET /streampage/searchTag?search_text=Koron&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+[14/Jun/2020 09:45:38] "GET /streampage/searchTag/?search_text=K&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 370
+[14/Jun/2020 09:45:38] "GET /streampage/searchTag/?search_text=Ko&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 402
+[14/Jun/2020 09:45:39] "GET /streampage/searchTag/?search_text=Kor&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 498
+[14/Jun/2020 09:45:39] "GET /streampage/searchTag/?search_text=Koron&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 568
+[14/Jun/2020 09:45:39] "GET /streampage/searchTag/?search_text=Koro&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 358
+[14/Jun/2020 09:45:39] "GET /streampage/searchTag/?search_text=K&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 371
+[14/Jun/2020 09:45:40] "GET /streampage/searchTag?search_text=KoronaVirus&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+[14/Jun/2020 09:45:41] "GET /streampage/searchTag/?search_text=KoronaVirus&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 200 1678
+[14/Jun/2020 09:45:49] "GET /streampage/searchTag?search_text=&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 301 0
+Internal Server Error: /streampage/searchTag/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/mystream/streampage/views.py", line 434, in searchTag_view
+    DATA = Res.json()['search']
+KeyError: 'search'
+[14/Jun/2020 09:45:49] "GET /streampage/searchTag/?search_text=&csrfmiddlewaretoken=1DxzEkS8URXoLm2oMGJTuEEcWAIq7o0xTp5QBEpLvDuXmJvXvQFqwtstB8GF6WaV HTTP/1.1" 500 14325
+/opt/mystream/streampage/views.py changed, reloading.
+
+{'postInstances': [{'postList': <QuerySet [<Posts: Mosquito nets, insect repellent, mosquito control, medications>, <Posts: /static/uploads/posts/malaria.jpg/>, <Posts: 228000000>, <Posts: Malaria is a mosquito-borne infectious disease that affects humans and other animals. Malaria causes symptoms that typically include fever, tiredness, vomiting, and headaches. In severe cases it can cause yellow skin, seizures, coma, or death. Symptoms usually begin ten to fifteen days after being bitten by an infected mosquito. If not properly treated, people may have recurrences of the disease months later. In those who have recently survived an infection, reinfection usually causes milder symptoms. This partial resistance disappears over months to years if the person has no continuing exposure to malaria.
+
+Malaria is caused by single-celled microorganisms of the Plasmodium group. The disease is most commonly spread by an infected female Anopheles mosquito. The mosquito bite introduces the parasites from the mosquito's saliva into a person's blood. The parasites travel to the liver where they mature and reproduce. Five species of Plasmodium can infect and be spread by humans. Most deaths are caused by P. falciparum because P. vivax, P. ovale, and P. malariae generally cause a milder form of malaria. The species P. knowlesi rarely causes disease in humans. Malaria is typically diagnosed by the microscopic examination of blood using blood films, or with antigen-based rapid diagnostic tests. Methods that use the polymerase chain reaction to detect the parasite's DNA have been developed, but are not widely used in areas where malaria is common due to their cost and complexity.>, <Posts: Bacteria>, <Posts: Malaria>]>, 'posttype': <QuerySet [<DatatypeFields: Prevention>, <DatatypeFields: Image>, <DatatypeFields: Frequency>, <DatatypeFields: Description>, <DatatypeFields: Type>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: It was a serious outbreak of the last century. Finally scientists found out the way of prevent this bacteria.>]>}, {'postList': <QuerySet [<Posts: 4815443>, <Posts: China>, <Posts: /static/uploads/posts/corona.jpg/>, <Posts: No>, <Posts: 31/12/2019>, <Posts: 30.62518110381448,114.28078479375002>, <Posts: Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) is the strain of coronavirus that causes coronavirus disease 2019 (COVID-19), a respiratory illness. Colloquially known as coronavirus, it was previously referred to by its provisional name 2019 novel coronavirus (2019-nCoV). As described by the National Institutes of Health, it is the successor to SARS-CoV-1. SARS-CoV-2 is a positive-sense single-stranded RNA virus. It is contagious in humans, and the World Health Organization (WHO) has designated the ongoing pandemic of COVID-19 a Public Health Emergency of International Concern.
+
+Taxonomically, SARS-CoV-2 is a strain of severe acute respiratory syndrome-related coronavirus (SARSr-CoV). It is believed to have zoonotic origins and has close genetic similarity to bat coronaviruses, suggesting it emerged from a bat-borne virus. There is no evidence yet to link an intermediate animal reservoir, such as a pangolin, to its introduction to humans. The virus shows little genetic diversity, indicating that the spillover event introducing SARS-CoV-2 to humans is likely to have occurred in late 2019.
+
+Epidemiological studies estimate each infection results in 1.4 to 3.9 new ones when no members of the community are immune and no preventive measures taken. The virus primarily spreads between people through close contact and via respiratory droplets produced from coughs or sneezes. It mainly enters human cells by binding to the receptor angiotensin converting enzyme 2 (ACE2).>, <Posts: enveloped>, <Posts: Coronavirus>, <Posts: SARS-CoV-2>]>, 'posttype': <QuerySet [<DatatypeFields: Number of Infected People>, <DatatypeFields: County>, <DatatypeFields: Image>, <DatatypeFields: Vaccinated>, <DatatypeFields: First Seen>, <DatatypeFields: Origin>, <DatatypeFields: Description>, <DatatypeFields: Shape>, <DatatypeFields: Family>, <DatatypeFields: Name>]>, 'comments': <QuerySet [<PostComments: This disease is terrible>]>}]}
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 8, in <module>
+    path('login/', views.login_view, name='login'),
+AttributeError: module 'streampage.views' has no attribute 'login_view'
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+[14/Jun/2020 09:47:19] "GET /streampage/logout/ HTTP/1.1" 302 0
+[14/Jun/2020 09:47:20] "GET /streampage/login/ HTTP/1.1" 200 48671
+[14/Jun/2020 09:47:30] "POST /streampage/login/ HTTP/1.1" 200 48794
+[14/Jun/2020 09:47:34] "GET /streampage/register HTTP/1.1" 301 0
+[14/Jun/2020 09:47:34] "GET /streampage/register/ HTTP/1.1" 200 48985
+[14/Jun/2020 09:47:57] "POST /streampage/register/ HTTP/1.1" 302 0
+[14/Jun/2020 09:47:57] "GET /streampage/login HTTP/1.1" 301 0
+[14/Jun/2020 09:47:57] "GET /streampage/login/ HTTP/1.1" 200 48666
+[14/Jun/2020 09:48:05] "POST /streampage/login/ HTTP/1.1" 302 0
+[14/Jun/2020 09:48:05] "GET /streampage HTTP/1.1" 301 0
+[14/Jun/2020 09:48:06] "GET /streampage/ HTTP/1.1" 200 47177
+[14/Jun/2020 09:48:09] "GET /streampage/communities/ HTTP/1.1" 200 53794
+[14/Jun/2020 09:48:10] "GET /static/uploads/communities/botanic.jpg/ HTTP/1.1" 304 0
+[14/Jun/2020 09:48:30] "GET /streampage/sendCommunityForm?Form=Yes HTTP/1.1" 301 0
+[14/Jun/2020 09:48:31] "GET /streampage/sendCommunityForm/?Form=Yes HTTP/1.1" 200 12106
+[14/Jun/2020 09:48:32] "GET /streampage/searchTag?search_text=t&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 301 0
+[14/Jun/2020 09:48:33] "GET /streampage/searchTag?search_text=te&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 301 0
+[14/Jun/2020 09:48:33] "GET /streampage/searchTag?search_text=tes&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 301 0
+[14/Jun/2020 09:48:33] "GET /streampage/searchTag?search_text=test&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 301 0
+/usr/local/lib/python3.6/dist-packages/django/template/defaulttags.py:63: UserWarning: A {% csrf_token %} was used in a template, but the context did not provide the value.  This is usually caused by not using RequestContext.
+  "A {% csrf_token %} was used in a template, but the context "
+[14/Jun/2020 09:48:33] "GET /streampage/searchTag/?search_text=tes&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 594
+[14/Jun/2020 09:48:33] "GET /streampage/searchTag/?search_text=te&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 978
+[14/Jun/2020 09:48:34] "GET /streampage/searchTag/?search_text=t&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 823
+[14/Jun/2020 09:48:34] "GET /streampage/searchTag/?search_text=test&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 1039
+[14/Jun/2020 09:48:34] "GET /streampage/searchTag/?search_text=t&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 823
+[14/Jun/2020 09:48:35] "GET /streampage/searchTag/?search_text=te&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 919
+[14/Jun/2020 09:48:35] "GET /streampage/searchTag/?search_text=tes&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 594
+[14/Jun/2020 09:48:35] "GET /streampage/searchTag/?search_text=test&csrfmiddlewaretoken=cDoWPU1kgnm0FufRUqoskoh6O1tjDcQwttef1qkhgbD468JylkyUsiCeY2nIwgjC HTTP/1.1" 200 1039
+[14/Jun/2020 09:48:52] "GET /streampage/populateProvince/?country=Turkey HTTP/1.1" 200 1082
+/usr/local/lib/python3.6/dist-packages/django/db/models/fields/__init__.py:1368: RuntimeWarning: DateTimeField Communities.communityCreationDate received a naive datetime (2020-06-14 09:49:07.634432) while time zone support is active.
+  RuntimeWarning)
+[14/Jun/2020 09:49:07] "POST /streampage/CreateCommunity/ HTTP/1.1" 200 38
+[14/Jun/2020 09:49:09] "GET /streampage/communities/ HTTP/1.1" 200 56298
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view streampage.views.DeleteCommunity_view didn't return an HttpResponse object. It returned None instead.
+[14/Jun/2020 09:49:11] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14249
+[14/Jun/2020 09:49:15] "GET /static/js/bootstrap.min.js.map HTTP/1.1" 404 1698
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view streampage.views.DeleteCommunity_view didn't return an HttpResponse object. It returned None instead.
+[14/Jun/2020 09:49:18] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14249
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+June 14, 2020 - 09:46:55
+Django version 3.0.3, using settings 'mystream.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+{'TITLE': 'Wikidata Sandbox,Wikidata Sandbox 2,Wikidata Sandbox 3,Wikidata sandbox property,Wikidata Sandbox/Pleiades,', 'ITEM': 'Q4115189,Q13406268,Q15397819,Q18720640,Q68191778,'}
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 3, in <module>
+    from . import views
+  File "/opt/mystream/streampage/views.py", line 641
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 3, in <module>
+    from . import views
+  File "/opt/mystream/streampage/views.py", line 1530
+    subquery = "\"entryHash\" not in (select \
+                                             ^
+SyntaxError: EOL while scanning string literal
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/mystream/streampage/views.py", line 394, in DeleteCommunity_view
+    if user.name == comCreator:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 225, in inner
+    return func(self._wrapped, *args)
+AttributeError: 'User' object has no attribute 'name'
+[14/Jun/2020 09:50:25] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14535
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/mystream/streampage/views.py", line 394, in DeleteCommunity_view
+    if user.name == comCreator:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 225, in inner
+    return func(self._wrapped, *args)
+AttributeError: 'User' object has no attribute 'name'
+[14/Jun/2020 09:50:28] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14535
+[14/Jun/2020 09:50:31] "GET /streampage/communities/ HTTP/1.1" 200 56298
+[14/Jun/2020 09:50:31] "GET /static/css/tagsinput.css HTTP/1.1" 200 2337
+[14/Jun/2020 09:50:31] "GET /static/fontawesome-free/css/all.min.css HTTP/1.1" 200 56517
+[14/Jun/2020 09:50:31] "GET /static/js/bootstrap.min.js HTTP/1.1" 200 58072
+[14/Jun/2020 09:50:31] "GET /static/js/sb-admin-2.min.js HTTP/1.1" 200 1106
+[14/Jun/2020 09:50:31] "GET /static/css/sb-admin-2.min.css HTTP/1.1" 200 164930
+[14/Jun/2020 09:50:31] "GET /static/js/tagsinput.js HTTP/1.1" 200 23345
+[14/Jun/2020 09:50:32] "GET /static/jquery/jquery.min.js HTTP/1.1" 200 88145
+[14/Jun/2020 09:50:32] "GET /static/uploads/logo/Logo.png HTTP/1.1" 200 9035
+[14/Jun/2020 09:50:32] "GET /static/uploads/logo/LogoText.png HTTP/1.1" 200 4148
+[14/Jun/2020 09:50:32] "GET /static/uploads/profiles/default.jpg HTTP/1.1" 200 91703
+[14/Jun/2020 09:50:32] "GET /static/uploads/communities/cosmology.jpg/ HTTP/1.1" 200 23823
+[14/Jun/2020 09:50:32] "GET /static/fontawesome-free/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 75408
+[14/Jun/2020 09:50:32] "GET /static/uploads/communities/botanic.jpg/ HTTP/1.1" 200 352729
+Not Found: /favicon.ico
+[14/Jun/2020 09:50:32] "GET /favicon.ico HTTP/1.1" 404 2088
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/mystream/streampage/views.py", line 394, in DeleteCommunity_view
+    if user.name == comCreator:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 225, in inner
+    return func(self._wrapped, *args)
+AttributeError: 'User' object has no attribute 'name'
+[14/Jun/2020 09:50:33] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14535
+[14/Jun/2020 09:50:38] "GET /static/js/bootstrap.min.js.map HTTP/1.1" 404 1698
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/mystream/streampage/views.py", line 394, in DeleteCommunity_view
+    if user.name == comCreator:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 225, in inner
+    return func(self._wrapped, *args)
+AttributeError: 'User' object has no attribute 'name'
+[14/Jun/2020 09:50:41] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14535
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+June 14, 2020 - 09:50:17
+Django version 3.0.3, using settings 'mystream.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 8, in <module>
+    path('login/', views.login_view, name='login'),
+AttributeError: module 'streampage.views' has no attribute 'login_view'
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 3, in <module>
+    from . import views
+  File "/opt/mystream/streampage/views.py", line 1681
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+Internal Server Error: /streampage/DeleteCommunity/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/mystream/streampage/views.py", line 394, in DeleteCommunity_view
+    if str(user).trim() == str(comCreator).trim():
+AttributeError: 'str' object has no attribute 'trim'
+[14/Jun/2020 09:51:27] "POST /streampage/DeleteCommunity/ HTTP/1.1" 500 14419
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+June 14, 2020 - 09:51:26
+Django version 3.0.3, using settings 'mystream.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 3, in <module>
+    from . import views
+  File "/opt/mystream/streampage/views.py", line 641
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/autoreload.py", line 53, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/commands/runserver.py", line 117, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 395, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python3.6/dist-packages/django/core/management/base.py", line 382, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 13, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python3.6/dist-packages/django/core/checks/urls.py", line 23, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 407, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 588, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python3.6/dist-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/resolvers.py", line 581, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/mystream/urls.py", line 24, in <module>
+    path('streampage/', include('streampage.urls')),
+  File "/usr/local/lib/python3.6/dist-packages/django/urls/conf.py", line 34, in include
+    urlconf_module = import_module(urlconf_module)
+  File "/usr/lib/python3.6/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 994, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/mystream/streampage/urls.py", line 3, in <module>
+    from . import views
+  File "/opt/mystream/streampage/views.py", line 1530
+    subquery = "\"entryHash\" not in (sel
+                                        ^
+SyntaxError: EOL while scanning string literal
+
+/opt/mystream/streampage/views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+/usr/local/lib/python3.6/dist-packages/django/template/defaulttags.py:63: UserWarning: A {% csrf_token %} was used in a template, but the context did not provide the value.  This is usually caused by not using RequestContext.
+  "A {% csrf_token %} was used in a template, but the context "
+[14/Jun/2020 09:51:49] "POST /streampage/DeleteCommunity/ HTTP/1.1" 200 50
+[14/Jun/2020 09:51:51] "GET /streampage/communities/ HTTP/1.1" 200 53794
+[14/Jun/2020 09:51:52] "GET /static/js/bootstrap.min.js.map HTTP/1.1" 404 1698
+[14/Jun/2020 09:51:52] "GET /static/uploads/communities/botanic.jpg/ HTTP/1.1" 304 0
