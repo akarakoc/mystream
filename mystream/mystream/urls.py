@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 urlpatterns += [
-    path('streampage/', include(('streampage.urls', 'streampage'), namespace='streampage')),
+    path('streampage/', include('streampage.urls')),
 ]

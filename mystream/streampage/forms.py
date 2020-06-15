@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django import forms
 from streampage.models import Primitives, communityUsers, Communities, Datatypes, DatatypeFields, Posts, CommunityTags, \
     DatatTypeTags, PostTags, UserTags
-from django_countries import countries
+from django_countries.fields import CountryField
 import json
 
 class UsersLoginForm(forms.Form):
@@ -89,8 +89,7 @@ class AddCommunity(forms.Form):
     Community_Description = forms.CharField(widget=forms.Textarea(attrs={'width': "50%", 'cols': "50", 'rows': "2", }))
     Community_Image = forms.ImageField()
     Private_Community = forms.BooleanField(initial=False, required=False)
-    #Community_Country = CountryField().formfield()
-    Community_Country = forms.ChoiceField(choices=countries, label='')
+    Community_Country = CountryField().formfield()
     Community_Location = forms.ChoiceField(label='', widget=forms.Select(attrs={'class':'form-control', 'name':'community_location',  'id':'id_community_location'}))
     Community_Tags = forms.CharField(widget=forms.Textarea(attrs={'width': "50%", 'cols': "50", 'rows': "2", }))
 

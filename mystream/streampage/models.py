@@ -22,7 +22,7 @@ class communityUsers(models.Model):
 
 
 class Communities(models.Model):
-    name = models.CharField(max_length=200, null=True, help_text='Enter community name')
+    name = models.CharField(max_length=200, null=False, help_text='Enter community name')
     description = models.CharField(max_length=200, null=True, help_text='Enter community description')	
     communityHash = models.CharField(max_length=200, null=True, help_text='Enter community hash')	
     communityPrv = models.BooleanField(default=False)	
