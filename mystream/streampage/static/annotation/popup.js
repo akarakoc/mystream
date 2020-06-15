@@ -280,7 +280,6 @@ function visualizeAnnotations(){
       success: function(data, status){
 
           var jsonList = data.response.annoList;
-          numberOfAnno = jsonList.length;
           console.log("Annotations is received successfully ! ");
           console.log(jsonList.length + " annotations are found for this page !");
           $.each(jsonList, function(index, json) {
@@ -321,10 +320,10 @@ function addAnnotationToSidebar(json, index, annoType){
     if($(".annoContainer").height() < 1000 )
         $(".annoContainer").css("height" , $(".annoContainer").height() + 200 );
 
-    if(index == 1)
-        $("#annotationCount").html("There is " + index + " annotation on this page");
+    if(numberOfAnno == 1)
+        $("#annotationCount").html("There is " + numberOfAnno + " annotation on this page");
     else
-        $("#annotationCount").html("There are " + index + " annotations on this page");
+        $("#annotationCount").html("There are " + numberOfAnno + " annotations on this page");
     var body = json.body[0];
     var buttonBody;
 
@@ -546,7 +545,7 @@ function surroundSelection(json, index) {
 function sendPostRequest(post_data, anno, annoType){
     $.ajax({
         type: "POST",
-        url: annotate_remote,
+        url: annotate_local,
         data: JSON.stringify(post_data),
         contentType: 'application/json',
         success: function (data, status) {
