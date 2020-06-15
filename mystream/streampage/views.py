@@ -31,6 +31,7 @@ from streampage.models import Primitives,communityUsers,Communities,Datatypes,Da
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 from countryinfo import CountryInfo
+from unicode_tr import unicode_tr
 
 def saveTagSearch_view(src):
     SEARCHPAGE = src	
@@ -1778,7 +1779,13 @@ def communityPageSearch_view(request):
         if request.GET.get('keyword'):
             if Communities.objects.all():
                 searchString = request.GET.get('keyword')
-                Community_List = Communities.objects.filter(description__contains=searchString).order_by('-communityCreationDate') | Communities.objects.filter(name__contains=searchString).order_by('-communityCreationDate')
+                text_true = unicode_tr(searchString)
+                print(text_true.capitalize())
+                Community_List = Communities.objects.filter(
+                    communityCountry__icontains=text_true.capitalize()).order_by(
+                    '-communityCreationDate') | Communities.objects.filter(
+                    communityLocation__icontains=text_true.capitalize()).order_by(
+                    '-communityCreationDate')
                 Cuser = request.user
                 UserList = communityUsers.objects.filter(nickName=Cuser)[0]
                 userphoto = UserList.userPhoto
