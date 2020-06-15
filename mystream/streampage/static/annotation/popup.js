@@ -288,6 +288,8 @@ function visualizeAnnotations(){
       success: function(data, status){
 
           var jsonList = data.response.annoList;
+          numberOfAnno = jsonList.length;
+          $("#numberOfAnno").val(numberOfAnno);
           console.log("Annotations is received successfully ! ");
           console.log(jsonList.length + " annotations are found for this page !");
           $.each(jsonList, function(index, json) {
@@ -552,7 +554,7 @@ function surroundSelection(json, index) {
 function sendPostRequest(post_data, anno, annoType){
     $.ajax({
         type: "POST",
-        url: annotate_local,
+        url: annotate_remote,
         data: JSON.stringify(post_data),
         contentType: 'application/json',
         success: function (data, status) {

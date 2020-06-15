@@ -10,21 +10,22 @@
 		<table class="table small">
 		  <tr>
 		    <td>
-			<div class = "small">
-				{% for fields in postEntries.postInstances.0.postList %}
-					{% for types in postEntries.postInstances.0.posttype %}
-						{% if types.name == fields.propertyName  %}
-							{% if types.relatedPrimitives.name  != "Image" and types.relatedPrimitives.name  != "Location" %}
-								<b>{{ fields.propertyName }}:&nbsp</b>
-								{{ fields.propertyValue }}<br>
+<!--			<div class="small">-->
+				<div>
+					{% for fields in postEntries.postInstances.0.postList %}
+						{% for types in postEntries.postInstances.0.posttype %}
+							{% if types.name == fields.propertyName  %}
+								{% if types.relatedPrimitives.name  != "Image" and types.relatedPrimitives.name  != "Location" %}
+									<b>{{ fields.propertyName }}:&nbsp</b>
+									{{ fields.propertyValue }}<br>
+								{% endif %}
 							{% endif %}
-						{% endif %}
+						{% endfor %}
 					{% endfor %}
-				{% endfor %}
-				<div class="row">
-					{{ fields.postTag }}
+					<div class="row">
+						{{ fields.postTag }}
+					</div>
 				</div>
-			</div>
 			</td>
 		  </tr>
 		</table><br><br>
@@ -102,6 +103,13 @@
 	    </div>
 		{% load static %}
 
+	<link rel="stylesheet" href="{% static 'css/annotator.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/popup.css' %}">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="{% static 'css/jquery.Jcrop.css' %}">
+
   	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
@@ -112,8 +120,9 @@
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
 	<script src="{% static 'annotation/popup.js' %}"></script>
-{% endblock %}
-{% block annotation %}
+
+
+
 	<div class="annoContainer" id="annoContainer" style="display: none;">
 		<div id="header">
 			<div class="input-group mb-3 search" >
@@ -129,7 +138,7 @@
 			<label id ="annotationCount">
 				There is not any annotation, yet.
 			</label>
-            <input type="hidden" id="numberOfAnno">
+			 <input type="hidden" id="numberOfAnno">
 			<br>
 		</div>
 
@@ -238,4 +247,5 @@
 		</div>
 	  </div>
 	</div>
+
 {% endblock %}

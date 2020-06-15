@@ -1774,17 +1774,14 @@ def UnFollowUser_view(request):
     ActivityStreams.objects.create(detail = description)
     return render(None, 'tagSearch.html', {'form': "You are unfollowing the user!"})
 
+
 def communityPageSearch_view(request):
     if request.user.is_authenticated:
         if request.GET.get('keyword'):
             if Communities.objects.all():
                 searchString = request.GET.get('keyword')
-                text_true = unicode_tr(searchString)
-                print(text_true.capitalize())
-                Community_List = Communities.objects.filter(
-                    communityCountry__icontains=text_true.capitalize()).order_by(
-                    '-communityCreationDate') | Communities.objects.filter(
-                    communityLocation__icontains=text_true.capitalize()).order_by(
+                Community_List = Communities.objects.filter(description__contains=searchString).order_by(
+                    '-communityCreationDate') | Communities.objects.filter(name__contains=searchString).order_by(
                     '-communityCreationDate')
                 Cuser = request.user
                 UserList = communityUsers.objects.filter(nickName=Cuser)[0]
@@ -1793,7 +1790,9 @@ def communityPageSearch_view(request):
                 paginator = Paginator(Community_List, 3)
                 page = request.GET.get('page')
                 community_resp = paginator.get_page(page)
-                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities, 'userPhoto': userphoto })
+                return render(request, 'community.html',
+                              {'community_resp': community_resp, 'User_communities': User_communities,
+                               'userPhoto': userphoto})
             else:
                 return render(request, 'community.html', {})
         else:
@@ -1806,10 +1805,12 @@ def communityPageSearch_view(request):
                 paginator = Paginator(Community_List, 3)
                 page = request.GET.get('page')
                 community_resp = paginator.get_page(page)
-                return render(request, 'community.html', {'community_resp': community_resp, 'User_communities': User_communities, 'userPhoto': userphoto })
+                return render(request, 'community.html',
+                              {'community_resp': community_resp, 'User_communities': User_communities,
+                               'userPhoto': userphoto})
             else:
                 return render(request, 'community.html', {})
-		
+
     else:
         return HttpResponseRedirect("/streampage/login")
 
@@ -1819,8 +1820,12 @@ def communityLocationPageSearch_view(request):
         if request.GET.get('keyword'):
             if Communities.objects.all():
                 searchString = request.GET.get('keyword')
-                Community_List = Communities.objects.filter(communityCountry__contains=searchString).order_by(
-                    '-communityCreationDate') | Communities.objects.filter(communityLocation__contains=searchString).order_by(
+                text_true = unicode_tr(searchString)
+                print(text_true.capitalize())
+                Community_List = Communities.objects.filter(
+                    communityCountry__icontains=text_true.capitalize()).order_by(
+                    '-communityCreationDate') | Communities.objects.filter(
+                    communityLocation__icontains=text_true.capitalize()).order_by(
                     '-communityCreationDate')
                 Cuser = request.user
                 UserList = communityUsers.objects.filter(nickName=Cuser)[0]
