@@ -1,0 +1,40 @@
+{
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "type": "Annotation",
+  "id": null,
+  "target": {
+    "type": "SpecificResource",
+    "source": "http://127.0.0.1:8000/",
+    "selector": [
+      {
+        "type": "XPathSelector",
+        "value": "//body/p[1]/text()[3]",
+        "refinedBy": {
+          "type": "DataPositionSelector",
+          "start": 95,
+          "end": 100
+        }
+      },
+      {
+        "type": "TextQuoteSelector",
+        "exact": "human",
+        "suffix": " right and\n    no one should fea",
+        "prefix": "ccess to clean water is a basic "
+      },
+      {
+        "type": "TextPositionSelector",
+        "start": 417,
+        "end": 422
+      }
+    ]
+  },
+  "motivation": "highlighting",
+  "canonical": "urn:uuid:b6577aa8-c998-8e98-ae02-2f88b5ad7611",
+  "body": [
+    {
+      "type": "TextualBody",
+      "format": "text/plain",
+      "value": "Sample text body"
+    }
+  ]
+}

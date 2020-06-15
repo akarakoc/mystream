@@ -1,12 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <button type="button" id="AddCommunity" class="btn btn-primary btn-sm small" data-toggle="modal" data-target="#CommunityModal">
-	<i class="fa fa-plus" aria-hidden="true"></i>
-	Add Community
-  </button>
+<div class="d-flex flex-row align-items-center justify-content-between small">
+	  <button type="button" id="AddCommunity" class="btn btn-primary btn-sm small" data-toggle="modal" data-target="#CommunityModal">
+		<i class="fa fa-plus" aria-hidden="true"></i>
+		Add Community
+	  </button>
+		<div class="small">
+		<form class="form-inline" action="/streampage/communityLocationPageSearch">
+			<input class="form-control mr-sm-2 small" type="search" placeholder="Search Location" aria-label="Search Location" name="keyword">
+			<button class="btn btn-primary my-2 my-sm-0 small" type="submit">Search Location</button>
+		</form>
+	  </div>
+	  <div class="small">
+		<form class="form-inline" action="/streampage/communityPageSearch">
+			<input class="form-control mr-sm-2 small" type="search" placeholder="Search" aria-label="Search" name="keyword">
+			<button class="btn btn-primary my-2 my-sm-0 small" type="submit">Search</button>
+		</form>
+	  </div>
+
+</div>
   <br>
   <br>
+
   <div id="community_list" class="row">
 	{% for comm in community_resp %}
 	<div class="card shadow mb-4 col-md-12">
@@ -28,11 +44,23 @@
 						<i class="fa fa-thumbs-up small" aria-hidden="true"></i> 
 						Like
 					</button>
+					{% for members in comm.communityMembers.all %}
+						{% if user.get_username == members.nickName%}
+							<button type="button" class="btn btn-danger btn-sm small" LeaveCommunity="Yes" id="LeftCommunity" hash="{{ comm.communityHash }}">
+							<i class="fas fa-sign-out-alt small"></i> 
+								Leave
+							</button>
+						{% endif %}
+					{% endfor %}
 					<button type="button" class="btn btn-primary btn-sm small" JoinCommunity="Yes" id="JoinCommunity" hash="{{ comm.communityHash }}">
-						<i class="fas fa-sign-in-alt small"></i> 
+					<i class="fas fa-sign-in-alt small"></i> 
 						Join
 					</button>
 					
+					<button type="button" id = "deleteCommunity" hash="{{ comm.communityHash  }}" class="btn btn-sm btn-outline-danger small">
+						<i class="fa fa-trash" aria-hidden="true"></i>
+					</button>
+
 				</div>
 			</div>
 			<!-- Card Body -->
@@ -51,6 +79,8 @@
 					<b>Community Point : </b>{{ comm.communityPopularity }}<br>
 					<b>Community Members : </b>{{ comm.communityMembers.all |length}}<br>
 					<b>Community Tags : </b><i><font class="primary">{{ comm.communityTags}}</font></i><br>
+					<b>Community Country: </b>{{ comm.communityCountry }}<br>
+					<b>Community Province: </b>{{ comm.communityLocation }}<br>
 				</div>
 			</div>
 		</div>
@@ -59,7 +89,7 @@
 </div>
 <!-- Modal -->
 	<div class="modal fade" id="CommunityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-dialog modal-dialog-centered modal-lg small" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<b><h8 class="modal-title" id="CommunityModalTitle"></h8></b>
@@ -72,11 +102,13 @@
 					{% csrf_token %}
 					{{form.as_p }}		
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary">Create</button>
-				</div>
 				</form>
+				<div id="addCommunityTagDivision" class="modal-body p-3"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary small" data-dismiss="modal">Close</button>
+					<button type="click" id="createCommunityButton" class="btn btn-primary small">Create</button>
+				</div>
+
 			</div>
 		</div>
 	</div>
