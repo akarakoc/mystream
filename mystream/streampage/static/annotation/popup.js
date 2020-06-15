@@ -99,10 +99,6 @@ $( document ).on( "click", "div", function(e) {
             $("#annoContainer").toggle('blind',1000);
 
         $(".annoTitle").removeClass("scrolledBorder");
-
-        if($("#anno-title-" + scrollId).position() == undefined)
-            scrollId -= 1;
-
         document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100;
         $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
 
@@ -117,10 +113,6 @@ $( document ).on( "click", ".highlightedAnnotation", function(e) {
         $("#annoContainer").toggle('blind',1000);
 
     $(".annoTitle").removeClass("scrolledBorder");
-
-    if($("#anno-title-" + scrollId).position() == undefined)
-        scrollId -= 1;
-
     document.getElementById("annoContainer").scrollTop = $("#anno-title-" + scrollId).position().top - 100;
     $($("#anno-title-" + scrollId)[0]).addClass("scrolledBorder");
 
@@ -219,9 +211,9 @@ $(document).on('click', "#openHighlightButton", function() {
     $( "#closeHighlightButton").css("display", "block");
     $(this).css("display", "none");
 
-    var annoList = $(".annotationSelector");
+    var textAnnoList = $(".annotationSelector");
 
-    $.each(annoList, function(index, a) {
+    $.each(textAnnoList, function(index, a) {
         $(a).addClass("highlightedAnnotation");
     });
 
@@ -306,6 +298,7 @@ function visualizeAnnotations(){
                                      }else if( annoType == "Image"){
                                          pointImage(json, index);
                                      }
+
                                      addAnnotationToSidebar(json, index, annoType);
 
                                 }catch(error){
@@ -322,8 +315,7 @@ function visualizeAnnotations(){
 function addAnnotationToSidebar(json, index, annoType){
 
     // Update Size Firstly
-    var numberOfAnno = index + 1;
-    $("#numberOfAnno").val(numberOfAnno);
+    index = index + 1;
 
     if($(".annoContainer").height() < 1000 )
         $(".annoContainer").css("height" , $(".annoContainer").height() + 200 );
@@ -356,7 +348,7 @@ function addAnnotationToSidebar(json, index, annoType){
     var annoLabel = "";
 
     if( annoType == "Text" ){
-        annoLabel = json.target.selector[1].exact;
+        annoLabel = window.getSelection();
     }else{
         var xpath = json.target.selector[1].value;
         annoLabel = getImageName(xpath);
@@ -483,6 +475,7 @@ function surroundSelection(json, index) {
         $(a).addClass("annotationSelector");
         $(a).attr("id", id);
 
+        console.log(index);
         $(a).data("dataAnnoIndex", index);
 
         $(a).data("title", "Annotation");
@@ -564,9 +557,7 @@ function sendPostRequest(post_data, anno, annoType){
                 var annotation = new AnnotationBuilder().fromJSON(JSON.stringify(anno));
 
                 annotation.result.target.toSelection();
-
-                numberOfAnno = parseInt($("#numberOfAnno").val());
-                surroundSelection(anno, numberOfAnno);
+                surroundSelection(anno);
             }
 
             if($("#submit").html() == "Update")
@@ -611,13 +602,12 @@ function createAnnotation() {
             content = { "id" : body, "type": "Video", "format":"audio/mpeg", "related": body };
         }
 
-        var anno = JSON.parse(jsonAnnotation);
-        anno.body = [ content ];
+        var textAnno = JSON.parse(jsonAnnotation);
+        textAnno.body = [ content ];
 
-        var post_data = { anno };
-        sendPostRequest(post_data, anno, annoType);
-        numberOfAnno = parseInt($("#numberOfAnno").val());
-        addAnnotationToSidebar(anno, numberOfAnno , annoType);
+        var post_data = { textAnno };
+        sendPostRequest(post_data, textAnno, annoType);
+        addAnnotationToSidebar(textAnno, numberOfAnno , annoType);
     }else{
         showMessage("Error", " Body must be URI to create Image or Video annotation.");
     }
