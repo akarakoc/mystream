@@ -76,19 +76,19 @@
 							   </div>
 							   <div class="col-sm-2 d-flex flex-row p-3">
 									<button type="button" id = "createCommentPage" hash="{{ postEntries.postInstances.0.postList.0.entryHash }}" class="btn btn-sm btn-outline-primary align-self-end p-2"><i class="fas fa-comments" style="font-size:24px" aria-hidden="true"></i> Send</button>
-							   </div>	
+							   </div>
 						  </div>
 					   </form>
 					   <table class="small">
 					   {% for items in postEntries.postInstances.0.comments %}
 					   <tr hash="{{items.commentHash}}">
-					   
+
 					    {% if items.postCommentCreator.userPhoto  %}
 							<td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></a></td>
 						{% else %}
 							<td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></a></td>
 						{% endif %}
-						  
+
 						  <td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><b>{{ items.postCommentCreator }}:</b></a></td>
 						  <td width="550px">{{ items.commentText }}</td>
 						  <td width="95px">{{ items.postCommentCreationDate }}</td>

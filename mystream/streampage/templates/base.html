@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Communityverse</title>
+  <title>Mystream</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}">
 	<!--  <link rel="stylesheet" href="{% static 'css/annotator.min.css' %}">-->
-  <link rel="stylesheet" href="{% static 'css/popup.css' %}">
+	<!--link rel="stylesheet" href="{% static 'css/popup.css' %}"-->
   <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"--->
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">-->
 
-    <link rel="stylesheet" href="{% static 'css/jquery.Jcrop.css' %}">
+	<!--link rel="stylesheet" href="{% static 'css/jquery.Jcrop.css' %}"-->
 
 
   <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
@@ -108,6 +108,7 @@ $( document ).ready(function() {
 	$(document).on ("click", "#createCommunityButton", function (event) {
 		event.preventDefault();
 		var data = new FormData($('#createCommunity').get(0));
+		console.log(data);
 		console.log($("input[name=csrfmiddlewaretoken]").val());
 		$.ajax({
 			type:'POST',
@@ -119,13 +120,11 @@ $( document ).ready(function() {
 			success: CommunityCreateResult
 		});
 	});
-	
+
 	function CommunityCreateResult(data, textStatus, jqXHR){
 		alert(data);
 		window.location.reload();
 	}
-
-
 
 	$(document).on ("change", "#id_Community_Country", function () {
 		$.ajax({
@@ -243,7 +242,7 @@ $( document ).ready(function() {
 	});
 
 //DELETE COMMUNITY
-	$( "#deleteCommunity" ).click(function() {
+	$(document).on ("click", "#deleteCommunity", function (event) {
 		var Chash = $(this).attr('hash');
 		var data = new FormData();
 		data.append('community_Hash', Chash);
@@ -1053,8 +1052,8 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 			contentType: false,
 			dataType: "html",
 			success: function(data, textStatus, jqXHR){
-				alert(data)
-				window.location.reload()
+				alert(data);
+				window.location.reload();
 			}		
 		});
 	});
@@ -1323,7 +1322,6 @@ $(document).on ("click", "#AddFreeSearch", function (event) {
 		</div>
 	  </div>
 	</div>
-	{% block annotation %}{% endblock %}
 	<footer class="container-fluid text-center">
 	  <p>Copyright Mystream 2020</p>
 	</footer>
