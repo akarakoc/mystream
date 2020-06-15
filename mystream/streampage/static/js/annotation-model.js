@@ -823,4 +823,3 @@ class AnnotationBuilder{
         return parser.protocol+'//'+ parser.host + parser.pathname + parser.search + parser.hash;
     }
 }
-
