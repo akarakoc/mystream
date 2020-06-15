@@ -1,7 +1,8 @@
 package com.mystream.service;
 
-import com.mystream.dom.TextAnnotation;
-import com.mystream.repo.TextAnnotationRepository;
+import com.mystream.dom.Annotation;
+import com.mystream.dom.Annotation;
+import com.mystream.repo.AnnotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +12,36 @@ import java.util.List;
 public class AnnotationServiceImpl implements AnnotationService {
 
 	@Autowired
-	TextAnnotationRepository textRepository;
+	AnnotationRepository annoRepository;
 
 	@Override
-	public TextAnnotation saveTextAnnotation(TextAnnotation anno){
-		return textRepository.save(anno);
+	public Annotation saveAnnotation(Annotation anno){
+
+		Annotation current = annoRepository.findByCanonical(anno.getCanonical());
+		if(current != null){
+			current.setBody(anno.getBody());
+			return annoRepository.save(current);
+		}
+		return annoRepository.save(anno);
 	}
 
 	@Override
-	public List<TextAnnotation> searchAnnotation(){
-		return textRepository.findAll();
+	public List<Annotation> searchAnnotation(){
+		return annoRepository.findAll();
 	}
 
+	@Override
+	public List<Annotation> searchAnnotationWithSource( String source){
+		return annoRepository.findByTarget_SourceLike(source);
+	}
 
+	@Override
+	public Annotation searchAnnotationWithCanonical( String canonical){
+		return annoRepository.findByCanonical(canonical);
+	}
+
+	@Override
+	public void deleteAnnotation( Annotation anno){
+		 annoRepository.delete(anno);
+	}
 }

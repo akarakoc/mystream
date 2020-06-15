@@ -1,0 +1,36 @@
+{
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "type": "Annotation",
+  "id": null,
+  "target": {
+    "type": "SpecificResource",
+    "source": "http://127.0.0.1:8000/",
+    "selector": [
+      {
+        "type": "XPathSelector",
+        "value": "//*[@id=\"e8e5858f-338c-e86f-bc1f-514e2441760e\"]/text()"
+      },
+      {
+        "type": "TextQuoteSelector",
+        "exact": "water",
+        "suffix": " is our first line of defence du",
+        "prefix": " the COVID-19. Indeed clean\n    "
+      },
+      {
+        "type": "TextPositionSelector",
+        "start": 317,
+        "end": 322
+      }
+    ]
+  },
+  "motivation": "highlighting",
+  "canonical": "urn:uuid:1c70419e-7df7-38fb-8786-bb9514141511",
+  "body": [
+    {
+      "id": "https://previews.123rf.com/images/ellensmile/ellensmile1705/ellensmile170500227/78201631-rippled-ocean-water-abstract-ocean-and-sea-water-texture.jpg",
+      "type": "Image",
+      "format": "image/jpeg",
+      "related": "https://previews.123rf.com/images/ellensmile/ellensmile1705/ellensmile170500227/78201631-rippled-ocean-water-abstract-ocean-and-sea-water-texture.jpg"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-{% extends "base.html" %} 
-
+{% extends "base.html" %}
 {% block content %}
+
 <div id="Datatypes_list" class="">
   <div class="card mb-2">
 	<!-- Card Body -->
@@ -11,16 +11,27 @@
 			</div>			
 			<div class="">
 				Created by: {{ community.communityCreator }} at {{ community.communityCreationDate }}
+				<button type="button" id="Edit_Community" hash="{{ community.communityHash  }}" class="btn btn-outline-secondary btn-sm">
+					<i class="fas fa-edit" aria-hidden="true"></i>
+				</button>
 			</div>
+			
 		</div>
 		<br>
 		<div class="row">
 			<div class="col-sm-3">
-				<img src="{{ community.communityPhoto }}" width="125" height="100" class="img-thumbnail"><br>
+				<div class="annotatedImage" style="position: relative;">
+					  <img id="communityImage" src="{{ community.communityPhoto }}" width="300" height="300" class="img-thumbnail"><br>
+			  	</div>
+<!--				<img src="{{ community.communityPhoto }}" width="300" height="300" class="img-thumbnail"><br>-->
 			</div>
-			<div class="col-sm-9">
-				<p>{{ community.description }}</p>
+			<div class="col-sm-4">
+				<p id="CommunityMetaData">{{ community.description }}</p>
 				<p>{{ community.communityTags }}</p>
+			</div>
+			<div class="col-sm-4">
+				<p>{{ community.communityCountry }}</p>
+				<p>{{ community.communityLocation }}</p>
 			</div>
 		</div>
 	</div>
@@ -58,11 +69,19 @@
 			<div class="right small">Created by: {{ posts.posttype.0.fieldCreator }} at {{ posts.posttype.0.fieldCreationDate }}
 			</div>
 			<div class="p-2">
-				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ comm.communityHash }}">
+				<button type="button" class="btn btn-primary btn-sm small" ReportPost="Yes" id="ReportPost" hash="{{ posts.postList.0.entryHash }}">
 						<i class="fas fa-exclamation-triangle small" aria-hidden="true"></i> 
 						Report
 				</button>
-				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ comm.communityHash }}">
+				{% for members in posts.posttype.0.relatedDatatype.subscribers.all %}
+					{% if user.get_username == members.nickName%}
+						<button type="button" class="btn btn-danger btn-sm small" UnsubscribePost="Yes" id="UnsubscribePost" hash="{{ posts.postList.0.entryHash }}">
+						<i class="fas fa-undo small" aria-hidden="true"></i> 
+						Unsubscribe
+						</button>
+					{% endif %}
+				{% endfor %}
+				<button type="button" class="btn btn-primary btn-sm small" SubscribePost="Yes" id="SubscribePost" hash="{{ posts.postList.0.entryHash }}">
 						<i class="fas fa-stream small" aria-hidden="true"></i> 
 						Subscribe
 				</button>
@@ -85,12 +104,15 @@
 									{% if types.relatedPrimitives.name  == "Image"  %}
 									  <td width="250px" >
 										<b>{{ fields.propertyName }}:&nbsp</b>
-										<img src="{{ fields.propertyValue }}" width="250px" height="200px">
+										  <div class="annotatedImage" style="position: relative;">
+											  <img id="postImage" src="{{ fields.propertyValue }}" width="250px" height="200px">
+										  </div>
+<!--										<img src="{{ fields.propertyValue }}" width="250px" height="200px">-->
 									  </td>
 									{% elif types.relatedPrimitives.name  == "Location"%}
 									   <td width="250px" >
 										<b>{{ fields.propertyName }}:&nbsp</b>
-										<div id="googleMap" style="width:250px;height:200px;"></div>
+										<div id="googleMap" googleMap='yes' style="width:250px;height:200px;" coordinates="{{ fields.propertyValue }}"></div>
 									   </td>
 									{% endif %}
 								{% endif %}
@@ -110,7 +132,7 @@
 					{% endfor %}
 				{% endfor %}
 				<div class="row">
-					<a href="http://3.134.79.169:8000/streampage/showPostDetails/?postHash={{ posts.postList.0.entryHash }}">more >></a>	
+					<a href="/streampage/showPostDetails/?postHash={{ posts.postList.0.entryHash }}">more >></a>
 				</div>
 				<div class="row">
 					{{ fields.postTag }}
@@ -132,17 +154,24 @@
 	    </div>
 		<table class="small">
 		   {% for items in posts.comments %}
-		   <tr>
-			  <td width="25px"><b>{{ items.postCommentCreator }}:</b></td>
-			  <td width="250px">{{ items.commentText }}</td>
-			  <td width="250px">{{ items.postCommentCreationDate }}</td>
+		   <tr hash="{{items.commentHash}}">
+			  {% if items.postCommentCreator.userPhoto  %}
+					<td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="{{ items.postCommentCreator.userPhoto }}"style="width:45px;height:45px;"></a></td>
+			  {% else %}
+					<td><a href="/streampage/UserPage?user={{ items.postCommentCreator }}"><img class="img-profile rounded-circle" src="/static/uploads/profiles/default.jpg"style="width:45px;height:45px;"></a></td>
+			  {% endif %}
+			  
+			  <td width="30px"><b><a href="/streampage/UserPage?user={{ items.postCommentCreator }}">{{ items.postCommentCreator }}:</a></b></td>
+			  <td width="290px">{{ items.commentText }}</td>
+			  <td width="95px">{{ items.postCommentCreationDate }}</td>
+			  <td width="20px"><button type="button" id = "deleteComment" hash="{{items.commentHash}}" class="btn btn-sm btn-outline-secondary align-self-end p-2"><i class="fas fa-minus-circle" style="font-size:16px" aria-hidden="true"></i></button></td>
 		   </tr>
 		   {% endfor %}
 		   </table>
 	  </div>
    </div>
    {% endfor %}
-	 
+
 	
 <!-- Modal Add Posttype-->
 	<div class="modal fade small" id="PosttypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -160,6 +189,7 @@
 						{{form.as_p }}
 					</div>
 				</form>
+				<div id="addPosttypeTagDivision" class="modal-body p-3"></div>
 				<div id="editPosttypeButton" class="modal-body p-3">
 					<button type="button" id="createPosttypeButton" class="btn btn-sm btn-primary small"><i class="fa fa-save small" aria-hidden="true"></i> Save Definition</button>
 				</div>
@@ -233,7 +263,8 @@
 				</div>
 				<div id="returnedPostFields">
 				</div>
-				
+				<div id="addPostTagDivision" class="modal-body p-3"></div>
+				<div id="map" class="modal-body p-3" style="height:500px; display:none;"></div>
 				<div class="modal-footer justify-content-between">				
 						{% csrf_token %}
 					<button type="submit" id="SubmitPost" class="btn btn-outline-primary btn-sm mr-auto"><i class="fa fa-save" aria-hidden="true"></i> Submit Post</button>
@@ -278,13 +309,63 @@
 		</div>
 	</div>
 	
-	 
+<!-- Modal Report Post -->
+	<div class="modal fade" id="ReportPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h8 class="modal-title" >Report Post</h8>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" action="" id="reportFormTag" enctype="multipart/form-data">
+					<div id="ReportPostBody" class="modal-body">
+						{% csrf_token %}
+						{{form.as_p }}
+					</div>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="click" id="createPostReport" hash="" class="btn btn-primary">Create</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	
+	<!-- Community Edit Modal -->
+	<div class="modal fade" id="CommunityEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg small" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<b><h8 class="modal-title" id="CommunityEditModalTitle"></h8></b>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" action="" id="editCommunity" enctype="multipart/form-data">
+				<div id="communityEditModalBody" class="modal-body">
+					{% csrf_token %}
+					{{form.as_p }}		
+				</div>
+				</form>
+				<div id="addCommunityTagDivision" class="modal-body p-3"></div>
+				<div class="modal-footer small">
+					<button type="button" class="btn btn-secondary small" data-dismiss="modal">Close</button>
+					<button type="click" id="editCommunityButton" class="btn btn-primary small">Create</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
 <div class="pagination">
     <span class="step-links">
         {% if post_resp.has_previous %}
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page=1">&laquo; first</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -292,9 +373,148 @@
         </span>
 
         {% if post_resp.has_next %}
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
-            <a href="http://18.219.3.42:8000/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.next_page_number }}">next</a>
+            <a href="/community/sendPostPage/?showPosts={{ Datatype_Id }}&page={{ post_resp.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
 </div>
+
+{% load static %}
+<!--script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+
+<<script src="{% static 'js/jquery.Jcrop.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="{% static 'annotation/annotation-model.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+<script src="{% static 'annotation/popup.js' %}"></script>-->
+
 {% endblock %}
+<!--
+{% block annotation %}
+	<div class="annoContainer" id="annoContainer" style="display: none;">
+		<div id="header">
+			<div class="input-group mb-3 search" >
+			  <div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon3">Search Annotation</span>
+			  </div>
+			  <input type="text" class="form-control" id="searchAnnotation" aria-describedby="basic-addon3">
+			</div>
+		</div>
+		<div id="content"></div>
+		<div id="footer">
+			<br>
+			<label id ="annotationCount">
+				There is not any annotation, yet.
+			</label>
+			<br>
+		</div>
+
+	</div>
+
+	<div class="slideButton" >
+		<button id="slideButton" type="button" class="btn btn-warning" style="display: block;">
+			<svg class="bi bi-bookmarks-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			  <path fill-rule="evenodd" d="M2 4a2 2 0 012-2h6a2 2 0 012 2v12l-5-3-5 3V4z" clip-rule="evenodd"/>
+			  <path d="M14 14l-1-.6V2a1 1 0 00-1-1H4.268A2 2 0 016 0h6a2 2 0 012 2v12z"/>
+			</svg>
+		</button>
+	</div>
+
+	<div  class="openHighlightButton" >
+		<button id="openHighlightButton" type="button" class="btn btn-warning" style="display: none;">
+			<svg class="bi bi-eye-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			  <path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+			  <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" clip-rule="evenodd"/>
+			</svg>
+		</button>
+	</div>
+
+	<div class="closeHighlightButton" >
+		<button id="closeHighlightButton"  type="button" class="btn btn-warning" style="display: block;">
+			<svg class="bi bi-eye" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			  <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd"/>
+			  <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd"/>
+			</svg>
+		</button>
+	</div>
+
+	<div class="createAnnotationButton" >
+		<button id="createAnnotationButton"  type="button" class="btn btn-warning" style="display: block;">
+			<svg class="bi bi-chat-square-quote-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			  <path fill-rule="evenodd" d="M0 2a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-2.5a1 1 0 00-.8.4l-1.9 2.533a1 1 0 01-1.6 0L5.3 12.4a1 1 0 00-.8-.4H2a2 2 0 01-2-2V2zm7.194 2.766c.087.124.163.26.227.401.428.948.393 2.377-.942 3.706a.446.446 0 01-.612.01.405.405 0 01-.011-.59c.419-.416.672-.831.809-1.22-.269.165-.588.26-.93.26C4.775 7.333 4 6.587 4 5.667 4 4.747 4.776 4 5.734 4c.271 0 .528.06.756.166l.008.004c.169.07.327.182.469.324.085.083.161.174.227.272zM11 7.073c-.269.165-.588.26-.93.26-.958 0-1.735-.746-1.735-1.666 0-.92.777-1.667 1.734-1.667.271 0 .528.06.756.166l.008.004c.17.07.327.182.469.324.085.083.161.174.227.272.087.124.164.26.228.401.428.948.392 2.377-.942 3.706a.446.446 0 01-.613.01.405.405 0 01-.011-.59c.42-.416.672-.831.81-1.22z" clip-rule="evenodd"/>
+			</svg>
+		</button>
+	</div>
+
+	<div id="popover-template" style="display:none">
+		<div class="popover" role="tooltip">
+			<div class="arrow"></div>
+			<h3 class="popover-header"></h3>
+			<div class="popover-body">
+			</div>
+		</div>
+	</div>
+
+	<div aria-live="polite" aria-atomic="true" style="top: 10px; left: 10px; min-height: 200px; min-width: 500px;">
+	  <div class="toast" style="position: absolute; top: 0; left: 0;">
+		<div class="toast-header" style="background-color: #f9bb00;">
+		  <strong class="mr-auto toast-title "> Header </strong>
+		  <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="toast-body">
+			Content
+		</div>
+	  </div>
+	</div>
+
+	<div id="annotation-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		  <div class="modal-header" style="background-color: #f9bb00;">
+			<h5 class="modal-title" id="modalLongTitle" >Create Annotation</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+
+		  <div id="annotation-modal-form" class="modal-body">
+
+			  <form>
+				  <div class="form-group">
+					<label for="target">Target</label>
+					<input type="text" class="form-control" id="target" >
+				  </div>
+				  <div class="form-group">
+					<label for="body">Body</label>
+					<input type="text" class="form-control" id="body" >
+				  </div>
+
+				  <div class="form-group">
+					<label for="type">Type</label>
+					<select class="form-control" id="type">
+					  <option value="TextualBody">Text</option>
+					  <option value="Image" >Image</option>
+					  <option value="Video" >Video</option>
+					</select>
+				  </div>
+
+				  <input type="hidden" class="form-control" id="canonical" >
+				  <input type="hidden" class="form-control" id="jsonAnnotation" >
+				  <input type="hidden" class="form-control" id="annoType" >
+
+				  <div class="modal-footer">
+					  <button id="submit" type="submit" class="btn btn-warning">Create</button>
+				  </div>
+
+				</form>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+{% endblock %}-->

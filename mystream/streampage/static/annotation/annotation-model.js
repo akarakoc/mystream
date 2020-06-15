@@ -337,12 +337,12 @@ class DataPositionSelector extends SegmentSelector{
       }
 }
 
-class HTMLFragmentSelector extends SegmentSelector{
-     constructor(object={value:null}){
+class MediaFragmentSelector extends SegmentSelector{
+     constructor(xywh){
             super();
             this.type = "FragmentSelector";
-            this.value = object.value;
-            this.conformsTo = 'http://tools.ietf.org/rfc/rfc3236';
+            this.conformsTo = "http://www.w3.org/TR/media-frags/";
+            this.value = xywh;
             Object.defineProperty(this, 'epsilon', { value: 100, enumerable: false, writable:true })
         }
         fromRange(range,inRange){
@@ -350,10 +350,10 @@ class HTMLFragmentSelector extends SegmentSelector{
              var treeWalker = document.createTreeWalker(inRange.commonAncestorContainer, NodeFilter.SHOW_ELEMENT+ NodeFilter.SHOW_TEXT)
             var lastNamed = null;
             var node;
-            while(node = treeWalker.nextNode()){ 
+            while(node = treeWalker.nextNode()){
                 //can check if inRange of acceptable
                     if(node.nodeType==1 && node.hasAttribute('id')){
-                        lastNamed = node;      
+                        lastNamed = node;
                     }
                    if(node == range.startContainer || node == range.endContainer || range.comparePoint(node,0)==0){
                        if(lastNamed != null){  //TODO: check if lastNamed is within epsilon pixels from this, or else reject?
@@ -363,7 +363,7 @@ class HTMLFragmentSelector extends SegmentSelector{
                                  this.value = lastNamed.getAttribute('id');
                                 return this;
                              }
-                           
+
                        }
                 }
             }
@@ -394,24 +394,25 @@ class SpecificResource{
     }
     firstRange(){
         if(this.source!=AnnotationBuilder.parseURL(window.location.href)){
+            return null;
             throw 'currently does not support selecting on other than current page. should add code to navigate to page or otherwise return null (but trying the first option before throwing null is best)';
         }
         //webResourceRange represents ALL of a "Web Resource": A Resource that must be identified by an URL, as described in the Web Architecture [webarch]. Web Resources may be dereferencable via their URL.
-        var webResourceRange = new Range(); webResourceRange.selectNode(document.documentElement); 
-        if(typeof this.selector =='undefined'){ 
-             return webResourceRange; 
+        var webResourceRange = new Range(); webResourceRange.selectNode(document.documentElement);
+        if(typeof this.selector =='undefined'){
+             return webResourceRange;
         } else {
                  if(Array.isArray(this.selector)){
                             for(var i = 0; i < this.selector.length; i++){
-                                    var range = this.selector[i].toRange(webResourceRange); 
+                                    var range = this.selector[i].toRange(webResourceRange);
                                     if(range != null) {return range ;}
                                 }
-                        } else {  
-                                var range = this.selector.toRange(webResourceRange);    
+                        } else {
+                                var range = this.selector.toRange(webResourceRange);
                                 if(range != null) {return range ;}
-                        }  
+                        }
         }
-        return null; //if failed, return nothing  
+        return null; //if failed, return nothing
     }
 
     toRange(){
@@ -429,7 +430,7 @@ class SpecificResource{
                             var windowTop = Math.round(window.scrollY);
                             if(absolutePosition > windowBottom | absolutePosition < windowTop){
                                 window.scroll(0, absolutePosition); //TODO: breaks in fixed position div. make sure to get correct fixed div locaction..
-                            }  
+                            }
                     }
             return this;
     }
@@ -448,22 +449,22 @@ class ExternalWebResource{
          if(this.source!=AnnotationBuilder.parseURL(window.location.href)){
             throw 'currently does not support getting range on other than current page. should add code to navigate to page or otherwise return null (but trying the first option before throwing null is best)';
         }
-        var webResourceRange = new Range(); webResourceRange.selectNode(document.documentElement); 
-         return webResourceRange; 
+        var webResourceRange = new Range(); webResourceRange.selectNode(document.documentElement);
+         return webResourceRange;
     }
     toSelection(){
                     var selection = window.getSelection();
                     selection.removeAllRanges();
-                    selection.addRange(this.toRange()); //TODO, funciton to get 'most popular' range.     
+                    selection.addRange(this.toRange()); //TODO, funciton to get 'most popular' range.
             return this;
     }
 }
 
 class Annotation{
-    constructor(object={id:null, target:null}){ //uuid can also apply to Body and Target. 
+    constructor(object={id:null, target:null}){ //uuid can also apply to Body and Target.
         this['@context'] = 'http://www.w3.org/ns/anno.jsonld';
-        this.type = 'Annotation'; 
-        this.id = object.id; //An Annotation must have exactly 1 URL that identifies it. 
+        this.type = 'Annotation';
+        this.id = object.id; //An Annotation must have exactly 1 URL that identifies it.
         this.target = object.target; //There must be 1 or more target relationships associated with an Annotation
         if(typeof object.motivation != 'undefined'){ this.motivation = object.motivation }
        if(typeof object.canonical != 'undefined'){ this.canonical = object.canonical }
@@ -471,7 +472,7 @@ class Annotation{
        if(typeof object.body != 'undefined'){ this.body = object.body }
 
         return this;
-    }  
+    }
 }
 
 class TextPositionSelector extends SegmentSelector{
@@ -483,16 +484,16 @@ class TextPositionSelector extends SegmentSelector{
         }
 
         _textNodeIterator(inRange){
-            var commonAncestorContainer = inRange.commonAncestorContainer; 
+            var commonAncestorContainer = inRange.commonAncestorContainer;
            // console.log(commonAncestorContainer)
-            if(commonAncestorContainer.nodeType == Node.TEXT_NODE) { 
-                    commonAncestorContainer=commonAncestorContainer.parentElement 
+            if(commonAncestorContainer.nodeType == Node.TEXT_NODE) {
+                    commonAncestorContainer=commonAncestorContainer.parentElement
             } else if(commonAncestorContainer.nodeType == Node.DOCUMENT_NODE){
-                    commonAncestorContainer=document.documentElement; 
+                    commonAncestorContainer=document.documentElement;
             }
             return document.createNodeIterator(commonAncestorContainer,NodeFilter.SHOW_TEXT,{ acceptNode: function(node){
                 if(node==inRange.startContainer || node==inRange.endContainer || inRange.comparePoint(node,0)==0){
-                    return NodeFilter.FILTER_ACCEPT; 
+                    return NodeFilter.FILTER_ACCEPT;
                 }
             } });
         }
@@ -500,7 +501,7 @@ class TextPositionSelector extends SegmentSelector{
        fromRange(range,inRange){
             if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
             var nodeIterator = this._textNodeIterator(inRange);
-            var commonAncestorContainerCount = 0; 
+            var commonAncestorContainerCount = 0;
             var inRangeStart = null;
             var inRangeEnd = null;
             var rangeStart = null;
@@ -518,7 +519,7 @@ class TextPositionSelector extends SegmentSelector{
                     if(inRangeEnd==null){
                          if(node==inRange.endContainer){
                              inRangeEnd = commonAncestorContainerCount + inRange.endOffset;
-                         } 
+                         }
                     }
                     if(inRangeStart!=null & rangeStart ==null){
                         if(node==range.startContainer){
@@ -543,20 +544,20 @@ class TextPositionSelector extends SegmentSelector{
             }
             return this;
        }
-        firstRange(inRange){ 
+        firstRange(inRange){
              if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
                 var nodeIterator = this._textNodeIterator(inRange);
                 var exactMatchStart = this.start;
                 var exactMatchEnd = this.end;
 
-                var commonAncestorContainerCount = 0; 
+                var commonAncestorContainerCount = 0;
                 var inRangeStart = null;
                 var inRangeEnd = null;
                 var rangeStartContainer = null;
                 var rangeStartOffset = null;
                 var rangeEndContainer = null;
                 var rangeEndOffset = null;
-            
+
                  var node;
                  while(node = nodeIterator.nextNode()){
                         var nodeValueLength = node.nodeValue.length;
@@ -570,11 +571,11 @@ class TextPositionSelector extends SegmentSelector{
                         if(inRangeEnd==null){
                             if(node==inRange.endContainer){
                                 inRangeEnd = commonAncestorContainerCount + inRange.endOffset;
-                            } 
+                            }
                         }
                     if(inRangeStart!=null & rangeStartContainer == null){
                             if(commonAncestorContainerCount + nodeValueLength >= exactMatchStart+inRangeStart & commonAncestorContainerCount < exactMatchStart+inRangeStart){
-                                rangeStartContainer = node; 
+                                rangeStartContainer = node;
                                 rangeStartOffset = exactMatchStart+inRangeStart-commonAncestorContainerCount;
                             }
                         }
@@ -583,16 +584,16 @@ class TextPositionSelector extends SegmentSelector{
                             //TODO: check if in range.
                                 rangeEndContainer = node;
                                 rangeEndOffset = exactMatchEnd+inRangeStart - commonAncestorContainerCount;
-                            } 
+                            }
                         }
                         if(rangeStartContainer!=null & rangeEndContainer!=null) { break;}
                         commonAncestorContainerCount = commonAncestorContainerCount + nodeValueLength;
-                
+
             }
              var range = new Range();
              range.setStart(rangeStartContainer, rangeStartOffset) ;
              range.setEnd(rangeEndContainer, rangeEndOffset) ;
-            return range; 
+            return range;
         }
 
 }
@@ -609,18 +610,18 @@ class TextQuoteSelector extends TextPositionSelector{
         Object.defineProperty(this, 'epsilon', { value: 32, enumerable: false, writable:true })
     }
 
-     fromRange(range, inRange){ 
+     fromRange(range, inRange){
         if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
         super.fromRange(range,inRange);
         var textContent = inRange.toString();
-  
-        this.exact = textContent.substring(this.start,this.end); 
-        this.prefix = textContent.substring(Math.max(this.start-this.epsilon,0), this.start); 
-        this.suffix =  textContent.substring(this.end,Math.min(this.end+this.epsilon,textContent.length))           
+
+        this.exact = textContent.substring(this.start,this.end);
+        this.prefix = textContent.substring(Math.max(this.start-this.epsilon,0), this.start);
+        this.suffix =  textContent.substring(this.end,Math.min(this.end+this.epsilon,textContent.length))
         return this;
     }
-    
-    firstRange(inRange){ 
+
+    firstRange(inRange){
         if(typeof inRange == 'undefined'){ var inRange = new Range(); inRange.selectNode(document.documentElement); }
         var textContent = inRange.toString();
         var fullMatchStart = textContent.indexOf(this.prefix + this.exact + this.suffix);
@@ -632,7 +633,7 @@ class TextQuoteSelector extends TextPositionSelector{
             return null;
         }
         return super.firstRange(inRange);
-    } 
+    }
 
      toTextPositionSelector(){
        return new TextPositionSelector({start:this.start,end:this.end});
@@ -662,6 +663,7 @@ class AnnotationBuilder{
                     case "DataPositionSelector": return new DataPositionSelector(value);
                     case "TextQuoteSelector": return new TextQuoteSelector(value);
                     case "TextPositionSelector": return new TextPositionSelector(value);
+                    case "TextualBody" : return null;
                     default: console.warn('mismatched type attribute in JSON reviver function')
             }
         } else {
@@ -681,6 +683,26 @@ class AnnotationBuilder{
         return this;
     }
 
+    tagging(source, xywh, xpath){
+        this.result.motivation = 'tagging';
+        this.result.canonical = "urn:uuid:" + this.uuid;
+        //might include fragment?
+
+        var newTarget = new SpecificResource();
+        newTarget.source = source;
+        newTarget.selector = [];
+
+        var fragmentSelector = new MediaFragmentSelector(xywh);
+        newTarget.selector.push(fragmentSelector);
+
+        var xPathSelector = new XPathSelector();
+        xPathSelector.value = xpath;
+        newTarget.selector.push(xPathSelector);
+
+        this.result.target = newTarget;
+        return this;
+    }
+
     highlight(selection){
             if(typeof selection =='undefined'){
                 var selection = document.getSelection();
@@ -689,7 +711,7 @@ class AnnotationBuilder{
                 throw 'user selection in document window is empty (indicating nothing pressed) or collapsed (indicating mere touch or press in window). In general might use scroll position to get a fragment selector, but not valid for highlighting motivation.';
             } else {
                 var range = selection.getRangeAt(0);
-                var rangeType = AnnotationBuilder.rangeType(range);  
+                var rangeType = AnnotationBuilder.rangeType(range);
                 //console.log(rangeType); //TEMP
                 if(rangeType.includes(AnnotationBuilder.END_DOCUMENT_NODE())){
                     throw 'invalid end of range such as a brand new Range object collapsed at the start of the document root';
@@ -700,13 +722,13 @@ class AnnotationBuilder{
                 var newTarget = new SpecificResource();
                 newTarget.source = this.url;
                 newTarget.selector = [];
-                if(rangeType.includes(AnnotationBuilder.ONE_CONTAINER_NODE())){   
+                if(rangeType.includes(AnnotationBuilder.ONE_CONTAINER_NODE())){
                         var xpathSelector = new XPathSelector();
                         if(rangeType.includes(AnnotationBuilder.START_SUBSTRING_DATA())){
                             xpathSelector.refinedBy = new DataPositionSelector();
                         }
                         xpathSelector.fromRange(range);
-                        newTarget.selector.push(xpathSelector);  
+                        newTarget.selector.push(xpathSelector);
                 } else {
                      var rangeSelector = new RangeSelector();
                      rangeSelector.startSelector = new XPathSelector();
@@ -718,19 +740,19 @@ class AnnotationBuilder{
                             rangeSelector.endSelector.refinedBy = new DataPositionSelector();
                      }
                      rangeSelector.fromRange(range);
-                     newTarget.selector.push(rangeSelector); 
+                     newTarget.selector.push(rangeSelector);
                 }
 
                 var textQuoteSelector = new TextQuoteSelector().fromRange(range);
                 newTarget.selector.push(textQuoteSelector);
                 newTarget.selector.push(textQuoteSelector.toTextPositionSelector());
-               
+
                 this.result.target = newTarget;
 
             }
             return this;
         }
-        
+
     static START_DOCUMENT_NODE(){return 1;}
     static START_ELEMENT_NODE(){return 2;}
     static START_CHARACTER_NODE(){return 3;} //might just use 'node' since distinction between element node not needed??
@@ -749,11 +771,11 @@ class AnnotationBuilder{
         if(range.startContainer.nodeType == Node.ELEMENT_NODE){result.push(AnnotationBuilder.START_ELEMENT_NODE())}
         if(range.endContainer.nodeType == Node.ELEMENT_NODE){result.push(AnnotationBuilder.END_ELEMENT_NODE())}
         if([Node.TEXT_NODE,Node.PROCESSING_INSTRUCTION_NODE,Node.COMMENT_NODE].includes(range.startContainer.nodeType)){
-            var length = range.startContainer.nodeValue.length; 
-            if(range.startContainer==range.endContainer){ 
-                result.push(AnnotationBuilder.ONE_CONTAINER_NODE()); 
+            var length = range.startContainer.nodeValue.length;
+            if(range.startContainer==range.endContainer){
+                result.push(AnnotationBuilder.ONE_CONTAINER_NODE());
                 if(range.startOffset == range.endOffset){
-                    result.push(AnnotationBuilder.COLLAPSED()); 
+                    result.push(AnnotationBuilder.COLLAPSED());
                 } else if(range.startOffset == 0 & range.endOffset == length) {
                     result.push(AnnotationBuilder.START_CHARACTER_NODE());
                 } else {
@@ -765,12 +787,12 @@ class AnnotationBuilder{
                 } else {
                      result.push(AnnotationBuilder.START_SUBSTRING_DATA());
                 }
-            }  
+            }
         }
         if([Node.TEXT_NODE,Node.PROCESSING_INSTRUCTION_NODE,Node.COMMENT_NODE].includes(range.endContainer.nodeType)){
-            var length = range.endContainer.nodeValue.length; 
-            if(range.startContainer==range.endContainer){ 
-                    //TECHNICALLY REDUNDANT INFO, but including anyhow 
+            var length = range.endContainer.nodeValue.length;
+            if(range.startContainer==range.endContainer){
+                    //TECHNICALLY REDUNDANT INFO, but including anyhow
                     if(range.startOffset == 0 & range.endOffset == length){
                         result.push(AnnotationBuilder.END_CHARACTER_NODE());
                     } else {

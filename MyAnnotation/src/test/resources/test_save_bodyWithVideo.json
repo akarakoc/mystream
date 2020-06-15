@@ -1,0 +1,51 @@
+{
+  "canonical": "urn:uuid:e33a1f63-2f09-7d15-a9c7-d6a14e8d82bf",
+  "motivation": "highlighting",
+  "annotatedBy": null,
+  "serializedBy": null,
+  "body": [
+    {
+      "id": "https://www.youtube.com/watch?v=AXvjEaCiJw8",
+      "type": "Video",
+      "format": "audio/mpeg",
+      "related": "https://www.youtube.com/watch?v=AXvjEaCiJw8"
+    }
+  ],
+  "target": {
+    "id": null,
+    "type": "SpecificResource",
+    "source": "http://127.0.0.1:8000/",
+    "selector": [
+      {
+        "type": "XPathSelector",
+        "id": null,
+        "refinedBy": {
+          "type": "DataPositionSelector",
+          "id": null,
+          "refinedBy": null,
+          "start": 17,
+          "end": 37
+        },
+        "value": "//body/p[1]/text()[1]"
+      },
+      {
+        "type": "TextQuoteSelector",
+        "id": null,
+        "refinedBy": null,
+        "exact": "keeping good hygiene",
+        "prefix": "\n\n\n\n        \n\n\n\n    Experts say ",
+        "suffix": " would reduce the risk of transm"
+      },
+      {
+        "type": "TextPositionSelector",
+        "id": null,
+        "refinedBy": null,
+        "start": 211,
+        "end": 231
+      }
+    ]
+  },
+  "@id": null,
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "@type": null
+}

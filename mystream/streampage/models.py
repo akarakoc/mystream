@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.postgres.fields import JSONField
 
 class Primitives(models.Model):
     name = models.CharField(max_length=200, null=True, help_text='Enter your primitive data types')
@@ -14,12 +14,15 @@ class communityUsers(models.Model):
     userPassword = models.CharField(max_length=200, null=True, help_text='Enter your password')	
     creationDate = models.DateTimeField(null=True)	
     communityPoint = models.CharField(max_length=200, null=True, help_text='Community Point')	
+    userBio = models.CharField(max_length=200, null=True, help_text='Community Point')
+    userBirthDay = models.CharField(max_length=200, null=True, help_text='Community Point')
     userPhoto = models.CharField(max_length=200, null=True, help_text='Community Point')
     def __str__(self):        
-        return self.nickName	
+        return self.nickName
+
 
 class Communities(models.Model):
-    name = models.CharField(max_length=200, null=True, help_text='Enter community name')
+    name = models.CharField(max_length=200, null=False, help_text='Enter community name')
     description = models.CharField(max_length=200, null=True, help_text='Enter community description')	
     communityHash = models.CharField(max_length=200, null=True, help_text='Enter community hash')	
     communityPrv = models.BooleanField(default=False)	
@@ -27,6 +30,8 @@ class Communities(models.Model):
     communityPopularity = models.ManyToManyField(communityUsers, related_name='votes', help_text='Vote')
     communityCreator = models.ForeignKey(communityUsers, related_name='creator',on_delete=models.SET_NULL, null=True)
     communityMembers = models.ManyToManyField(communityUsers, related_name='members', help_text='Select members')
+    communityCountry = models.CharField(max_length=200, null=True, help_text="Select country")
+    communityLocation = models.CharField(max_length=200, null=True, help_text="Select province")
     communityTags = models.CharField(max_length=2000, null=True, help_text='Enter community Tags')
     communityCreationDate= models.DateTimeField(null=True)	
     def __str__(self):
@@ -39,9 +44,9 @@ class Datatypes(models.Model):
     relatedCommunity = models.ForeignKey(Communities, help_text='Select related community',on_delete=models.SET_NULL, null=True)
     datatypeCreationDate= models.DateTimeField(null=True)
     datatypeEditionDate= models.DateTimeField(null=True)
-    datatypePhoto = models.CharField(max_length=200, null=True, help_text='datatype photo')
     datatypeTags = models.CharField(max_length=2000, null=True, help_text='Enter datatype Tags')
     datatypeHash = models.CharField(max_length=200, null=True, help_text='Enter datatype hash')
+    subscribers = models.ManyToManyField(communityUsers, related_name='subscribers', help_text='Select members')
     def __str__(self):
         return self.name
 		
@@ -85,12 +90,23 @@ class PostComments(models.Model):
     relatedCommunityforComment = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
     relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
     commentHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
-    commentText = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    commentText = models.CharField(max_length=2000, null=True, help_text='Enter name of type')
     postCommentCreator = models.ForeignKey(communityUsers, related_name='commentcreator', on_delete=models.SET_NULL, null=True)
     postCommentCreationDate= models.DateTimeField(null=True)
     postCommentTag= models.CharField(max_length=2000, null=True, help_text='Enter Post Tags')
     def __str__(self):
         return self.commentText
+
+class ReportedPosts(models.Model):
+    reportHash = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    relatedCommunity = models.ForeignKey(Communities,on_delete=models.SET_NULL, null=True)
+    relatedMeta = models.ForeignKey(PostsMetaHash,on_delete=models.SET_NULL, null=True)
+    reason = models.CharField(max_length=200, null=True, help_text='Enter name of type')
+    description = models.CharField(max_length=2000, null=True, help_text='Enter name of type')
+    reportPostCreator = models.ForeignKey(communityUsers, related_name='reporttcreator', on_delete=models.SET_NULL, null=True)
+    reportPostCreationDate = models.DateTimeField(null=True)
+    def __str__(self):
+        return self.reason
 
 class CommunityTags(models.Model):
     communityTag = models.ForeignKey(Communities, related_name='commTag',on_delete=models.SET_NULL, null=True)
@@ -123,6 +139,7 @@ class UserTags(models.Model):
 class UserCircle(models.Model):
     circleOwner = models.OneToOneField(communityUsers, on_delete=models.SET_NULL, null=True)
     circleUsers = models.ManyToManyField(communityUsers, related_name='Followers', help_text='Select Members')
-    tagItem = models.CharField(max_length=2000, null=True, help_text='Enter Community Tag Item')
-    def __str__(self):
-        return self.circleOwner
+
+		
+class ActivityStreams(models.Model):
+    detail = JSONField()
