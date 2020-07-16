@@ -64,7 +64,9 @@ $( document ).ready(function() {
 		$('#CommunityModalTitle').html("Add New Community");
 		var tagSelector = document.getElementById("communityTag");
 		if(!tagSelector){
+			$('#addCommunityTagDivision').append('<label for="communityTagInput">Tag Input:</label><input type="text"  class="form-control small" required="" id="communityTagInput">');
 			$('#addCommunityTagDivision').append('<label for="communityTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="communityTag"></select><button type="click" id="addTagforCommunity" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
+			
 		}
 		$('#CommunityModal').modal('show');
 		var length = $('select[name="Community_Country"]')[0].options.length;
@@ -80,7 +82,7 @@ $( document ).ready(function() {
 		$.ajax({
             url: "/streampage/searchTag",
             data: {
-				'search_text' : $('#id_Community_Name').val(),
+				'search_text' : $('#communityTagInput').val(),
 				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
 			},
 			type: "GET",
@@ -95,7 +97,7 @@ $( document ).ready(function() {
 			$('#communityTag').append( new Option(communityTagList[i],i));
 		}
 	}
-	$("body").on('keyup', "#id_Community_Name", tagSearch);
+	$("body").on('keyup', "#communityTagInput", tagSearch);
 	
 	$(document).on ("click", "#addTagforCommunity", function (event) {
 		var selectedName = $('#communityTag').find(":selected").text();
@@ -349,6 +351,7 @@ $( document ).ready(function() {
 		$('#posttypeModalTitle').html("Add New Posttype");
 		var tagSelector = document.getElementById("posttypeTag");
 		if(!tagSelector){
+			$('#addPosttypeTagDivision').append('<label for="posttypeTagInput">Tag Input:</label><input type="text"  class="form-control small" required="" id="posttypeTagInput">');
 			$('#addPosttypeTagDivision').append('<label for="posttypeTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="posttypeTag"></select><button type="click" id="addTagforPosttype" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
 		}
 		$('#PosttypeModal').modal('show');
@@ -359,7 +362,7 @@ $( document ).ready(function() {
 		$.ajax({
             url: "/streampage/searchTag",
             data: {
-				'search_text' : $('#id_Posttype_Name').val(),
+				'search_text' : $('#posttypeTagInput').val(),
 				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
 			},
 			type: "GET",
@@ -374,7 +377,7 @@ $( document ).ready(function() {
 			$('#posttypeTag').append( new Option(posttypeTagList[i],i));
 		}
 	}
-	$("body").on('keyup', "#id_Posttype_Name", tagSearchDt);
+	$("body").on('keyup', "#posttypeTagInput", tagSearchDt);
 
 	$(document).on ("click", "#addTagforPosttype", function (event) {
 		var selectedName = $('#posttypeTag').find(":selected").text();
@@ -744,6 +747,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 				$('#returnedPostFields').html(data);
 				var tagSelector = document.getElementById("postTag");
 				if(!tagSelector){
+					$('#addPostTagDivision').append('<label for="postTagInput">Tag Input:</label><input type="text"  class="form-control small" required="" id="postTagInput">');
 					$('#addPostTagDivision').append('<label for="postTag">Tag Selector:</label><div class="row p-2"><select class="form-control col-sm-10" id="postTag"></select><button type="click" id="addTagforPost" class="btn btn-outline-primary btn-sm mr-auto col-sm-2 small"><i class="fa fa-plus small" aria-hidden="true"></i> Add Tag</button></div>');
 				}
 				var tagSelectorMap = document.getElementById("id_LocationEntry");
@@ -758,7 +762,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		$.ajax({
             url: "/streampage/searchTag",
             data: {
-				'search_text' : $('#id_TextEntry').val(),
+				'search_text' : $('#postTagInput').val(),
 				'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
 			},
 			type: "GET",
@@ -774,7 +778,7 @@ $(document).on ("click", "#DeleteSelectedPosttype", function (event) {
 		}
 	}
 	
-	$("body").on('keyup', "#id_TextEntry", tagSearchPt);
+	$("body").on('keyup', "#postTagInput", tagSearchPt);
 	
 	$(document).on ("click", "#addTagforPost", function (event) {
 		var selectedName = $('#postTag').find(":selected").text();
