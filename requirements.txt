@@ -14,7 +14,7 @@ constantly==15.1.0
 countryinfo==0.1.2
 cryptography==2.1.4
 distro-info===0.18ubuntu0.18.04.1
-Django==3.0.3
+Django==3.1.12
 django-countries==6.1.2
 ec2-hibinit-agent==1.0.0
 hibagent==1.0.1
