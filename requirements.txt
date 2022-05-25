@@ -40,7 +40,7 @@ pycrypto==2.6.1
 pycryptodome==3.9.7
 pycryptodomex==3.9.7
 pygobject==3.26.1
-PyJWT==1.5.3
+PyJWT==2.4.0
 pyOpenSSL==17.5.0
 pyserial==3.4
 python-apt==1.6.5+ubuntu0.2
